@@ -4,6 +4,7 @@ import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/constant/api_constants.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
 import 'dart:convert';
+import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class RemoteServices {
   static var client = http.Client();
@@ -21,19 +22,19 @@ class RemoteServices {
     }
   }
 
-  static Future<User> fetchUser(String username, String password) async {
-    var response = await client.post(
-      Uri.parse(ApiConstants.HOST + ApiConstants.AUTHORIZATE),
-      headers: VariableConstants.API_HEADERS(),
-      body: jsonEncode(
-          <String, String>{'username': username, 'password': password}),
-    );
+  static Future<User> authUser(String username, String password) async {
+    String url = ApiConstants.HOST + ApiConstants.AUTHORIZATE;
+    String body = jsonEncode(
+        <String, String>{'username': username, 'password': password});
+
+    var response = await ApiService.instance.post(url, body);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
+      await setToken(json.decode(jsonString)["jwt"]);
       return User.fromJson(json.decode(jsonString)["user"]);
     } else {
-      print('fetchUser: error');
+      print('authUser: error');
       return null;
     }
   }
@@ -41,12 +42,8 @@ class RemoteServices {
   static Future<User> updateUser(User user) async {
     var map = new Map<String, dynamic>();
     map["user"] = jsonEncode(user.toJson());
-
-    var response = await client.put(
-      Uri.parse(ApiConstants.HOST + ApiConstants.UPDATE_USER),
-      headers: VariableConstants.API_PUT_HEADERS(),
-      body: map,
-    );
+    String url = ApiConstants.HOST + ApiConstants.UPDATE_USER;
+    var response = await ApiService.instance.put(url, map);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
