@@ -14,7 +14,7 @@ class UserController extends GetxController {
   void fetchUser(String username, String password) async {
     try {
       isLoading(true);
-      var userFetched = await RemoteServices.fetchUser(username, password);
+      var userFetched = await RemoteServices.authUser(username, password);
       if (userFetched != null) {
         user.value = userFetched;
       }

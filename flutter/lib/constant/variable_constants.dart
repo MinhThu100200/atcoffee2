@@ -1,19 +1,16 @@
 class VariableConstants {
-  static String TOKEN =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDExMDYzODQ1MzAyMzM0NSwiaWF0IjoxNjUxNDEzMDc0fQ.r0KQdwBDJJZ_XThifl5JLgCT-Wg_jH7IBMxd0sN2tfY';
-
-  static API_HEADERS() {
+  static API_HEADERS(String token) {
     return {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ' + TOKEN,
+      'Authorization': 'Bearer ' + token,
     };
   }
 
-  static API_PUT_HEADERS() {
+  static API_PUT_HEADERS(String token) {
     return {
       'Accept': '*/*',
-      'Authorization': 'Bearer ' + TOKEN,
+      'Authorization': 'Bearer ' + token,
     };
   }
 }

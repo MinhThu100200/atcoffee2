@@ -41,7 +41,7 @@ class _loginPageState extends State<LoginPage> {
 
   void _login(String email, String password) {
     // Data Fixed - Change
-    userController.fetchUser('0975226327', '12345');
+    userController.fetchUser('0234567891', '123456');
     if (userController.user != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => new RootApp()));
@@ -57,7 +57,7 @@ class _loginPageState extends State<LoginPage> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: Colors.black,
             ),
