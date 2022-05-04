@@ -23,6 +23,8 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	private String address;
 	private String timeOpen;
 	private String timeClose;
+	private double latitude;
+	private double longitude;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "store_product",
@@ -73,6 +75,22 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setTimeClose(String timeClose) {
 		this.timeClose = timeClose;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
 	public List<ProductEntity> getProducts() {
