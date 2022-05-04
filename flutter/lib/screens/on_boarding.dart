@@ -1,8 +1,12 @@
+import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/screens/login_page/login_page.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
+import 'package:at_coffee/screens/root_app/root_app.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/models/user.dart';
 
 class Onboarding extends StatelessWidget {
   @override
@@ -21,6 +25,22 @@ class onboarding extends StatefulWidget {
 }
 
 class _onboardingState extends State<onboarding> {
+  final UserController userController = Get.put(new UserController());
+
+  @override
+  void initState() {
+    super.initState();
+    authUserByToken();
+  }
+
+  void authUserByToken() async {
+    User user = await userController.authUserByToken();
+    if (user != null) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => new RootApp()));
+    }
+  }
+
   int currentPage = 0;
   PageController _pageController =
       new PageController(initialPage: 0, keepPage: true);

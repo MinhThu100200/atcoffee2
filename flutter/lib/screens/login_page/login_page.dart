@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:at_coffee/screens/on_boarding.dart';
+import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
 import 'package:at_coffee/screens/root_app/root_app.dart';
@@ -30,7 +31,7 @@ class _loginPageState extends State<LoginPage> {
   bool _validatePassword = false;
   bool _statePassword = true;
 
-  UserController userController = Get.put(new UserController());
+  final UserController userController = Get.put(new UserController());
 
   @override
   void dispose() {
@@ -39,9 +40,14 @@ class _loginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _login(String email, String password) {
     // Data Fixed - Change
-    userController.fetchUser('0234567891', '123456');
+    userController.authUser('0234567891', '123456');
     if (userController.user != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => new RootApp()));

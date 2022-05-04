@@ -11,7 +11,7 @@ class UserController extends GetxController {
     super.onInit();
   }
 
-  void fetchUser(String username, String password) async {
+  void authUser(String username, String password) async {
     try {
       isLoading(true);
       var userFetched = await RemoteServices.authUser(username, password);
@@ -21,6 +21,20 @@ class UserController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  Future<User> authUserByToken() async {
+    try {
+      isLoading(true);
+      var userFetched = await RemoteServices.authUserByToken();
+      if (userFetched != null) {
+        user.value = userFetched;
+        return user.value;
+      }
+    } finally {
+      isLoading(false);
+    }
+    return null;
   }
 
   Future<bool> updateUser(User userUpdate) async {
