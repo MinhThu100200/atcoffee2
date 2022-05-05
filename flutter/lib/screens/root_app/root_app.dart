@@ -10,8 +10,10 @@ import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:at_coffee/screens/reward_page/reward_page.dart';
 import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/profile_page/profile_page.dart';
+import 'package:at_coffee/screens/home_page/home_page.dart';
 // controllers
 import 'package:at_coffee/controllers/cart_controller.dart';
+import 'package:at_coffee/screens/test_location.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({Key key}) : super(key: key);
@@ -37,17 +39,19 @@ class _RootAppState extends State<RootApp> {
     return IndexedStack(
       index: pageIndex,
       children: [
-        ProductsPage(),
+        //ProductsPage(),
+        HomePage(),
         RewardPage(),
         LocationPage(),
         // CartPage(),
-        Center(
-          child: Text("Notification Page"),
-        ),
-        ProfilePage(),
         // Center(
-        //   child: Text("Personal Page"),
+        //   child: Text("Notification Page"),
         // ),
+        GetUserLocation(),
+        //ProfilePage(),
+        Center(
+          child: Text("Personal Page"),
+        ),
       ],
     );
   }

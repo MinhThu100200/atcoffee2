@@ -5,6 +5,7 @@ const Color secondary = Color(0xFF2C2C2C);
 
 const Color white = Color(0xFFFFFFFF);
 const Color black = Color(0xFF000000);
+const Color transparentBlack = Color(0xFF66000000);
 
 //const Color primary = Color(0xFF92A3FD);
 //const Color secondary = Color(0xFF9DCEFF);
@@ -21,6 +22,7 @@ const Color gray = Color(0xFF6E6E6E);
 const Color gray1 = Color(0xFF363636);
 const Color gray2 = Color(0xFF4B4B4B);
 const Color gray3 = Color(0xFF4D4D4D);
+const Color transparentGray = Color(0xFFC0C0C0);
 
 const Color red = Color(0xFFD84035);
 const Color red2 = Color(0xFFFF7363);
@@ -35,3 +37,9 @@ const Color purple = Color(0xFF595683);
 
 const Color yellow = Color(0xFFF1CD7C);
 const Color lightYellow = Color(0xFFFFD88A);
+
+const Color pink = Color(0xFFD993B4);
+const Color lightPink = Color(0xFFF3DEE8);
+
+const Color lightBlue = Color(0xFF005ABE);
+const Color perano = Color(0xFF9BA5FF);
