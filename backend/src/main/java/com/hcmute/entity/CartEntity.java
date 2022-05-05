@@ -16,6 +16,10 @@ public class CartEntity extends BaseEntity implements Serializable{
 	private int quantity;
 	private String description;
 	private String size;
+	private int sugar;
+	private int ice;
+	private int milk;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private ProductEntity product;
@@ -55,6 +59,25 @@ public class CartEntity extends BaseEntity implements Serializable{
 	}
 	public void setSize(String size) {
 		this.size = size;
+	}
+	
+	public int getSugar() {
+		return sugar;
+	}
+	public void setSugar(int sugar) {
+		this.sugar = sugar;
+	}
+	public int getIce() {
+		return ice;
+	}
+	public void setIce(int ice) {
+		this.ice = ice;
+	}
+	public int getMilk() {
+		return milk;
+	}
+	public void setMilk(int milk) {
+		this.milk = milk;
 	}
 	public ProductEntity getProduct() {
 		return product;
