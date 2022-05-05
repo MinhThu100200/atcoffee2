@@ -27,7 +27,7 @@ class RemoteServices {
     String body = jsonEncode(
         <String, String>{'username': username, 'password': password});
 
-    var response = await ApiService.instance.post(url, body);
+    var response = await ApiService.instance().post(url, body);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
@@ -39,11 +39,23 @@ class RemoteServices {
     }
   }
 
+  static Future<User> authUserByToken() async {
+    String url = ApiConstants.HOST + ApiConstants.AUTH_USER_BY_TOKEN;
+    var response = await ApiService.instance().get(url);
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      return User.fromJson(json.decode(jsonString));
+    } else {
+      print('authUserByToken: error');
+      return null;
+    }
+  }
+
   static Future<User> updateUser(User user) async {
     var map = new Map<String, dynamic>();
     map["user"] = jsonEncode(user.toJson());
     String url = ApiConstants.HOST + ApiConstants.UPDATE_USER;
-    var response = await ApiService.instance.put(url, map);
+    var response = await ApiService.instance().put(url, map);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;

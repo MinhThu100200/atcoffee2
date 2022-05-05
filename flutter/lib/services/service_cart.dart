@@ -9,7 +9,7 @@ class RemoteServices {
 
   static Future<List<Cart>> fetchCartsByCustomerId(id) async {
     String url = ApiConstants.HOST + ApiConstants.GET_CARTS_BY_CUSOMTERID(id);
-    var response = await ApiService.instance.get(url);
+    var response = await ApiService.instance().get(url);
     print(response.body);
     if (response.statusCode == 200) {
       var jsonString = response.body;

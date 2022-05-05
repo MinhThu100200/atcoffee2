@@ -1,3 +1,4 @@
+import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import 'package:at_coffee/screens/home_page/home_page.dart';
 // controllers
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/screens/test_location.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({Key key}) : super(key: key);
@@ -25,6 +27,12 @@ class RootApp extends StatefulWidget {
 class _RootAppState extends State<RootApp> {
   // get carts
   final cartController = Get.put(CartController());
+  final UserController userController = Get.put(UserController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   int pageIndex = 0;
   @override

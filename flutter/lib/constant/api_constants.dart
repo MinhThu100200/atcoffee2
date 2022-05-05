@@ -25,5 +25,5 @@ class ApiConstants {
   // Api User
   static String AUTHORIZATE = '/api/authenticate';
   static String UPDATE_USER = '/api/info/user';
-  static String GET_USER_BY_TOKEN = 'api/user/authenticate';
+  static String AUTH_USER_BY_TOKEN = '/api/user/authenticate';
 }

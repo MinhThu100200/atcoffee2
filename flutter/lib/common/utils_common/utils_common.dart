@@ -20,11 +20,15 @@ Future<bool> removeToken() async {
 
 class ApiService {
   var client;
-  ApiService() {
+
+  static ApiService _instance;
+  ApiService._() {
     client = http.Client();
   }
 
-  static ApiService instance = new ApiService();
+  static ApiService instance() {
+    return _instance ?? ApiService._();
+  }
 
   Future<dynamic> get(String url) async {
     String token = await getToken();
