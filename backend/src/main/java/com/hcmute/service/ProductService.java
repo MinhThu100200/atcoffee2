@@ -14,6 +14,7 @@ public interface ProductService {
 	ProductDTO findOneByCode(String code);
 	int countByCategoryCode(String categoryCode);
 	List<ProductDTO> findAll();
+	List<ProductDTO>findSuggesstion(long customerId, int num);
 	ProductResponse findByState(Boolean state, Pageable pageable);
 	ProductResponse findAll(Pageable pageable);
 	ProductResponse findByKeyword(String keyword, Pageable pageable);

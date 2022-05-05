@@ -13,12 +13,17 @@ import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.CategoryDTO;
 import com.hcmute.dto.ProductDTO;
 import com.hcmute.dto.StoreDTO;
+import com.hcmute.entity.BillDetailEntity;
+import com.hcmute.entity.BillEntity;
 import com.hcmute.entity.CategoryEntity;
 import com.hcmute.entity.ProductEntity;
 import com.hcmute.entity.StoreEntity;
+import com.hcmute.entity.UserEntity;
+import com.hcmute.repository.BillRepository;
 import com.hcmute.repository.CategoryRepository;
 import com.hcmute.repository.ProductRepository;
 import com.hcmute.repository.StoreRepository;
+import com.hcmute.repository.UserRepository;
 import com.hcmute.service.ProductService;
 
 @Service
@@ -32,7 +37,10 @@ public class ProductServiceImpl implements ProductService{
 	private StoreRepository storeRepository;
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private BillRepository billRepository;
 	
 	@Override
 	public ProductDTO save(ProductDTO dto) {
@@ -90,6 +98,35 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public List<ProductDTO> findAll() {
 		List<ProductEntity> entities = productRepository.findAll();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+	
+	@Override
+	public List<ProductDTO> findSuggesstion(long customerId, int num) {
+		UserEntity customer = userRepository.findOne(customerId);
+		List<BillEntity> billEntities = billRepository.findByCustomerOrderByCreatedDateDesc(customer);
+		List<ProductEntity> entities = new ArrayList<ProductEntity>();
+		boolean flg = false;
+		for (int i = 0; i < billEntities.size(); i++) {
+			List<BillDetailEntity> billDetailEntities = billEntities.get(i).getBillDetails();
+			for (int j = 0; j < billDetailEntities.size(); j++) {
+				if (entities.contains(billDetailEntities.get(j).getProduct()) == false) {
+					entities.add(billDetailEntities.get(j).getProduct());
+					
+					if (entities.size() == num) {
+						flg = true;
+					}
+				}
+				if (flg == true) {
+					break;
+				}
+			}
+			if (flg == true) {
+				break;
+			}
+		}
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
 		return dtos;

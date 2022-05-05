@@ -86,6 +86,16 @@ public class ProductAPI {
 		return ResponseEntity.ok(productDTOs);
 	}
 	
+	@GetMapping("/api/user/product/suggestion")
+	public ResponseEntity<List<ProductDTO>> findSuggesstion(@RequestParam(name="customerId", required = false) long customerId,
+			@RequestParam(name = "num", defaultValue = "10000") int num) {
+		List<ProductDTO> productDTOs = productService.findSuggesstion(customerId, num);
+		productDTOs.forEach((productDTO) -> {
+			productDTO.calRateAndNumberReviewers();
+		});
+		return ResponseEntity.ok(productDTOs);
+	}
+	
 	@GetMapping("/api/info/product") 
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size", defaultValue = "10000") int size, @RequestParam(name = "store", required = false) String storeCode,
