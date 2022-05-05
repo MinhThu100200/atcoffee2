@@ -36,5 +36,9 @@ public class ProductResponse {
 	public void setProducts(List<ProductDTO> products) {
 		this.products = products;
 	}
-	
+	public void calRateAndNumberReviewers() {
+		products.forEach((product) -> {
+			product.calRateAndNumberReviewers();
+		});
+	}
 }

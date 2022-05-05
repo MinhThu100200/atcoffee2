@@ -4,6 +4,9 @@ public class CartDTO extends BaseDTO<CartDTO>{
 	private int quantity;
 	private String description;
 	private String size;
+	private int sugar;
+	private int ice;
+	private int milk;
 	private long productId;
 	private long customerId;
 	private long storeId;
@@ -57,6 +60,25 @@ public class CartDTO extends BaseDTO<CartDTO>{
 	}
 	public void setStoreId(long storeId) {
 		this.storeId = storeId;
+	}
+	
+	public int getSugar() {
+		return sugar;
+	}
+	public void setSugar(int sugar) {
+		this.sugar = sugar;
+	}
+	public int getIce() {
+		return ice;
+	}
+	public void setIce(int ice) {
+		this.ice = ice;
+	}
+	public int getMilk() {
+		return milk;
+	}
+	public void setMilk(int milk) {
+		this.milk = milk;
 	}
 	public ProductDTO getProduct() {
 		return product;

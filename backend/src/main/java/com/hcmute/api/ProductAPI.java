@@ -53,17 +53,23 @@ public class ProductAPI {
 	
 	@PostMapping (value = "/api/admin/product/state")
 	public ResponseEntity<ProductDTO> updateState(@RequestBody ProductDTO productDTO) {
-		return ResponseEntity.ok(productService.updateState(productDTO.getId(), productDTO.isState()));
+		productDTO = productService.updateState(productDTO.getId(), productDTO.isState());
+		productDTO.calRateAndNumberReviewers();
+		return ResponseEntity.ok(productDTO);
 	}
 	
 	@GetMapping("/api/info/product/{id}")
 	public ResponseEntity<ProductDTO> findOne(@PathVariable(name = "id") long id) {
-		return ResponseEntity.ok(productService.findOne(id));
+		ProductDTO productDTO = productService.findOne(id);
+		productDTO.calRateAndNumberReviewers();
+		return ResponseEntity.ok(productDTO);
 	}
 	
 	@GetMapping(value = "/api/info/product", params = "code")
 	public ResponseEntity<ProductDTO> findOneByCode(@RequestParam(name = "code") String code) {
-		return ResponseEntity.ok(productService.findOneByCode(code));
+		ProductDTO productDTO = productService.findOneByCode(code);
+		productDTO.calRateAndNumberReviewers();
+		return ResponseEntity.ok(productDTO);
 	}
 	
 	@GetMapping(value = "/api/info/product/count", params = "category")
@@ -73,7 +79,11 @@ public class ProductAPI {
 	
 	@GetMapping("/api/staff/product/list")
 	public ResponseEntity<List<ProductDTO>> findAll() {
-		return ResponseEntity.ok(productService.findAll());
+		List<ProductDTO> productDTOs = productService.findAll();
+		productDTOs.forEach((productDTO) -> {
+			productDTO.calRateAndNumberReviewers();
+		});
+		return ResponseEntity.ok(productDTOs);
 	}
 	
 	@GetMapping("/api/info/product") 
@@ -98,6 +108,7 @@ public class ProductAPI {
 				result = productService.findByKeyword(keyword, pageable);
 			}
 		}
+		result.calRateAndNumberReviewers();
 		return ResponseEntity.ok(result);
 	}
 	
@@ -119,6 +130,7 @@ public class ProductAPI {
 		} else {
 			result = productService.findByKeywordIgnore(keyword, pageable);
 		}
+		result.calRateAndNumberReviewers();
 		return ResponseEntity.ok(result);
 	}
 }
