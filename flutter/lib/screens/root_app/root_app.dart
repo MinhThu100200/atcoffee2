@@ -1,4 +1,3 @@
-import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,10 +5,8 @@ import 'package:get/get.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 // screens
 import 'package:at_coffee/screens/location_page/location_page.dart';
-import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:at_coffee/screens/reward_page/reward_page.dart';
-import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/profile_page/profile_page.dart';
 import 'package:at_coffee/screens/home_page/home_page.dart';
 // controllers
@@ -27,7 +24,6 @@ class RootApp extends StatefulWidget {
 class _RootAppState extends State<RootApp> {
   // get carts
   final cartController = Get.put(CartController());
-  final UserController userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -99,14 +95,14 @@ class _RootAppState extends State<RootApp> {
                     size: 28,
                     color: pageIndex == index ? primary : black,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   pageIndex == index
                       ? Container(
                           width: 6,
                           height: 6,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: primary, shape: BoxShape.circle),
                         )
                       : Container()

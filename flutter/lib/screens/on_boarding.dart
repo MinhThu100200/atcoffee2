@@ -2,11 +2,8 @@ import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/screens/login_page/login_page.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
-import 'package:at_coffee/screens/root_app/root_app.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:at_coffee/controllers/user_controller.dart';
-import 'package:at_coffee/models/user.dart';
 
 class Onboarding extends StatelessWidget {
   @override
@@ -25,20 +22,9 @@ class onboarding extends StatefulWidget {
 }
 
 class _onboardingState extends State<onboarding> {
-  final UserController userController = Get.put(new UserController());
-
   @override
   void initState() {
     super.initState();
-    authUserByToken();
-  }
-
-  void authUserByToken() async {
-    User user = await userController.authUserByToken();
-    if (user != null) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => new RootApp()));
-    }
   }
 
   int currentPage = 0;
@@ -78,46 +64,46 @@ class _onboardingState extends State<onboarding> {
             left: 0,
             right: 0,
             child: Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               height: 420,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/images/path.png'),
                       fit: BoxFit.fill)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 70,
                   ),
                   InkWell(
                     onTap: openLoginPage,
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 100),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.black.withOpacity(0.2),
-                                offset: Offset(0, 9),
+                                offset: const Offset(0, 9),
                                 blurRadius: 20,
                                 spreadRadius: 3)
                           ]),
-                      child: Text(
+                      child: const Text(
                         "Đăng nhập",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   InkWell(
                     onTap: openSignUp,
-                    child: Text(
+                    child: const Text(
                       "Đăng ký",
                       style: TextStyle(
                           color: Colors.white,
@@ -136,12 +122,12 @@ class _onboardingState extends State<onboarding> {
 
   AnimatedContainer getIndicator(int pageNo) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
       height: 10,
       width: (currentPage == pageNo) ? 20 : 10,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
           color: (currentPage == pageNo) ? Colors.black : Colors.grey),
     );
   }
@@ -155,13 +141,13 @@ class _onboardingState extends State<onboarding> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        const SizedBox(
           height: 70,
         ),
         Container(
           height: 200,
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Center(
             child: Lottie.asset(
               uriAnimation,
@@ -170,17 +156,17 @@ class _onboardingState extends State<onboarding> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Text(
             title,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
           child: Text(
             content,
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
         )

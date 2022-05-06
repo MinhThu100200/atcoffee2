@@ -10,10 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.hcmute.entity.BillEntity;
 import com.hcmute.entity.StoreEntity;
+import com.hcmute.entity.UserEntity;
 
 public interface BillRepository extends JpaRepository<BillEntity, Long>{
 	
 	List<BillEntity> findByCreatedDateBetweenAndStatus(Date start, Date end, String status);
+	List<BillEntity> findByCustomerOrderByCreatedDateDesc(UserEntity customer);
 	@Query("select b from BillEntity b left join b.staff s left join b.customer c WHERE "
 			+ "(b.code LIKE %?1% OR s.name LIKE %?1% OR c.name LIKE %?1%) AND b.status = ?2 ORDER BY b.modifiedDate DESC")
 	Page<BillEntity>findByKeywordAndStatus(String keyword, String status, Pageable pageable);

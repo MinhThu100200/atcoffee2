@@ -32,6 +32,10 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<StoreEntity> stores = new ArrayList<>();
+	
+	@ManyToMany(mappedBy = "favourites", fetch = FetchType.LAZY)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<UserEntity> customers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<BillDetailEntity> billDetails = new ArrayList<BillDetailEntity>();
@@ -112,6 +116,14 @@ public class ProductEntity extends BaseEntity implements Serializable {
 			store.getProducts().add(this);
 		}
 	}
+	
+	public List<UserEntity> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<UserEntity> customers) {
+		this.customers = customers;
+	}
 
 	public List<RateEntity> getRates() {
 		return rates;
@@ -139,6 +151,26 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	public void setCarts(List<CartEntity> carts) {
 		this.carts = carts;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// If the object is compared with itself then return true 
+        if (obj == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(obj instanceof ProductEntity)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        ProductEntity productCompare = (ProductEntity) obj;
+         
+        // Compare the data members and return accordingly
+        return Long.compare(getId(), productCompare.getId()) == 0;
 	}
 	
 }

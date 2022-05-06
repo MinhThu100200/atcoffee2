@@ -133,6 +133,15 @@ public class BillServiceImpl implements BillService{
 		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
 		return dtos;
 	}
+	
+	@Override
+	public List<BillDTO> findByCustomerId(long customerId) {
+		UserEntity customer = userRepository.findOne(customerId);
+		List<BillEntity> entities = billRepository.findByCustomerOrderByCreatedDateDesc(customer);
+		List<BillDTO> dtos = new ArrayList<BillDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
+		return dtos;
+	}
 
 	@Override
 	public BillResponse findByKeywordAndStatus(String keyword, String status, Pageable pageable) {

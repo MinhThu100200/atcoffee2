@@ -18,6 +18,7 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	private List<CategoryDTO> categories;
 	private List<StoreDTO> stores;
 	private List<SizeDTO> sizes;
+	private List<RateDTO> rates;
 	
 	public ProductDTO() {
 		super();
@@ -82,6 +83,25 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	}
 	public void setSizes(List<SizeDTO> sizes) {
 		this.sizes = sizes;
+	}
+	
+	public List<RateDTO> getRates() {
+		return rates;
+	}
+	public void setRates(List<RateDTO> rates) {
+		this.rates = rates;
+	}
+	public void calRateAndNumberReviewers() {
+		this.numberReviewers = rates.size();
+		if (numberReviewers > 0) {
+			int sumRate = 0;
+			for (int i = 0; i < rates.size(); i++) {
+				sumRate += rates.get(i).getStar();
+			}
+			this.rate = (float)sumRate / numberReviewers;
+		} else {
+			this.rate = 0;
+		}
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
+import com.hcmute.api.request.FavouriteRequest;
 import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.ProductDTO;
 
@@ -14,6 +15,10 @@ public interface ProductService {
 	ProductDTO findOneByCode(String code);
 	int countByCategoryCode(String categoryCode);
 	List<ProductDTO> findAll();
+	List<ProductDTO> findSuggesstion(long customerId, int num);
+	List<ProductDTO> findFavouritesByCustomerId(long customerId);
+	boolean saveFavourite(FavouriteRequest favouriteRequest);
+	boolean deleteFavourite(FavouriteRequest favouriteRequest);
 	ProductResponse findByState(Boolean state, Pageable pageable);
 	ProductResponse findAll(Pageable pageable);
 	ProductResponse findByKeyword(String keyword, Pageable pageable);
