@@ -259,7 +259,7 @@ class _homePageState extends State<HomePage> {
                                             Container(
                                                 padding:
                                                     EdgeInsets.only(left: 8),
-                                                child: Text("Take away",
+                                                child: Text("Take away ",
                                                     style: TextStyle(
                                                         color: primary,
                                                         fontSize: 18,

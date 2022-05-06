@@ -117,7 +117,7 @@ Future<String> _getAddress(double lat, double lang) async {
   List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
   //print(placemarks);
   Placemark place = placemarks[0];
-  print(place);
+  //print(place);
 
   double distanceInMeters =
       Geolocator.distanceBetween(lat, lang, 10.9021, 106.7754);
