@@ -32,6 +32,10 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<StoreEntity> stores = new ArrayList<>();
+	
+	@ManyToMany(mappedBy = "favourites", fetch = FetchType.LAZY)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<UserEntity> customers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<BillDetailEntity> billDetails = new ArrayList<BillDetailEntity>();
@@ -111,6 +115,14 @@ public class ProductEntity extends BaseEntity implements Serializable {
 			this.stores.add(store);
 			store.getProducts().add(this);
 		}
+	}
+	
+	public List<UserEntity> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<UserEntity> customers) {
+		this.customers = customers;
 	}
 
 	public List<RateEntity> getRates() {

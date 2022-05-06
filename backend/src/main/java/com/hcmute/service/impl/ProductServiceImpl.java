@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.request.FavouriteRequest;
 import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.CategoryDTO;
 import com.hcmute.dto.ProductDTO;
@@ -131,6 +132,15 @@ public class ProductServiceImpl implements ProductService{
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
 		return dtos;
 	}
+	
+	@Override
+	public List<ProductDTO> findFavouritesByCustomerId(long customerId) {
+		UserEntity customer = userRepository.findOne(customerId);
+		List<ProductEntity> entities = customer.getFavourites();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
 
 	@Override
 	public ProductResponse findAll(Pageable pageable) {
@@ -228,5 +238,37 @@ public class ProductServiceImpl implements ProductService{
 		result.setSize(page.getSize());
 		result.setPage(pageable.getPageNumber());
 		return result;
+	}
+
+	@Override
+	public boolean saveFavourite(FavouriteRequest favouriteRequest) {
+		try {
+			UserEntity userEntity = userRepository.findOne(favouriteRequest.getCustomerId());
+			ProductEntity productEntity = productRepository.findOne(favouriteRequest.getProductId());
+			if (userEntity.getFavourites().contains(productEntity) == false) {
+				userEntity.getFavourites().add(productEntity);
+				userRepository.save(userEntity);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+		
+	}
+	
+	@Override
+	public boolean deleteFavourite(FavouriteRequest favouriteRequest) {
+		try {
+			UserEntity userEntity = userRepository.findOne(favouriteRequest.getCustomerId());
+			ProductEntity productEntity = productRepository.findOne(favouriteRequest.getProductId());
+			if (userEntity.getFavourites().contains(productEntity) == true) {
+				userEntity.getFavourites().remove(productEntity);
+				userRepository.save(userEntity);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+		
 	}
 }

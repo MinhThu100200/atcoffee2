@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hcmute.api.request.FavouriteRequest;
 import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.ProductDTO;
 import com.hcmute.service.ProductService;
@@ -87,13 +89,32 @@ public class ProductAPI {
 	}
 	
 	@GetMapping("/api/user/product/suggestion")
-	public ResponseEntity<List<ProductDTO>> findSuggesstion(@RequestParam(name="customerId", required = false) long customerId,
+	public ResponseEntity<List<ProductDTO>> findSuggesstion(@RequestParam(name="customerId", required = true) long customerId,
 			@RequestParam(name = "num", defaultValue = "10000") int num) {
 		List<ProductDTO> productDTOs = productService.findSuggesstion(customerId, num);
 		productDTOs.forEach((productDTO) -> {
 			productDTO.calRateAndNumberReviewers();
 		});
 		return ResponseEntity.ok(productDTOs);
+	}
+	
+	@GetMapping("/api/user/favourite")
+	public ResponseEntity<List<ProductDTO>> findFavourites(@RequestParam(name="customerId", required = true) long customerId) {
+		List<ProductDTO> productDTOs = productService.findFavouritesByCustomerId(customerId);
+		productDTOs.forEach((productDTO) -> {
+			productDTO.calRateAndNumberReviewers();
+		});
+		return ResponseEntity.ok(productDTOs);
+	}
+	
+	@PostMapping("/api/user/favourite")
+	public ResponseEntity<Boolean> addFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+		return ResponseEntity.ok(productService.saveFavourite(favouriteRequest));
+	}
+	
+	@DeleteMapping("/api/user/favourite")
+	public ResponseEntity<Boolean> removeFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+		return ResponseEntity.ok(productService.deleteFavourite(favouriteRequest));
 	}
 	
 	@GetMapping("/api/info/product") 
