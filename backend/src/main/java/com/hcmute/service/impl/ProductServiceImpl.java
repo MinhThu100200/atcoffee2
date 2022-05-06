@@ -261,7 +261,7 @@ public class ProductServiceImpl implements ProductService{
 		try {
 			UserEntity userEntity = userRepository.findOne(favouriteRequest.getCustomerId());
 			ProductEntity productEntity = productRepository.findOne(favouriteRequest.getProductId());
-			if (userEntity.getFavourites().contains(productEntity) == true) {
+			if (userEntity.getFavourites().contains(productEntity)) {
 				userEntity.getFavourites().remove(productEntity);
 				userRepository.save(userEntity);
 			}
