@@ -25,7 +25,9 @@ class Store {
       this.name,
       this.address,
       this.timeOpen,
-      this.timeClose});
+      this.timeClose,
+      this.latitude,
+      this.longitude});
 
   int id;
   int createdDate;
@@ -39,21 +41,24 @@ class Store {
   String address;
   String timeOpen;
   String timeClose;
+  double latitude;
+  double longitude;
 
   factory Store.fromJson(Map<String, dynamic> json) => Store(
-        id: json["id"],
-        createdDate: json["createdDate"],
-        modifiedDate: json["modifiedDate"],
-        createdBy: json["createdBy"],
-        modifiedBy: json["modifiedBy"],
-        code: json["code"],
-        state: json["state"],
-        results: json["results"],
-        name: json["name"],
-        address: json["address"],
-        timeOpen: json["timeOpen"],
-        timeClose: json["timeClose"],
-      );
+      id: json["id"],
+      createdDate: json["createdDate"],
+      modifiedDate: json["modifiedDate"],
+      createdBy: json["createdBy"],
+      modifiedBy: json["modifiedBy"],
+      code: json["code"],
+      state: json["state"],
+      results: json["results"],
+      name: json["name"],
+      address: json["address"],
+      timeOpen: json["timeOpen"],
+      timeClose: json["timeClose"],
+      latitude: json["latitude"],
+      longitude: json["longitude"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -67,6 +72,8 @@ class Store {
         "name": name,
         "address": address,
         "timeOpen": timeOpen,
-        "timeClose": timeClose
+        "timeClose": timeClose,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }

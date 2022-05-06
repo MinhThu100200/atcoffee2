@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart'
+    show Placemark, placemarkFromCoordinates;
+import 'package:location/location.dart';
 
 class LocationPage extends StatefulWidget {
   @override
@@ -15,6 +19,65 @@ class _locationPageState extends State<LocationPage> {
   int selectedTab = 0;
 
   final StoreController storeController = Get.put(StoreController());
+
+  // void _getLocation(latStore, longDes) {
+  //   _getAddress(latStore, latStore).then((value) {
+  //     return value;
+  //   });
+  // }
+
+  String _getAddress(double lat, double long) {
+    double distanceInMeters = 0;
+    //_getLocationData().then((value) {
+    if (lat == 0 ||
+        long == 0 ||
+        storeController.latitude.value == 0 ||
+        storeController.longitude.value == 0) return 0.toString();
+    // GeoCode geoCode = GeoCode();
+    //print(currentLocation);
+
+    //LocationData location = value;
+
+    // Address address =
+    //     await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+    // print(address);
+    // Coordinates coordinates =
+    //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
+    // print(coordinates);
+    //getDistance(lat, lang, 10.9021, 106.7754);
+
+    // List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
+    // //print(placemarks);
+    // Placemark place = placemarks[0];
+    // print(place);
+
+    distanceInMeters = (Geolocator.distanceBetween(
+                storeController.latitude.value,
+                storeController.longitude.value,
+                lat,
+                long) +
+            1000) /
+        1000;
+    // lệch 1km cho phép
+    print(distanceInMeters);
+
+    return distanceInMeters.round().toString();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // _getLocationData().then((value) => setState(() {
+      //       currentLocation = value;
+      //     }));
+      storeController.fetchStores();
+      storeController.getAddress();
+      // productController.fetchProductsByCategory(codeCategory[0]);
+      // print("Build Completed");
+    });
+  }
 
   void setStateValue(value) {
     selectedTab = value;
@@ -175,13 +238,24 @@ class _locationPageState extends State<LocationPage> {
                                                             .storesList[index]
                                                             .address,
                                                         style: TextStyle(
-                                                            fontSize: 15)),
+                                                            fontSize: 12)),
                                                   ),
                                                   SizedBox(
                                                     height: 12,
                                                   ),
                                                   Container(
-                                                    child: Text("Cách đây 15km",
+                                                    child: Text(
+                                                        "Cách khoảng đây " +
+                                                            _getAddress(
+                                                                storeController
+                                                                    .storesList[
+                                                                        index]
+                                                                    .latitude,
+                                                                storeController
+                                                                    .storesList[
+                                                                        index]
+                                                                    .longitude) +
+                                                            "km",
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color: gray)),

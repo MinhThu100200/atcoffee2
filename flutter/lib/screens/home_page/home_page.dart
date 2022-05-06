@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart'
+    show Placemark, placemarkFromCoordinates;
 import 'package:at_coffee/controllers/store_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,20 +14,92 @@ class HomePage extends StatefulWidget {
 
 class _homePageState extends State<HomePage> {
   List<String> listTab = ["Gần đây", "Tất cả"];
-
+  LocationData currentLocation;
+  String address = "";
   //int selectedTab = 0;
 
-  //final StoreController storeController = Get.put(StoreController());
+  final StoreController storeController = Get.put(StoreController());
+  // Future<LocationData> _getLocationData() async {
+  //   Location location = new Location();
+  //   LocationData _locationData;
 
-  void setStateValue(value) {
-    //selectedTab = value;
-    setState(() {});
+  //   bool _serviceEnabled;
+  //   PermissionStatus _permissionGranted;
+
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       return null;
+  //     }
+  //   }
+
+  //   _permissionGranted = await location.hasPermission();
+  //   if (_permissionGranted == PermissionStatus.denied) {
+  //     _permissionGranted = await location.requestPermission();
+  //     if (_permissionGranted != PermissionStatus.granted) {
+  //       return null;
+  //     }
+  //   }
+
+  //   _locationData = await location.getLocation();
+
+  //   return _locationData;
+  // }
+
+  String _getLocation() {
+    //print("â'aaaaaaa" + storeController.latitude?.value.toString());
+
+    _getAddress(
+            storeController.latitude?.value, storeController.longitude?.value)
+        .then((value) {
+      setState(() {
+        //currentLocation = location;
+        address = value;
+      });
+    });
+    print(address);
+  }
+
+  Future<String> _getAddress(double lat, double lang) async {
+    if (lat == 0.0 || lang == 0.0) return "";
+    // GeoCode geoCode = GeoCode();
+    // Address address =
+    //     await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+    // print(address);
+    // Coordinates coordinates =
+    //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
+    // print(coordinates);
+    //getDistance(lat, lang, 10.9021, 106.7754);
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
+    //print(placemarks);
+    Placemark place = placemarks[0];
+    print(place);
+
+    // double distanceInMeters =
+    //     Geolocator.distanceBetween(lat, lang, 10.9021, 106.7754);
+    // // lệch 1km cho phép
+    // print(distanceInMeters + 1000);
+
+    return "${place.street}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      storeController.getAddress();
+      //productController.fetchProductsByCategory(codeCategory[0]);
+      print("Build Completed");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    print("mt" + storeController.myAddress.value);
     return Scaffold(
       backgroundColor: lightGray3,
       body: Column(
@@ -316,9 +391,17 @@ class _homePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: 6),
-                  Text("1 Võ Văn Ngân, thành phố Hồ Chí Minh",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Obx(() {
+                    if (storeController.isLoading.value) {
+                      return Text("đang định vị, vị trí của bạn...",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 15));
+                    } else {
+                      return Text(storeController.myAddress.value,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 15));
+                    }
+                  })
                 ],
               ))
         ],

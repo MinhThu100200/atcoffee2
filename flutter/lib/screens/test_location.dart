@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geocode/geocode.dart';
+//import 'package:geocode/geocode.dart';
 import 'package:location/location.dart';
 import 'dart:math' show sin, cos, sqrt, atan2;
 import 'package:vector_math/vector_math.dart';
@@ -105,10 +105,10 @@ getDistance(latitude1, longitude1, latitude2, longitude2) {
 
 Future<String> _getAddress(double lat, double lang) async {
   if (lat == null || lang == null) return "";
-  GeoCode geoCode = GeoCode();
-  Address address =
-      await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
-  print(address);
+  // GeoCode geoCode = GeoCode();
+  // Address address =
+  //     await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+  // print(address);
   // Coordinates coordinates =
   //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
   // print(coordinates);
