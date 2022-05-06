@@ -4,7 +4,7 @@ import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/constant/api_constants.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
 import 'dart:convert';
-import 'package:at_coffee/common/utils_common/utils_common.dart';
+import 'package:at_coffee/common/utils_common/api_service.dart';
 
 class RemoteServices {
   static var client = http.Client();

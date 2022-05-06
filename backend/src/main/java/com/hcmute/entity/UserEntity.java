@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -63,6 +67,13 @@ public class UserEntity extends BaseEntity implements Serializable{
 	
 	@OneToMany(mappedBy = "customer")
 	private List<CartEntity> customerCarts = new ArrayList<>();
+	
+	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE} , fetch = FetchType.LAZY)
+	@JoinTable(name = "user_product",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private List<ProductEntity> favourites = new ArrayList<>();
 	
 	public String getUsername() {
 		return username;
@@ -203,7 +214,7 @@ public class UserEntity extends BaseEntity implements Serializable{
 	public List<BillEntity> getCustomerBills() {
 		return customerBills;
 	}
-
+	
 	public void setCustomerBills(List<BillEntity> customerBills) {
 		this.customerBills = customerBills;
 	}
@@ -215,6 +226,12 @@ public class UserEntity extends BaseEntity implements Serializable{
 	public void setCustomerCarts(List<CartEntity> customerCarts) {
 		this.customerCarts = customerCarts;
 	}
-	
-	
+
+	public List<ProductEntity> getFavourites() {
+		return favourites;
+	}
+
+	public void setFavourites(List<ProductEntity> favourites) {
+		this.favourites = favourites;
+	}
 }
