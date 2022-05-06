@@ -4,6 +4,7 @@
 
 # Xcode
 #
+.dart_tool/
 build/
 *.pbxuser
 !default.pbxuser
