@@ -51,6 +51,8 @@ dependencies:
   fluttertoast: ^8.0.9
   toast: ^0.2.9
   shared_preferences: ^2.0.13
+  geolocator: ^8.2.0
+  geocoding: ^2.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
