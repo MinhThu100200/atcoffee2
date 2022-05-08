@@ -17,6 +17,7 @@ public interface UserService extends UserDetailsService{
 	UserDTO findOneByUsername(String username);
 	UserDTO findOneByCode(String code);
 	UserDTO findOne(Long id);
+	String validateSignUpUser(UserDTO userDto);
 	List<UserDTO> validate(String username, String code, String email, String phone, String identityCard);
 	List<UserDTO> findAll();
 	List<UserDTO> findByRoleAndCreatedDateBetween(String roleName, Date start, Date end);

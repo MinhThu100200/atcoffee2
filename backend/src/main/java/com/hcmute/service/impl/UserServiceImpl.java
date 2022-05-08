@@ -262,4 +262,19 @@ public class UserServiceImpl implements UserService{
 		return dtos;
 	}
 
+	@Override
+	public String validateSignUpUser(UserDTO userDto) {
+		String validateMsg = "";
+		UserEntity entity = userRepository.findOneByEmail(userDto.getEmail());
+		if (entity != null) {
+			validateMsg += "Email đã tồn tại. ";
+		}
+		entity = userRepository.findOneByPhone(userDto.getPhone());
+		if (entity != null) {
+			validateMsg += "Số điện thoại đã tồn tại.";
+		}
+		
+		return validateMsg;
+	}
+
 }
