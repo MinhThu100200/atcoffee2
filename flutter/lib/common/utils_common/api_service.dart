@@ -52,7 +52,21 @@ class ApiService {
     return response;
   }
 
+  Future<dynamic> postForm(String url, dynamic body) async {
+    String token = await getToken();
+    var response = await client.post(Uri.parse(url),
+        headers: VariableConstants.API_PUT_HEADERS(token), body: body);
+    return response;
+  }
+
   Future<dynamic> put(String url, dynamic body) async {
+    String token = await getToken();
+    var response = await client.put(Uri.parse(url),
+        headers: VariableConstants.API_HEADERS(token), body: body);
+    return response;
+  }
+
+  Future<dynamic> putForm(String url, dynamic body) async {
     String token = await getToken();
     var response = await client.put(Uri.parse(url),
         headers: VariableConstants.API_PUT_HEADERS(token), body: body);

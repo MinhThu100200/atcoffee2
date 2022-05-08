@@ -52,10 +52,10 @@ class _RootAppState extends State<RootApp> {
         //   child: Text("Notification Page"),
         // ),
         GetUserLocation(),
-        //ProfilePage(),
-        Center(
-          child: Text("Personal Page"),
-        ),
+        ProfilePage(),
+        // Center(
+        //   child: Text("Personal Page"),
+        // ),
       ],
     );
   }

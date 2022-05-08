@@ -1,3 +1,4 @@
+import 'package:at_coffee/screens/forget_password/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:at_coffee/screens/on_boarding.dart';
@@ -45,9 +46,11 @@ class _loginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  void _login(String email, String password) {
+  void _login(String email, String password) async {
     // Data Fixed - Change
-    userController.authUser('0234567891', '123456');
+    // await userController.authUser('0975226327', '12345');
+    await userController.authUser('0234567891', '123456');
+
     if (userController.user != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => new RootApp()));
@@ -194,7 +197,7 @@ class _loginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: openForgetPassword,
                             child: Text(
                               "Quên mật khẩu?",
                               style: TextStyle(
@@ -360,5 +363,9 @@ class _loginPageState extends State<LoginPage> {
 
   void openSignUp() {
     Get.to(() => SignUpPage());
+  }
+
+  void openForgetPassword() {
+    Get.to(() => ForgetPassword());
   }
 }

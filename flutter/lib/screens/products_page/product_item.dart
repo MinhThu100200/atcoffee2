@@ -117,10 +117,28 @@ class _ProductItem extends State<ProductItem> {
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              Text(_product.rate.toString() + " ",
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.yellow)),
+                              Container(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: Text(
+                                    "★★★★★".substring(
+                                          0,
+                                          _product.rate.toInt(),
+                                        ) +
+                                        "☆☆☆☆☆".substring(
+                                            _product.rate.toInt(), 5),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.yellow)),
+                              ),
                               Text(
-                                  _product.rate.toString() +
-                                      "★★★★/" +
-                                      "6" +
+                                  "/ " +
+                                      _product.numberReviewers.toString() +
                                       " đánh giá",
                                   style: const TextStyle(
                                       fontSize: 12,
@@ -146,7 +164,7 @@ class _ProductItem extends State<ProductItem> {
                               Image.network(_product.image, fit: BoxFit.contain,
                                   errorBuilder: (BuildContext context,
                                       Object exception, StackTrace stackTrace) {
-                            return Text('😢');
+                            return const Text('😢');
                           }, loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent loadingProgress) {

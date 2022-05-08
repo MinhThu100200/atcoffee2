@@ -282,7 +282,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                                       },
                                       activeColor: Colors.green,
                                     ),
-                                    Text('Khác',
+                                    const Text('Khác',
                                         style: TextStyle(fontSize: 18.0))
                                   ],
                                 )

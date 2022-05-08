@@ -1,3 +1,4 @@
+import 'package:at_coffee/screens/change_password/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
@@ -278,7 +279,10 @@ class _ProfilePage extends State<ProfilePage> {
                             child: const Icon(Icons.password_outlined,
                                 color: Colors.black, size: 28.0),
                           ),
-                          Container(
+                          InkWell(
+                              onTap: () {
+                                Get.to(() => ChangePassword());
+                              },
                               child: const Text('Đổi mật khẩu',
                                   style: TextStyle(fontSize: 18.0)))
                         ],
