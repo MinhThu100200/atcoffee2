@@ -5,6 +5,7 @@ import 'package:at_coffee/services/service_product.dart';
 class ProductController extends GetxController {
   var isLoading = true.obs;
   var productsList = List<Product>().obs;
+  var productsSuggestion = List<Product>().obs;
 
   @override
   void onInit() {
@@ -32,6 +33,20 @@ class ProductController extends GetxController {
       var products = await RemoteServices.fetchProductsByCategory(cate);
       if (products != null) {
         productsList.value = products;
+      }
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void fetchProductSuggest(customerId, size) async {
+    try {
+      isLoading(true);
+      var products = await RemoteServices.fetchProductSuggest(customerId, size);
+      if (products != null) {
+        productsSuggestion.value = products;
+        print("suggest");
+        print(products);
       }
     } finally {
       isLoading(false);

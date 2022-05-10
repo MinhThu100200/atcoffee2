@@ -3,8 +3,6 @@
 //     final product = productFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 import 'package:at_coffee/models/category.dart';
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/size.dart';
@@ -13,6 +11,9 @@ List<Product> productFromJson(String str) {
   final data = json.decode(str)['products'];
   return List<Product>.from(data.map((x) => Product.fromJson(x)));
 }
+
+List<Product> storeFromJsonNotPage(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
 String productToJson(List<Product> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

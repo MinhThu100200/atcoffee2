@@ -8,7 +8,9 @@ import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/controllers/product_controller.dart';
 
+import '../products_page/product_item.dart';
 import '../products_page/products_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,78 +19,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _homePageState extends State<HomePage> {
-  List<String> listTab = ["Gần đây", "Tất cả"];
-  LocationData currentLocation;
-  String address = "";
-  //int selectedTab = 0;
-
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
-  // Future<LocationData> _getLocationData() async {
-  //   Location location = new Location();
-  //   LocationData _locationData;
-
-  //   bool _serviceEnabled;
-  //   PermissionStatus _permissionGranted;
-
-  //   _serviceEnabled = await location.serviceEnabled();
-  //   if (!_serviceEnabled) {
-  //     _serviceEnabled = await location.requestService();
-  //     if (!_serviceEnabled) {
-  //       return null;
-  //     }
-  //   }
-
-  //   _permissionGranted = await location.hasPermission();
-  //   if (_permissionGranted == PermissionStatus.denied) {
-  //     _permissionGranted = await location.requestPermission();
-  //     if (_permissionGranted != PermissionStatus.granted) {
-  //       return null;
-  //     }
-  //   }
-
-  //   _locationData = await location.getLocation();
-
-  //   return _locationData;
-  // }
-
-  String _getLocation() {
-    //print("â'aaaaaaa" + storeController.latitude?.value.toString());
-
-    _getAddress(
-            storeController.latitude?.value, storeController.longitude?.value)
-        .then((value) {
-      setState(() {
-        //currentLocation = location;
-        address = value;
-      });
-    });
-    print(address);
-  }
-
-  Future<String> _getAddress(double lat, double lang) async {
-    if (lat == 0.0 || lang == 0.0) return "";
-    // GeoCode geoCode = GeoCode();
-    // Address address =
-    //     await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
-    // print(address);
-    // Coordinates coordinates =
-    //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
-    // print(coordinates);
-    //getDistance(lat, lang, 10.9021, 106.7754);
-
-    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
-    //print(placemarks);
-    Placemark place = placemarks[0];
-    print(place);
-
-    // double distanceInMeters =
-    //     Geolocator.distanceBetween(lat, lang, 10.9021, 106.7754);
-    // // lệch 1km cho phép
-    // print(distanceInMeters + 1000);
-
-    return "${place.street}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
-  }
+  final ProductController productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -96,15 +29,14 @@ class _homePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       storeController.getAddress();
-      //productController.fetchProductsByCategory(codeCategory[0]);
-      print("Build Completed");
+      productController.fetchProductSuggest(userController.user.value.id, 3);
+      print("Build Completed:" + userController.user.value.id.toString());
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    print("mt" + storeController.myAddress.value);
     return Scaffold(
       backgroundColor: lightGray3,
       body: Column(
@@ -120,17 +52,6 @@ class _homePageState extends State<HomePage> {
                         child: SizedBox(
                       width: size.width,
                       child: Stack(alignment: Alignment.centerLeft, children: [
-                        // Positioned(
-                        //   child: IconButton(
-                        //       icon: const Icon(
-                        //         Icons.arrow_back,
-                        //         color: Colors.white,
-                        //       ),
-                        //       onPressed: () {
-                        //         Navigator.of(context).pop();
-                        //       }),
-                        // ),
-
                         Positioned(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10, left: 5),
@@ -251,7 +172,7 @@ class _homePageState extends State<HomePage> {
                                                       "Chưa đạt phần thưởng",
                                                       style: TextStyle(
                                                           color: white,
-                                                          fontSize: 16,
+                                                          fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w600)))
                                             ],
@@ -382,12 +303,31 @@ class _homePageState extends State<HomePage> {
                               children: [
                                 Container(
                                     padding: EdgeInsets.all(20),
-                                    child: Text("Gợi ý của bạn",
+                                    child: Text("Gợi ý riêng của bạn",
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w800))),
                               ],
                             ),
+                            Obx(() {
+                              if (productController.isLoading.value)
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              else
+                                return Container(
+                                  child: ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: productController
+                                          .productsSuggestion.length,
+                                      shrinkWrap: true,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return ProductItem(
+                                            product: productController
+                                                .productsSuggestion[index]);
+                                      }),
+                                );
+                            })
                           ]),
                     ),
                   ],
@@ -395,46 +335,73 @@ class _homePageState extends State<HomePage> {
               ),
             )),
           ),
-          Container(
-              width: size.width,
-              padding: const EdgeInsets.only(
-                  top: 10, bottom: 5, left: 10, right: 10),
-              color: white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              color: lightGreen2,
-                              borderRadius: BorderRadius.circular(14)),
-                          height: 30,
-                          padding: const EdgeInsets.all(3),
-                          child: Image.asset('assets/icons/delivery-man.png')),
-                      SizedBox(width: 5),
-                      Text("Giao đến",
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: gray3))
-                    ],
-                  ),
-                  SizedBox(height: 6),
-                  Obx(() {
-                    if (storeController.isLoading.value) {
-                      return Text("đang định vị, vị trí của bạn...",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15));
-                    } else {
-                      return Text(storeController.myAddress.value,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15));
-                    }
-                  })
-                ],
-              ))
+          InkWell(
+            onTap: () {
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 200,
+                      color: Colors.amber,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Text('Modal BottomSheet'),
+                            ElevatedButton(
+                              child: const Text('Close BottomSheet'),
+                              onPressed: () => Navigator.pop(context),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            },
+            child: Container(
+                width: size.width,
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 5, left: 10, right: 10),
+                color: white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: lightGreen2,
+                                borderRadius: BorderRadius.circular(14)),
+                            height: 30,
+                            padding: const EdgeInsets.all(3),
+                            child:
+                                Image.asset('assets/icons/delivery-man.png')),
+                        SizedBox(width: 5),
+                        Text("Giao đến",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: gray3))
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    Obx(() {
+                      if (storeController.isLoading.value ||
+                          storeController.myAddress.value == '') {
+                        return Text("đang định vị, vị trí của bạn...",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15));
+                      } else {
+                        return Text(storeController.myAddress.value,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15));
+                      }
+                    })
+                  ],
+                )),
+          )
         ],
       ),
     );

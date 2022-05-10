@@ -111,13 +111,13 @@ class _ProductItem extends State<ProductItem> {
                             ]),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: 4,
                           ),
                           Container(
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(_product.rate.toString() + " ",
+                              Text(_product.rate.round().toString() + " ",
                                   style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -127,10 +127,10 @@ class _ProductItem extends State<ProductItem> {
                                 child: Text(
                                     "★★★★★".substring(
                                           0,
-                                          _product.rate.toInt(),
+                                          _product.rate.round(),
                                         ) +
                                         "☆☆☆☆☆".substring(
-                                            _product.rate.toInt(), 5),
+                                            _product.rate.round(), 5),
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,

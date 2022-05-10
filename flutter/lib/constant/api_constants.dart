@@ -1,5 +1,5 @@
 class ApiConstants {
-  static String HOST = 'https://fc49-116-108-122-110.ngrok.io';
+  static String HOST = 'https://dc6a-116-108-122-110.ngrok.io';
   static String GET_CATEGORY = '/api/info/category/?list=true';
   static String GET_STORE = '/api/info/store';
   static String GET_PRODUCT =
@@ -13,6 +13,11 @@ class ApiConstants {
   static String GET_RATE = '/api/info/rate';
   static String GET_RATE_BY_PRODUCT(id) =>
       '/api/info/rate?productId=' + id.toString();
+  static String GET_SUGGESTION(customerId, size) =>
+      '/api/user/product/suggestion?customerId=' +
+      customerId.toString() +
+      '&num=' +
+      size.toString();
 
   // Api Cart
   static String GET_CARTS_BY_CUSOMTERID(id) =>
