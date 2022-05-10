@@ -7,6 +7,8 @@ import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
 import 'package:at_coffee/controllers/store_controller.dart';
 
+import '../products_page/products_page.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _homePageState createState() => _homePageState();
@@ -265,6 +267,61 @@ class _homePageState extends State<HomePage> {
                             ),
                             Row(
                               children: [
+                                InkWell(
+                                  onTap: () => Get.to(() => ProductsPage()),
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      height: size.width / 2 - 40,
+                                      width: size.width / 2 - 30,
+                                      decoration: BoxDecoration(
+                                          color: lightGreen2,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      margin: EdgeInsets.only(
+                                        left: 20,
+                                      ),
+                                      //padding: const EdgeInsets.only(bottom: 5),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 65,
+                                              margin:
+                                                  const EdgeInsets.only(top: 8),
+                                              child: Image.asset(
+                                                  'assets/icons/delivery-man.png'),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                    padding: EdgeInsets.only(
+                                                        top: 6, left: 8),
+                                                    child: Text("Delivery",
+                                                        style: TextStyle(
+                                                            color: primary,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700))),
+                                              ],
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  top: 5, left: 8, right: 5),
+                                              child: Text(
+                                                  "Giao hàng tận nơi đến địa chỉ của bạn",
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                    //color: primary,
+                                                    fontSize: 12,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                ),
                                 Container(
                                     alignment: Alignment.center,
                                     height: size.width / 2 - 40,
@@ -276,87 +333,55 @@ class _homePageState extends State<HomePage> {
                                     margin: EdgeInsets.only(
                                       left: 20,
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 70,
-                                          margin: const EdgeInsets.only(top: 8),
-                                          child: Image.asset(
-                                              'assets/icons/delivery-man.png'),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(
-                                                padding: EdgeInsets.only(
-                                                    top: 10, left: 8),
-                                                child: Text("Delivery",
-                                                    style: TextStyle(
-                                                        color: primary,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w700))),
-                                          ],
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(
-                                              top: 5, left: 8, right: 5),
-                                          child: Text(
-                                              "Giao hàng tận nơi đến địa chỉ của bạn",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                //color: primary,
-                                                fontSize: 13,
-                                              )),
-                                        ),
-                                      ],
-                                    )),
-                                Container(
-                                    alignment: Alignment.center,
-                                    height: size.width / 2 - 40,
-                                    width: size.width / 2 - 30,
-                                    decoration: BoxDecoration(
-                                        color: lightGreen2,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    margin: EdgeInsets.only(
-                                      left: 20,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 80,
-                                          margin: const EdgeInsets.only(top: 8),
-                                          child: Image.asset(
-                                              'assets/images/strawberry-background.png'),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(
-                                                padding:
-                                                    EdgeInsets.only(left: 8),
-                                                child: Text("Take away ",
-                                                    style: TextStyle(
-                                                        color: primary,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w700))),
-                                          ],
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(
-                                              top: 5, left: 8, right: 5),
-                                          child: Text(
-                                              "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                //color: primary,
-                                                fontSize: 13,
-                                              )),
-                                        ),
-                                      ],
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 80,
+                                            child: Image.asset(
+                                                'assets/images/strawberry-background.png'),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                  padding:
+                                                      EdgeInsets.only(left: 8),
+                                                  child: Text("Take away ",
+                                                      style: TextStyle(
+                                                          color: primary,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight
+                                                              .w700))),
+                                            ],
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(
+                                                top: 5, left: 8, right: 5),
+                                            child: Text(
+                                                "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  //color: primary,
+                                                  fontSize: 12,
+                                                )),
+                                          ),
+                                        ],
+                                      ),
                                     )),
                               ],
-                            )
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Text("Gợi ý của bạn",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800))),
+                              ],
+                            ),
                           ]),
                     ),
                   ],

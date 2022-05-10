@@ -47,7 +47,7 @@ class _loginPageState extends State<LoginPage> {
 
   void _login(String email, String password) {
     // Data Fixed - Change
-    userController.authUser('0234567891', '123456');
+    userController.authUser('0346279377', '1234567890');
     if (userController.user != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => new RootApp()));

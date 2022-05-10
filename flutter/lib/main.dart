@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void authUserByToken() async {
     User user = await userController.authUserByToken();
+    print(user);
     if (user != null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => new RootApp()));
