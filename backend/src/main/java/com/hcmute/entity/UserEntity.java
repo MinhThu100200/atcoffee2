@@ -40,7 +40,6 @@ public class UserEntity extends BaseEntity implements Serializable{
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
-	@Column(unique = true)
 	private String identityCard;
 	@ManyToOne
 	@JoinColumn(name = "store_id")

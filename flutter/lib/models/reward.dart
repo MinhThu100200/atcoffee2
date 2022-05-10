@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 
 List<Reward> rewardFromJson(String str) {
-  final data = json.decode(str)['rewards'];
   return List<Reward>.from(json.decode(str).map((x) => Reward.fromJson(x)));
 }
 
@@ -38,7 +37,7 @@ class Reward {
   List<dynamic> results;
   String name;
   int proviso;
-  double redution;
+  int redution;
 
   factory Reward.fromJson(Map<String, dynamic> json) => Reward(
         id: json["id"],

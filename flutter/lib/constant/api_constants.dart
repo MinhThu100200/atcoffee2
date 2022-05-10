@@ -8,8 +8,7 @@ class ApiConstants {
       '/api/info/product?page=1&size=100&store=AT_THUDUC&category=' +
       cate +
       '&keyword';
-  static String GET_REWARD =
-      '/api/staff/reward?page=1&size=1000&keyword&state=true';
+  static String GET_REWARD = '/api/info/reward';
   static String GET_PROMOTION = "/api/info/promotion?list=true";
   static String GET_RATE = '/api/info/rate';
   static String GET_RATE_BY_PRODUCT(id) =>
@@ -26,4 +25,8 @@ class ApiConstants {
   static String AUTHORIZATE = '/api/authenticate';
   static String UPDATE_USER = '/api/info/user';
   static String AUTH_USER_BY_TOKEN = '/api/user/authenticate';
+  static String SIGN_UP = '/api/info/user';
+  static String VALIDATE_CUSTOMER_SIGNUP = "/api/info/customer/validate";
+  static String RESET_PASSWORD = '/api/info/reset-password';
+  static String CHANGE_PASSWORD = '/api/user/change-password';
 }

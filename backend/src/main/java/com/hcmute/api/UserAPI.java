@@ -87,6 +87,12 @@ public class UserAPI {
 		return ResponseEntity.ok(userDTO);
 	}
 	
+	
+	@PostMapping(value = "/api/info/customer/validate")
+	public ResponseEntity<String> validateCustomer(@RequestBody UserDTO userDto) {
+		return ResponseEntity.ok(userService.validateSignUpUser(userDto));
+	}
+	
 	@PostMapping(value = "/api/info/user")
 	public ResponseEntity<UserDTO> addCustomer(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
 			@RequestParam("user") String userJson){

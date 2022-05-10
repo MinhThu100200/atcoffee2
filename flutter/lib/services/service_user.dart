@@ -55,7 +55,7 @@ class RemoteServices {
     var map = new Map<String, dynamic>();
     map["user"] = jsonEncode(user.toJson());
     String url = ApiConstants.HOST + ApiConstants.UPDATE_USER;
-    var response = await ApiService.instance().put(url, map);
+    var response = await ApiService.instance().putForm(url, map);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
@@ -63,6 +63,83 @@ class RemoteServices {
     } else {
       print('updateUser: error');
       return null;
+    }
+  }
+
+  static Future<String> validateSignUp(User user) async {
+    String validateMsg = '';
+    try {
+      String url = ApiConstants.HOST + ApiConstants.VALIDATE_CUSTOMER_SIGNUP;
+      String body = jsonEncode(user.toJson());
+      var response = await ApiService.instance().post(url, body);
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        print(response.statusCode);
+        validateMsg = 'Đã có lỗi xảy ra';
+      }
+    } catch (e) {
+      print('validateSignUp: error');
+      validateMsg = 'Đã có lỗi xảy ra';
+    }
+    return validateMsg;
+  }
+
+  static Future<User> signUp(User user) async {
+    try {
+      user.image =
+          'https://res.cloudinary.com/tranan2509/image/upload/v1638879521/c5dblrhvi0yewfzs6blj.jpg';
+      String url = ApiConstants.HOST + ApiConstants.SIGN_UP;
+      var map = new Map<String, dynamic>();
+      map["user"] = jsonEncode(user.toJson());
+      var response = await ApiService.instance().postForm(url, map);
+
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        return User.fromJson(json.decode(jsonString));
+      } else {
+        print('signUp: ' + response.statusCode);
+        return null;
+      }
+    } catch (e) {
+      print('signUp: error');
+      return null;
+    }
+  }
+
+  static Future<bool> resetPassword(String email) async {
+    try {
+      String url =
+          ApiConstants.HOST + ApiConstants.RESET_PASSWORD + '?email=' + email;
+      var response = await ApiService.instance().get(url);
+      if (response.statusCode == 200) {
+        return response.body.toString().toLowerCase() == 'true';
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> changePassword(
+      User user, String oldPassword, String newPassword) async {
+    try {
+      String url = ApiConstants.HOST + ApiConstants.CHANGE_PASSWORD;
+      String body = jsonEncode(<String, dynamic>{
+        'user': user.toJson(),
+        'oldPassword': oldPassword,
+        'newPassword': newPassword
+      });
+      var response = await ApiService.instance().put(url, body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        if (json.decode(response.body) != null) {
+          return true;
+        }
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 }

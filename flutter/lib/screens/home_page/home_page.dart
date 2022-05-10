@@ -1,3 +1,4 @@
+import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -6,6 +7,7 @@ import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
 
 import '../products_page/products_page.dart';
 
@@ -21,6 +23,7 @@ class _homePageState extends State<HomePage> {
   //int selectedTab = 0;
 
   final StoreController storeController = Get.put(StoreController());
+  final UserController userController = Get.put(UserController());
   // Future<LocationData> _getLocationData() async {
   //   Location location = new Location();
   //   LocationData _locationData;
@@ -133,8 +136,11 @@ class _homePageState extends State<HomePage> {
                             padding: const EdgeInsets.only(top: 10, left: 5),
                             child: Container(
                               alignment: Alignment.topLeft,
-                              child: Text("Xin chào, Minh Thư !!!",
-                                  style: TextStyle(
+                              child: Text(
+                                  "Xin chào, " +
+                                      userController.user.value.name +
+                                      " !!!",
+                                  style: const TextStyle(
                                       color: white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold)),
@@ -145,14 +151,14 @@ class _homePageState extends State<HomePage> {
                     )),
                     Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: 12),
-                      child: Text("Trang chủ",
+                      padding: const EdgeInsets.only(top: 12),
+                      child: const Text("Trang chủ",
                           style: TextStyle(
                               color: white,
                               fontSize: 28,
                               fontWeight: FontWeight.bold)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -203,7 +209,7 @@ class _homePageState extends State<HomePage> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         15)),
-                                                        child: Text('120',
+                                                        child: const Text('120',
                                                             style: TextStyle(
                                                                 fontSize: 11,
                                                                 color: white,
@@ -267,8 +273,8 @@ class _homePageState extends State<HomePage> {
                             ),
                             Row(
                               children: [
-                                InkWell(
-                                  onTap: () => Get.to(() => ProductsPage()),
+                                GestureDetector(
+                                  onTap: () => Get.to(ProductsPage()),
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: size.width / 2 - 40,

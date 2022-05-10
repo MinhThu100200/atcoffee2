@@ -101,7 +101,7 @@ class _RewardPage extends State<RewardPage> {
                       ],
                     ),
                     Obx(() {
-                      if (rewardController.isLoading.value)
+                      if (promotionController.isLoading.value)
                         return Center(child: CircularProgressIndicator());
                       else
                         return Container(
@@ -207,20 +207,20 @@ class _RewardPage extends State<RewardPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                            margin:
-                                EdgeInsets.only(top: 15, left: 15, right: 15),
-                            child: Text("Quà tặng hội viên",
+                            margin: const EdgeInsets.only(
+                                top: 15, left: 15, right: 15),
+                            child: const Text("Quà tặng hội viên",
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600))),
                         Container(
-                            margin:
-                                EdgeInsets.only(top: 15, left: 15, right: 15),
+                            margin: const EdgeInsets.only(
+                                top: 15, left: 15, right: 15),
                             child: InkWell(
                               onTap: () {},
                               child: Container(
                                   //color: primary,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       top: 8, left: 5, right: 5, bottom: 8),
                                   decoration: BoxDecoration(
                                       color: Colors.green[100],

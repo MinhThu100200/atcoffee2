@@ -1,3 +1,4 @@
+import 'package:at_coffee/screens/root_app/root_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:at_coffee/screens/on_boarding.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/common/utils_common/utils_common.dart';
+import 'package:at_coffee/models/user.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // class SignUpPage extends StatelessWidget {
 //   @override
@@ -24,8 +28,12 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _signupPageState extends State<SignUpPage> {
+  final userController = Get.put(UserController());
+
   final _email = TextEditingController();
   bool _validateEmail = false;
+  final _name = TextEditingController();
+  bool _validateName = false;
   String _msgValidateEmail = 'Email không đươc để trống';
   final _phone = TextEditingController();
   bool _validatePhone = false;
@@ -36,6 +44,7 @@ class _signupPageState extends State<SignUpPage> {
   String _msgValidatePasswordConfirm = 'Xác nhận mật khẩu không đươc để trống';
   bool _isHidePasswordConfirm = true;
   bool _isHidestatePassword = true;
+  var _gender = 0;
 
   @override
   void dispose() {
@@ -84,6 +93,49 @@ class _signupPageState extends State<SignUpPage> {
                               ),
                             ),
                           ]),
+                      Container(
+                        height: 70,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: bgTextField,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                color: black.withOpacity(0.5),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Flexible(
+                                child: TextField(
+                                  cursorColor: black.withOpacity(0.5),
+                                  style: TextStyle(fontSize: 15),
+                                  cursorHeight: 20,
+                                  controller: _name,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    labelText: 'Nhập tên',
+                                    labelStyle:
+                                        const TextStyle(color: Colors.black),
+                                    //hintText: "Email",
+                                    border: InputBorder.none,
+                                    errorText: _validateName
+                                        ? 'Tên không được để trống'
+                                        : null,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         height: 70,
                         width: double.infinity,
@@ -287,11 +339,72 @@ class _signupPageState extends State<SignUpPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                        height: 00,
+                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 8.0),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: 0,
+                                      groupValue: _gender,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _gender = value;
+                                        });
+                                      },
+                                      activeColor: Colors.green,
+                                    ),
+                                    const Text('Nam',
+                                        style: TextStyle(fontSize: 18.0))
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: 1,
+                                      groupValue: _gender,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _gender = value;
+                                        });
+                                      },
+                                      activeColor: Colors.green,
+                                    ),
+                                    const Text('Nữ',
+                                        style: TextStyle(fontSize: 18.0))
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: 2,
+                                      groupValue: _gender,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _gender = value;
+                                        });
+                                      },
+                                      activeColor: Colors.green,
+                                    ),
+                                    const Text('Khác',
+                                        style: TextStyle(fontSize: 18.0))
+                                  ],
+                                )
+                              ],
+                            ),
+                          )),
                     ],
                   ),
                 ),
                 const SizedBox(
-                  height: 60.0,
+                  height: 20.0,
                 ),
                 // login button and social login
                 Container(
@@ -432,8 +545,16 @@ class _signupPageState extends State<SignUpPage> {
     Get.off(() => LoginPage());
   }
 
-  void signUp() {
+  void signUp() async {
     bool _isValid = true;
+    setState(() {
+      if (_name.text.trim().isEmpty) {
+        _validateName = true;
+        _isValid = false;
+      } else {
+        _validateName = false;
+      }
+    });
     setState(() {
       if (_email.text.isEmpty) {
         _validateEmail = true;
@@ -484,8 +605,59 @@ class _signupPageState extends State<SignUpPage> {
       }
     });
     if (_isValid) {
-      // TODO: Toast success message
-      Get.off(() => LoginPage());
+      User user = new User();
+      user.code = _email.text;
+      user.name = _name.text;
+      user.email = _email.text;
+      user.username = _email.text;
+      user.phone = _phone.text;
+      user.identityCard = _phone.text;
+      user.password = _password.text;
+      user.dob = DateTime.now().millisecondsSinceEpoch;
+      user.address = '';
+      user.gender = _gender == 0
+          ? 'Nam'
+          : _gender == 1
+              ? 'Nữ'
+              : 'Khác';
+
+      String validateMsg = await userController.validateSignUp(user);
+      if (validateMsg == '') {
+        User userNew = await userController.signUp(user);
+
+        if (userNew != null) {
+          Fluttertoast.showToast(
+              msg: 'Đăng kí thành công',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: primary,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Get.to(() => RootApp());
+        } else {
+          Fluttertoast.showToast(
+              msg: 'Đăng kí thất bại',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: red2,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: validateMsg,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: red2,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+
+      //
+      // Get.off(() => LoginPage());
     }
   }
 }
