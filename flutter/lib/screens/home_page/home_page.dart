@@ -337,27 +337,38 @@ class _homePageState extends State<HomePage> {
           ),
           InkWell(
             onTap: () {
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
+              showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return Container(
                       height: 200,
-                      color: Colors.amber,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const Text('Modal BottomSheet'),
-                            ElevatedButton(
-                              child: const Text('Close BottomSheet'),
-                              onPressed: () => Navigator.pop(context),
-                            )
-                          ],
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
                         ),
                       ),
-                    );
-                  });
+                      child: Column(
+                        children: [
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Container(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, right: 10),
+                                        child: Icon(Icons.close_rounded,
+                                            size: 25))),
+                              ]),
+                        ],
+                      ));
+                },
+              );
             },
             child: Container(
                 width: size.width,

@@ -232,6 +232,109 @@ class _RewardPage extends State<RewardPage> {
                             ))
                       ],
                     ),
+                    Obx(() {
+                      if (promotionController.isLoading.value)
+                        return Center(child: CircularProgressIndicator());
+                      else
+                        return Container(
+                          child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount:
+                                  promotionController.promotionsList.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return checkExpired(promotionController
+                                        .promotionsList[index])
+                                    ? TicketView(
+                                        backgroundColor: primary,
+                                        child: Container(
+                                          //margin: EdgeInsets.only(),
+                                          height: 100,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      width: 200,
+                                                      padding: EdgeInsets.only(
+                                                          left: 12),
+                                                      child: Text(
+                                                          promotionController
+                                                              .promotionsList[
+                                                                  index]
+                                                              .description,
+                                                          maxLines: 4,
+                                                          style: TextStyle(
+                                                              fontSize: 13))),
+                                                ],
+                                              ),
+                                              Container(
+                                                  margin: EdgeInsets.only(
+                                                      top: 10,
+                                                      bottom: 10,
+                                                      right: 13),
+                                                  height: 70,
+                                                  width: 70,
+                                                  color: lightYellow,
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 5),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                                Icons
+                                                                    .coffee_sharp,
+                                                                size: 11),
+                                                            Text("A&T Coffee",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10)),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 7),
+                                                        child: Text(
+                                                            promotionController
+                                                                    .promotionsList[
+                                                                        index]
+                                                                    .discount
+                                                                    .toString() +
+                                                                "%",
+                                                            style: TextStyle(
+                                                                fontSize: 35,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: white)),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container();
+                              }),
+                        );
+                    }),
                   ]))
             ]),
           )),
