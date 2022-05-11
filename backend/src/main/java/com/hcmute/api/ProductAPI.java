@@ -92,6 +92,9 @@ public class ProductAPI {
 	public ResponseEntity<List<ProductDTO>> findSuggesstion(@RequestParam(name="customerId", required = true) long customerId,
 			@RequestParam(name = "num", defaultValue = "10000") int num) {
 		List<ProductDTO> productDTOs = productService.findSuggesstion(customerId, num);
+		if (productDTOs == null || productDTOs.size() == 0) {
+			productDTOs = productService.findByState(true, new PageRequest(0, num)).getProducts();
+		}
 		productDTOs.forEach((productDTO) -> {
 			productDTO.calRateAndNumberReviewers();
 		});
