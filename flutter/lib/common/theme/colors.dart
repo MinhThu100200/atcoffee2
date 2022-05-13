@@ -29,6 +29,8 @@ const Color red2 = Color(0xFFFF7363);
 
 const Color lightGreen = Color(0xFF7EBDA2);
 const Color lightGreen2 = Color(0xFFBED2BB);
+const Color lightGreen3 = Color(0xFFC9FEC9);
+const Color greenTransparent = Color(0xFFDDFFDD);
 
 const Color white1 = Color(0xFFF1E6D8);
 

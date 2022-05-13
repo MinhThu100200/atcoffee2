@@ -4,6 +4,7 @@ import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/services/service_store.dart';
 import 'package:location/location.dart';
+import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class StoreController extends GetxController {
   var isLoading = true.obs;
@@ -11,12 +12,19 @@ class StoreController extends GetxController {
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
   RxString myAddress = "".obs;
+  var storeNearYou = new Store().obs;
+  var storeMinDistance = 0.obs;
+  var selected = 0.obs;
 
   @override
   void onInit() {
     //fetchStores();
     //setLocationData();
     super.onInit();
+  }
+
+  void setSeleted(value) {
+    selected.value = value;
   }
 
   void setLocationData() async {
@@ -132,8 +140,44 @@ class StoreController extends GetxController {
       if (stores != null) {
         storesList.value = stores;
       }
+    } catch (error) {
+      print(error);
     } finally {
       isLoading(false);
+    }
+  }
+
+  void myStoreNearYou() async {
+    try {
+      //isLoading(true);
+      var stores = await RemoteServices.fetchStores();
+      if (stores != null) {
+        storesList.value = stores;
+        print(stores.length);
+        print("store");
+        var indexMin = 0;
+        var minDistance = UtilsCommon.getAddress(stores[0].latitude,
+            stores[0].longitude, latitude.value, longitude.value);
+        print(minDistance);
+        for (var i = 1; i > stores.length - 1; i++) {
+          print("store");
+          print(stores[i]);
+          var distance = UtilsCommon.getAddress(stores[i].latitude,
+              stores[i].longitude, latitude.value, longitude.value);
+          if (distance < minDistance) {
+            minDistance = distance;
+            indexMin = i;
+          }
+        }
+        storeNearYou.value = stores[indexMin];
+        storeMinDistance.value = minDistance.round();
+        print(minDistance);
+        print(stores[indexMin]);
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      //isLoading(false);
     }
   }
 }

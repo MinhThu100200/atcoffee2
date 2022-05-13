@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
 import 'package:location/location.dart';
+import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class LocationPage extends StatefulWidget {
   @override
@@ -20,14 +21,10 @@ class _locationPageState extends State<LocationPage> {
 
   final StoreController storeController = Get.put(StoreController());
 
-  // void _getLocation(latStore, longDes) {
-  //   _getAddress(latStore, latStore).then((value) {
-  //     return value;
-  //   });
-  // }
-
   String _getAddress(double lat, double long) {
     double distanceInMeters = 0;
+    print(storeController.latitude.value.toString() +
+        storeController.longitude.value.toString());
     //_getLocationData().then((value) {
     if (lat == 0 ||
         long == 0 ||
@@ -59,6 +56,7 @@ class _locationPageState extends State<LocationPage> {
             1000) /
         1000;
     // lệch 1km cho phép
+    print("distanceInMeters");
     print(distanceInMeters);
 
     return distanceInMeters.round().toString();
@@ -72,7 +70,7 @@ class _locationPageState extends State<LocationPage> {
       // _getLocationData().then((value) => setState(() {
       //       currentLocation = value;
       //     }));
-      storeController.fetchStores();
+      //storeController.fetchStores();
       storeController.getAddress();
       // productController.fetchProductsByCategory(codeCategory[0]);
       // print("Build Completed");
@@ -246,15 +244,23 @@ class _locationPageState extends State<LocationPage> {
                                                   Container(
                                                     child: Text(
                                                         "Cách khoảng đây " +
-                                                            _getAddress(
-                                                                storeController
-                                                                    .storesList[
-                                                                        index]
-                                                                    .latitude,
-                                                                storeController
-                                                                    .storesList[
-                                                                        index]
-                                                                    .longitude) +
+                                                            UtilsCommon.getAddress(
+                                                                    storeController
+                                                                        .storesList[
+                                                                            index]
+                                                                        .latitude,
+                                                                    storeController
+                                                                        .storesList[
+                                                                            index]
+                                                                        .longitude,
+                                                                    storeController
+                                                                        .latitude
+                                                                        .value,
+                                                                    storeController
+                                                                        .longitude
+                                                                        .value)
+                                                                .round()
+                                                                .toString() +
                                                             "km",
                                                         style: TextStyle(
                                                             fontSize: 12,

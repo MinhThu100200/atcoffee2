@@ -22,7 +22,12 @@ class _homePageState extends State<HomePage> {
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
   final ProductController productController = Get.put(ProductController());
-
+  //var selected = 0.obs;
+  var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
+  var wayImage = [
+    'assets/icons/delivery-man.png',
+    'assets/images/strawberry-background.png'
+  ];
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +35,7 @@ class _homePageState extends State<HomePage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       storeController.getAddress();
       productController.fetchProductSuggest(userController.user.value.id, 3);
+      storeController.myStoreNearYou();
       print("Build Completed:" + userController.user.value.id.toString());
     });
   }
@@ -289,6 +295,7 @@ class _homePageState extends State<HomePage> {
                                             child: Text(
                                                 "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
                                                 maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   //color: primary,
                                                   fontSize: 12,
@@ -337,38 +344,143 @@ class _homePageState extends State<HomePage> {
           ),
           InkWell(
             onTap: () {
-              showModalBottomSheet(
-                backgroundColor: Colors.transparent,
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
+              storeController.myAddress.value == ""
+                  ? null
+                  : showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            child: Column(
                               children: [
-                                GestureDetector(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Container(
+                                Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         padding: const EdgeInsets.only(
-                                            top: 10, right: 10),
-                                        child: Icon(Icons.close_rounded,
-                                            size: 25))),
-                              ]),
-                        ],
-                      ));
-                },
-              );
+                                            left: 16, top: 5),
+                                        child: Text(
+                                            "Chọn phương thức giao hàng",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600)),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () => Navigator.pop(context),
+                                          child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5, right: 10),
+                                              child: Icon(Icons.close_rounded,
+                                                  size: 25))),
+                                    ]),
+                                Container(
+                                  color: Colors.grey[200],
+                                  width: size.width,
+                                  child: SizedBox(height: 0.5),
+                                ),
+                                Obx(() {
+                                  if (productController.isLoading.value)
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  else
+                                    return Flexible(
+                                      flex: 1,
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: wayTitle.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                              child: InkWell(
+                                                onTap: () => storeController
+                                                    .setSeleted(index),
+                                                child: Obx(
+                                                  () => Container(
+                                                      color: storeController
+                                                                  .selected
+                                                                  .value ==
+                                                              index
+                                                          ? greenTransparent
+                                                          : white,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10,
+                                                              left: 16),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                              height: 50,
+                                                              width: 50,
+                                                              decoration: BoxDecoration(
+                                                                  color:
+                                                                      lightGreen3,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              25)),
+                                                              child: Container(
+                                                                  height: 26,
+                                                                  width: 26,
+                                                                  child: Image.asset(
+                                                                      wayImage[
+                                                                          index]))),
+                                                          Column(
+                                                            children: [
+                                                              Container(
+                                                                  child: Text(
+                                                                      wayTitle[
+                                                                          index],
+                                                                      style: TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w500))),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    wayTitle[index] ==
+                                                                            "Giao tận nơi"
+                                                                        ? storeController
+                                                                            .myAddress
+                                                                            .value
+                                                                        : "A&T Coffee, " +
+                                                                            storeController.storeNearYou.value.address,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            11),
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )
+                                                        ],
+                                                      )),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                })
+                              ],
+                            ));
+                      },
+                    );
             },
             child: Container(
                 width: size.width,
@@ -385,14 +497,14 @@ class _homePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                                 color: lightGreen2,
                                 borderRadius: BorderRadius.circular(14)),
-                            height: 30,
+                            height: 20,
                             padding: const EdgeInsets.all(3),
                             child:
                                 Image.asset('assets/icons/delivery-man.png')),
                         SizedBox(width: 5),
                         Text("Giao đến",
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: gray3))
                       ],
@@ -401,13 +513,14 @@ class _homePageState extends State<HomePage> {
                     Obx(() {
                       if (storeController.isLoading.value ||
                           storeController.myAddress.value == '') {
-                        return Text("đang định vị, vị trí của bạn...",
+                        return Text("Đang định vị vị trí của bạn...",
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15));
+                                fontWeight: FontWeight.w600, fontSize: 13));
                       } else {
+                        //storeController.myStoreNearYou();
                         return Text(storeController.myAddress.value,
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15));
+                                fontWeight: FontWeight.w600, fontSize: 13));
                       }
                     })
                   ],
