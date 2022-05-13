@@ -233,13 +233,21 @@ class _locationPageState extends State<LocationPage> {
                                                     height: 3,
                                                   ),
                                                   Container(
-                                                    child: Text(
-                                                        storeController
-                                                            .storesList[index]
-                                                            .address,
-                                                        style: TextStyle(
-                                                            fontSize: 12)),
-                                                  ),
+                                                      width: size.width - 130.0,
+                                                      child: Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                                storeController
+                                                                    .storesList[
+                                                                        index]
+                                                                    .address,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12)),
+                                                          )
+                                                        ],
+                                                      )),
                                                   SizedBox(
                                                     height: 12,
                                                   ),
@@ -255,7 +263,7 @@ class _locationPageState extends State<LocationPage> {
                                                                     .storesList[
                                                                         index]
                                                                     .longitude) +
-                                                            "km",
+                                                            " km",
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color: gray)),
