@@ -72,4 +72,11 @@ class ApiService {
         headers: VariableConstants.API_PUT_HEADERS(token), body: body);
     return response;
   }
+
+  Future<dynamic> delete(String url) async {
+    String token = await getToken();
+    var response = await client.delete(Uri.parse(url),
+        headers: VariableConstants.API_HEADERS(token));
+    return response;
+  }
 }

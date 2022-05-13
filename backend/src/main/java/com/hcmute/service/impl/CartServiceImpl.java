@@ -6,6 +6,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hcmute.dto.CartDTO;
 import com.hcmute.entity.CartEntity;
@@ -19,6 +20,7 @@ import com.hcmute.repository.UserRepository;
 import com.hcmute.service.CartService;
 
 @Service
+@Transactional
 public class CartServiceImpl implements CartService{
 	
 	@Autowired
@@ -34,6 +36,7 @@ public class CartServiceImpl implements CartService{
 	
 	@Override
 	public CartDTO save(CartDTO cartDTO) {
+		mapper.getConfiguration().setAmbiguityIgnored(true);
 		CartEntity entity = mapper.map(cartDTO, CartEntity.class);
 		ProductEntity product = productRepository.findOne(cartDTO.getProductId());
 		UserEntity customer = userRepository.findOne(cartDTO.getCustomerId());

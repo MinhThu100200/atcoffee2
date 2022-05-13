@@ -298,7 +298,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                       width: size.width,
                       height: size.height - 86.0,
                       color: Colors.grey.withOpacity(0.3),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 ]

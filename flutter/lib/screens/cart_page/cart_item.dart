@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:at_coffee/controllers/cart_controller.dart';
 
 class CartItem extends StatefulWidget {
   CartItem({Key key, this.cart}) : super(key: key);
@@ -12,6 +14,9 @@ class CartItem extends StatefulWidget {
 
 class _CartItem extends State<CartItem> {
   final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
+
+  final CartController cartController = Get.put(CartController());
+
   Cart _cart;
   @override
   void initState() {
@@ -48,6 +53,7 @@ class _CartItem extends State<CartItem> {
             setState(() {
               _cart.state = val;
             });
+            _updateState(_cart);
           },
         )),
         Expanded(
@@ -91,10 +97,18 @@ class _CartItem extends State<CartItem> {
                 color: Colors.red,
               ),
               onPressed: () {
-                // remove cart
+                deleteCart(_cart.id);
               }),
         )
       ]),
     ));
+  }
+
+  void _updateState(Cart cart) async {
+    cartController.updateCart(cart);
+  }
+
+  void deleteCart(int cartId) async {
+    cartController.deleteCart(cartId);
   }
 }

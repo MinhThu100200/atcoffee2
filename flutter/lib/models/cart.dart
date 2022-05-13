@@ -21,6 +21,9 @@ class Cart {
       this.results,
       this.description,
       this.quantity,
+      this.sugar,
+      this.ice,
+      this.milk,
       this.customerId,
       this.productId,
       this.storeId,
@@ -37,6 +40,9 @@ class Cart {
   List<dynamic> results;
   String description;
   int quantity;
+  int sugar;
+  int ice;
+  String milk;
   int customerId;
   int productId;
   int storeId;
@@ -54,6 +60,9 @@ class Cart {
       results: json["results"],
       description: json["description"],
       quantity: json["quantity"],
+      sugar: json["sugar"],
+      ice: json["ice"],
+      milk: json["milk"],
       customerId: json["customerId"],
       productId: json["productId"],
       storeId: json["storeId"],
@@ -71,6 +80,9 @@ class Cart {
         "results": results,
         "description": description,
         "quantity": quantity,
+        "sugar": sugar,
+        "ice": ice,
+        "milk": milk,
         "customerId": customerId,
         "productId": productId,
         "storeId": storeId,
