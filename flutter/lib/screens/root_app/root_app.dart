@@ -15,7 +15,8 @@ import 'package:at_coffee/screens/test_location.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 
 class RootApp extends StatefulWidget {
-  const RootApp({Key key}) : super(key: key);
+  RootApp({Key key, this.nameRoute}) : super(key: key);
+  String nameRoute;
 
   @override
   _RootAppState createState() => _RootAppState();
@@ -24,13 +25,41 @@ class RootApp extends StatefulWidget {
 class _RootAppState extends State<RootApp> {
   // get carts
   final cartController = Get.put(CartController());
+  int pageIndex = 0;
+  String _nameRoute;
+
+  void getIndex(nameRoute) {
+    switch (widget.nameRoute) {
+      case 'home':
+        setStatePageIndex(0);
+        break;
+      case 'reward':
+        setStatePageIndex(1);
+        break;
+      case 'location':
+        setStatePageIndex(2);
+        break;
+      case 'notification':
+        setStatePageIndex(3);
+        break;
+      default:
+        setStatePageIndex(4);
+        break;
+    }
+  }
+
+  void setStatePageIndex(value) {
+    setState(() {
+      pageIndex = value;
+    });
+  }
 
   @override
   void initState() {
+    getIndex(widget.nameRoute);
     super.initState();
   }
 
-  int pageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

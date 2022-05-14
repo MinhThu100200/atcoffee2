@@ -48,10 +48,13 @@ class _loginPageState extends State<LoginPage> {
 
   void _login(String email, String password) async {
     // Data Fixed - Change
-    userController.authUser('0346279377', '1234567890');
-    if (userController.user != null) {
+    await userController.authUser('0346279377', '1234567890');
+    if (userController.user.value.name != "" &&
+        userController.user.value.name != null) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => new RootApp()));
+          context,
+          MaterialPageRoute(
+              builder: (context) => new RootApp(nameRoute: 'home')));
       // Get.off(() => new RootApp());
     }
   }

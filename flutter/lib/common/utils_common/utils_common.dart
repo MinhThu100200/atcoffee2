@@ -20,7 +20,6 @@ class UtilsCommon {
     double lat,
     double long,
   ) {
-    print("minhthut");
     double distanceInMeters = 0;
     //_getLocationData().then((value) {
     if (lat == 0 || long == 0 || latStore == 0 || longStore == 0) return 0;

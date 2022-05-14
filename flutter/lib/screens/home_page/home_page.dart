@@ -1,4 +1,6 @@
+import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
+import 'package:at_coffee/screens/reward_page/reward_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -12,6 +14,7 @@ import 'package:at_coffee/controllers/product_controller.dart';
 
 import '../products_page/product_item.dart';
 import '../products_page/products_page.dart';
+import '../root_app/root_app.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,11 +26,7 @@ class _homePageState extends State<HomePage> {
   final UserController userController = Get.put(UserController());
   final ProductController productController = Get.put(ProductController());
   //var selected = 0.obs;
-  var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
-  var wayImage = [
-    'assets/icons/delivery-man.png',
-    'assets/images/strawberry-background.png'
-  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -35,7 +34,8 @@ class _homePageState extends State<HomePage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       storeController.getAddress();
       productController.fetchProductSuggest(userController.user.value.id, 3);
-      storeController.myStoreNearYou();
+
+      storeController.getStoreListNearYou();
       print("Build Completed:" + userController.user.value.id.toString());
     });
   }
@@ -63,14 +63,16 @@ class _homePageState extends State<HomePage> {
                             padding: const EdgeInsets.only(top: 10, left: 5),
                             child: Container(
                               alignment: Alignment.topLeft,
-                              child: Text(
-                                  "Xin chào, " +
-                                      userController.user.value.name +
-                                      " !!!",
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
+                              child: Obx(
+                                () => Text(
+                                    "Xin chào, " +
+                                        userController.user.value.name +
+                                        " !!!",
+                                    style: const TextStyle(
+                                        color: white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              ),
                             ),
                           ),
                         )
@@ -136,52 +138,65 @@ class _homePageState extends State<HomePage> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         15)),
-                                                        child: const Text('120',
-                                                            style: TextStyle(
-                                                                fontSize: 11,
-                                                                color: white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500))))
+                                                        child: Obx(
+                                                          () => Text(
+                                                              userController
+                                                                  .user
+                                                                  .value
+                                                                  .currentPoints
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 11,
+                                                                  color: white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500)),
+                                                        )))
                                               ],
                                             )),
-                                        Container(
-                                          width: size.width - 130,
-                                          decoration: BoxDecoration(
-                                              color: lightPink,
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                  padding:
-                                                      EdgeInsets.only(top: 16),
-                                                  child: Text(
-                                                      "Phần thưởng khả dụng",
-                                                      style: TextStyle(
-                                                          color: primary,
-                                                          fontSize: 20,
-                                                          fontWeight: FontWeight
-                                                              .w800))),
-                                              SizedBox(height: 6),
-                                              Container(
-                                                  height: 48,
-                                                  alignment: Alignment.center,
-                                                  margin: EdgeInsets.only(
-                                                      left: 34, right: 34),
-                                                  decoration: BoxDecoration(
-                                                      color: primary,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16)),
-                                                  child: Text(
-                                                      "Chưa đạt phần thưởng",
-                                                      style: TextStyle(
-                                                          color: white,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600)))
-                                            ],
+                                        GestureDetector(
+                                          onTap: () => Get.to(() =>
+                                              RootApp(nameRoute: 'reward')),
+                                          child: Container(
+                                            width: size.width - 130,
+                                            decoration: BoxDecoration(
+                                                color: lightPink,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                    padding: EdgeInsets.only(
+                                                        top: 16),
+                                                    child: Text(
+                                                        "Phần thưởng khả dụng",
+                                                        style: TextStyle(
+                                                            color: primary,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w800))),
+                                                SizedBox(height: 6),
+                                                Container(
+                                                    height: 48,
+                                                    alignment: Alignment.center,
+                                                    margin: EdgeInsets.only(
+                                                        left: 34, right: 34),
+                                                    decoration: BoxDecoration(
+                                                        color: primary,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16)),
+                                                    child: Text(
+                                                        "Chưa đạt phần thưởng",
+                                                        style: TextStyle(
+                                                            color: white,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600)))
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -342,190 +357,8 @@ class _homePageState extends State<HomePage> {
               ),
             )),
           ),
-          InkWell(
-            onTap: () {
-              storeController.myAddress.value == ""
-                  ? null
-                  : showModalBottomSheet(
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 16, top: 5),
-                                        child: Text(
-                                            "Chọn phương thức giao hàng",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600)),
-                                      ),
-                                      GestureDetector(
-                                          onTap: () => Navigator.pop(context),
-                                          child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5, right: 10),
-                                              child: Icon(Icons.close_rounded,
-                                                  size: 25))),
-                                    ]),
-                                Container(
-                                  color: Colors.grey[200],
-                                  width: size.width,
-                                  child: SizedBox(height: 0.5),
-                                ),
-                                Obx(() {
-                                  if (productController.isLoading.value)
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  else
-                                    return Flexible(
-                                      flex: 1,
-                                      child: ListView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: wayTitle.length,
-                                          shrinkWrap: true,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return Container(
-                                              child: InkWell(
-                                                onTap: () => storeController
-                                                    .setSeleted(index),
-                                                child: Obx(
-                                                  () => Container(
-                                                      color: storeController
-                                                                  .selected
-                                                                  .value ==
-                                                              index
-                                                          ? greenTransparent
-                                                          : white,
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10,
-                                                              left: 16),
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                              height: 50,
-                                                              width: 50,
-                                                              decoration: BoxDecoration(
-                                                                  color:
-                                                                      lightGreen3,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              25)),
-                                                              child: Container(
-                                                                  height: 26,
-                                                                  width: 26,
-                                                                  child: Image.asset(
-                                                                      wayImage[
-                                                                          index]))),
-                                                          Column(
-                                                            children: [
-                                                              Container(
-                                                                  child: Text(
-                                                                      wayTitle[
-                                                                          index],
-                                                                      style: TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w500))),
-                                                              Row(
-                                                                children: [
-                                                                  Text(
-                                                                    wayTitle[index] ==
-                                                                            "Giao tận nơi"
-                                                                        ? storeController
-                                                                            .myAddress
-                                                                            .value
-                                                                        : "A&T Coffee, " +
-                                                                            storeController.storeNearYou.value.address,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            11),
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                ],
-                                                              )
-                                                            ],
-                                                          )
-                                                        ],
-                                                      )),
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                    );
-                                })
-                              ],
-                            ));
-                      },
-                    );
-            },
-            child: Container(
-                width: size.width,
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 5, left: 10, right: 10),
-                color: white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                            decoration: BoxDecoration(
-                                color: lightGreen2,
-                                borderRadius: BorderRadius.circular(14)),
-                            height: 20,
-                            padding: const EdgeInsets.all(3),
-                            child:
-                                Image.asset('assets/icons/delivery-man.png')),
-                        SizedBox(width: 5),
-                        Text("Giao đến",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: gray3))
-                      ],
-                    ),
-                    SizedBox(height: 6),
-                    Obx(() {
-                      if (storeController.isLoading.value ||
-                          storeController.myAddress.value == '') {
-                        return Text("Đang định vị vị trí của bạn...",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 13));
-                      } else {
-                        //storeController.myStoreNearYou();
-                        return Text(storeController.myAddress.value,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 13));
-                      }
-                    })
-                  ],
-                )),
-          )
+          //popup
+          PopUpAddress(),
         ],
       ),
     );
