@@ -1,3 +1,5 @@
+import 'package:at_coffee/models/promotion.dart';
+import 'package:at_coffee/models/reward.dart';
 import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:at_coffee/services/service_cart.dart';
@@ -5,6 +7,10 @@ import 'package:at_coffee/services/service_cart.dart';
 class CartController extends GetxController {
   var isLoading = true.obs;
   var cartsList = new List<Cart>().obs;
+  var promotion = new Promotion().obs;
+  var reward = new Reward().obs;
+  // 0 - none; 1 - promotion; 2 - reward
+  var type = 0.obs;
 
   var total =
       {"amount": 0, "promotion": 0, "totalAmount": 0, "quantity": 0}.obs;

@@ -1,11 +1,17 @@
+import 'package:at_coffee/models/promotion.dart';
+import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:flutter/material.dart';
+import 'package:ticketview/ticketview.dart';
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/payment.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/payment_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/controllers/reward_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:at_coffee/controllers/type_controller.dart';
+import 'package:at_coffee/controllers/promotion_controller.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,10 +30,13 @@ class CartPage extends StatefulWidget {
 class _CartPage extends State<CartPage> {
   final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
 
+  final TypeController typeController = Get.put(TypeController());
   final CartController cartController = Get.put(CartController());
   final PaymentController paymentController = Get.put(PaymentController());
   final UserController userController = Get.put(UserController());
   final StoreController storeController = Get.put(StoreController());
+  final PromotionController promotionController =
+      Get.put(PromotionController());
 
   String _selectedOrder = 'Mang đi';
   int _indexSelectedOrder = 0;
@@ -35,7 +44,7 @@ class _CartPage extends State<CartPage> {
   String _selectedPayment = '';
 
   bool _isSaving = false;
-
+  bool _isValidPromotion = true;
   Store _store = new Store();
 
   @override
@@ -50,24 +59,36 @@ class _CartPage extends State<CartPage> {
 
   double _calPromotion(carts) {
     if (carts == null || carts.length == 0) {
+      cartController.total["promotion"] = 0.toInt();
       return 0;
     }
+    _isValidPromotion = true;
 
-    double amount = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        amount += carts[i]
-                .product
-                .sizes[carts[i].size == 'S'
-                    ? 0
-                    : carts[i].size == 'M'
-                        ? 1
-                        : 2]
-                .price *
-            (carts[i].product.discount / 100);
-      }
+    double promotionValue = 0;
+
+    switch (cartController.type.value) {
+      case 0:
+        break;
+      case 1:
+        Promotion promotion = cartController.promotion.value;
+        if (_validPromotion(promotion)) {
+          promotionValue =
+              cartController.total["amount"] * promotion.discount / 100;
+        } else {
+          _isValidPromotion = false;
+        }
+        break;
+      case 2:
+        Reward reward = cartController.reward.value;
+        if (_validReward(reward)) {
+          promotionValue = reward.redution.toDouble();
+        } else {
+          _isValidPromotion = false;
+        }
+        break;
     }
-    return amount;
+    cartController.total["promotion"] = promotionValue.toInt();
+    return promotionValue;
   }
 
   double _calAmount(carts) {
@@ -78,41 +99,27 @@ class _CartPage extends State<CartPage> {
     double amount = 0;
     for (int i = 0; i < carts.length; i++) {
       if (carts[i].state == true) {
-        amount += carts[i]
-                .product
-                .sizes[carts[i].size == 'S'
-                    ? 0
-                    : carts[i].size == 'M'
-                        ? 1
-                        : 2]
-                .price *
+        amount += (carts[i]
+                        .product
+                        .sizes[carts[i].size == 'S'
+                            ? 0
+                            : carts[i].size == 'M'
+                                ? 1
+                                : 2]
+                        .price *
+                    (1 - carts[i].product.discount / 100))
+                .toInt() *
             carts[i].quantity;
       }
     }
+    cartController.total["amount"] = amount.toInt();
     return amount;
   }
 
   double _calTotalAmount(carts) {
-    if (carts == null || carts.length == 0) {
-      return 0;
-    }
-
-    double amount = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        amount += carts[i]
-                .product
-                .sizes[carts[i].size == 'S'
-                    ? 0
-                    : carts[i].size == 'M'
-                        ? 1
-                        : 2]
-                .price *
-            carts[i].quantity *
-            (1 - carts[i].product.discount / 100);
-        ;
-      }
-    }
+    double amount = cartController.total["amount"].toDouble() -
+        cartController.total["promotion"];
+    cartController.total["totalAmount"] = amount.toInt();
     return amount;
   }
 
@@ -127,6 +134,8 @@ class _CartPage extends State<CartPage> {
         quantity += carts[i].quantity;
       }
     }
+    cartController.total["quanity"] = quantity.toInt();
+
     return quantity;
   }
 
@@ -156,11 +165,67 @@ class _CartPage extends State<CartPage> {
                             child: Column(
                               children: [
                                 Card(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 8.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 0.0, vertical: 8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(_selectedOrder,
+                                                    style: TextStyle(
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600)),
+                                                GestureDetector(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10.0,
+                                                        vertical: 4.0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      color: primary
+                                                          .withOpacity(0.3),
+                                                    ),
+                                                    child: const Text(
+                                                        "Thay đổi",
+                                                        style: TextStyle(
+                                                            fontSize: 16.0,
+                                                            color: primary)),
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: Row(
+                                              children: [
+                                                Flexible(
+                                                    child: Text(
+                                                        "01 Đ. Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh")),
+                                              ],
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Card(
                                   child: Column(children: [
                                     Container(
                                       padding: const EdgeInsets.only(
                                           left: 24.0,
-                                          right: 24.0,
+                                          right: 22.0,
                                           top: 16.0,
                                           bottom: 0.0),
                                       child: Row(
@@ -169,18 +234,32 @@ class _CartPage extends State<CartPage> {
                                           children: [
                                             const Text("Các sản phẩm đã chọn",
                                                 style: TextStyle(
-                                                    fontSize: 22.0,
+                                                    fontSize: 20.0,
                                                     fontWeight:
-                                                        FontWeight.bold)),
+                                                        FontWeight.w600)),
                                             GestureDetector(
                                               onTap: () {},
-                                              child: const Text("+ Thêm",
-                                                  style: TextStyle(
-                                                      fontSize: 22.0)),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0,
+                                                        vertical: 4.0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  color:
+                                                      primary.withOpacity(0.3),
+                                                ),
+                                                child: const Text(" + Thêm ",
+                                                    style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: primary)),
+                                              ),
                                             ),
                                           ]),
                                     ),
-                                    if (cartController.cartsList.length >
+                                    if (cartController.cartsList.value.length >
                                         0) ...[
                                       Container(
                                         child: ListView.builder(
@@ -221,9 +300,9 @@ class _CartPage extends State<CartPage> {
                                               alignment: Alignment.centerLeft,
                                               child: const Text("Tổng cộng",
                                                   style: TextStyle(
-                                                      fontSize: 22.0,
+                                                      fontSize: 20.0,
                                                       fontWeight:
-                                                          FontWeight.bold)),
+                                                          FontWeight.w600)),
                                             ),
                                             Container(
                                                 padding:
@@ -237,14 +316,14 @@ class _CartPage extends State<CartPage> {
                                                   children: [
                                                     const Text('Thành tiền',
                                                         style: TextStyle(
-                                                            fontSize: 18.0)),
+                                                            fontSize: 16.0)),
                                                     Text(
                                                         oCcy.format(_calAmount(
                                                                 cartController
                                                                     .cartsList)
                                                             .toInt()),
                                                         style: const TextStyle(
-                                                            fontSize: 18.0))
+                                                            fontSize: 16.0))
                                                   ],
                                                 )),
                                             Container(
@@ -265,16 +344,54 @@ class _CartPage extends State<CartPage> {
                                                   children: [
                                                     const Text('Giảm giá',
                                                         style: TextStyle(
-                                                            fontSize: 18.0)),
+                                                            fontSize: 16.0)),
                                                     Text(
                                                         oCcy.format(_calPromotion(
                                                                 cartController
                                                                     .cartsList)
                                                             .toInt()),
                                                         style: const TextStyle(
-                                                            fontSize: 18.0))
+                                                            fontSize: 16.0))
                                                   ],
                                                 )),
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 0.0,
+                                                        vertical: 0.0),
+                                                child: const Divider()),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(
+                                                    () => PromotionCartPage());
+                                              },
+                                              child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                            _textSelectedPromotion(),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                fontSize: 16.0,
+                                                                color: _isValidPromotion
+                                                                    ? lightBlue
+                                                                    : red)),
+                                                      ),
+                                                      const Icon(
+                                                        Icons
+                                                            .arrow_right_outlined,
+                                                        color: lightBlue,
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ),
                                             Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -293,14 +410,14 @@ class _CartPage extends State<CartPage> {
                                                   children: [
                                                     const Text('Tổng tiền',
                                                         style: TextStyle(
-                                                            fontSize: 18.0)),
+                                                            fontSize: 16.0)),
                                                     Text(
                                                         oCcy.format(_calTotalAmount(
                                                                 cartController
                                                                     .cartsList)
                                                             .toInt()),
                                                         style: const TextStyle(
-                                                            fontSize: 18.0))
+                                                            fontSize: 16.0))
                                                   ],
                                                 )),
                                             Container(
@@ -325,12 +442,12 @@ class _CartPage extends State<CartPage> {
                                               alignment: Alignment.centerLeft,
                                               child: const Text("Thanh toán",
                                                   style: TextStyle(
-                                                      fontSize: 22,
+                                                      fontSize: 20,
                                                       fontWeight:
-                                                          FontWeight.bold))),
+                                                          FontWeight.w600))),
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 0.0, vertical: 4.0),
+                                                horizontal: 0.0, vertical: 2.0),
                                             alignment: Alignment.centerLeft,
                                             child: DropdownButton<String>(
                                               value: _selectedPayment ?? '',
@@ -351,7 +468,7 @@ class _CartPage extends State<CartPage> {
                                                           style:
                                                               const TextStyle(
                                                                   fontSize:
-                                                                      18.0))),
+                                                                      16.0))),
                                                 );
                                               }).toList(),
                                             ),
@@ -375,10 +492,11 @@ class _CartPage extends State<CartPage> {
                                                 right: 12.0),
                                             child: const Icon(
                                                 Icons.delete_outline,
-                                                color: red)),
+                                                color: red,
+                                                size: 18.0)),
                                         const Text("Xóa giỏ hàng",
                                             style: TextStyle(
-                                                color: red, fontSize: 18.0))
+                                                color: red, fontSize: 16.0))
                                       ]),
                                     ),
                                   ),
@@ -422,8 +540,8 @@ class _CartPage extends State<CartPage> {
                                       ' sản phẩm',
                                   style: const TextStyle(
                                       color: white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold)),
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             Container(
                               alignment: Alignment.centerLeft,
@@ -435,8 +553,8 @@ class _CartPage extends State<CartPage> {
                                           .toInt()),
                                   style: const TextStyle(
                                       color: white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold)),
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600)),
                             ),
                           ]),
                         ),
@@ -450,8 +568,8 @@ class _CartPage extends State<CartPage> {
                               child: const Text('Đặt hàng',
                                   style: TextStyle(
                                       color: white,
-                                      fontSize: 22.0,
-                                      fontWeight: FontWeight.bold)),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             style: ButtonStyle(
                                 backgroundColor:
@@ -477,6 +595,9 @@ class _CartPage extends State<CartPage> {
 
   void deleteCartByUserId(int userId) async {
     cartController.deleteCartByUserId(userId);
+    cartController.promotion.value = new Promotion();
+    cartController.reward.value = new Reward();
+    cartController.type.value = 0;
   }
 
   void _showModelButtonSheet(BuildContext context) {
@@ -522,7 +643,8 @@ class _CartPage extends State<CartPage> {
                           onTap: () {
                             setState(() {
                               _indexSelectedOrder = 1;
-                              _selectedOrder = 'Giao hàng';
+                              _selectedOrder = 'Giao tận nơi';
+                              Navigator.pop(context);
                             });
                           },
                           child: Card(
@@ -553,7 +675,7 @@ class _CartPage extends State<CartPage> {
                                                 'Giao hàng',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.w800,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 18.0),
                                               )),
                                           Container(
@@ -595,7 +717,7 @@ class _CartPage extends State<CartPage> {
                                                         .user.value.phone,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
-                                                    fontWeight: FontWeight.w500,
+                                                    fontWeight: FontWeight.w400,
                                                     fontSize: 17.0),
                                               )),
                                         ],
@@ -607,7 +729,8 @@ class _CartPage extends State<CartPage> {
                           onTap: () {
                             setState(() {
                               _indexSelectedOrder = 0;
-                              _selectedOrder = 'Mang đi';
+                              _selectedOrder = 'Tự đến lấy';
+                              Navigator.pop(context);
                             });
                           },
                           child: Card(
@@ -639,7 +762,7 @@ class _CartPage extends State<CartPage> {
                                                 'Mang đi',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.w800,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 18.0),
                                               )),
                                           Container(
@@ -664,7 +787,7 @@ class _CartPage extends State<CartPage> {
                                                     ' km',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
-                                                    fontWeight: FontWeight.w500,
+                                                    fontWeight: FontWeight.w400,
                                                     fontSize: 17.0),
                                               )),
                                         ],
@@ -678,6 +801,44 @@ class _CartPage extends State<CartPage> {
                 )),
           );
         });
+  }
+
+  bool _validPromotion(Promotion promotion) {
+    if (promotion.proviso > cartController.total["amount"]) {
+      return false;
+    }
+
+    if (userController.user.value.typeId == null ||
+        userController.user.value.typeId <
+            typeController.typesList
+                .firstWhere((type) => type.code == promotion.object)
+                .id) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _validReward(Reward reward) {
+    if (userController.user.value.currentPoints < reward.proviso) {
+      return false;
+    }
+    return true;
+  }
+
+  String _textSelectedPromotion() {
+    if (cartController.type.value == 0) {
+      return 'Chọn mã khuyến mãi';
+    }
+
+    if (cartController.type.value == 1) {
+      return cartController.promotion.value.description;
+    }
+
+    if (cartController.type.value == 2) {
+      return cartController.reward.value.name;
+    }
+
+    return '';
   }
 
   Store _getNearestStore() {
@@ -708,9 +869,440 @@ class _CartPage extends State<CartPage> {
                 long) +
             1000) /
         1000;
-    // lệch 1km cho phép
-    print(distanceInMeters);
 
     return distanceInMeters.round();
+  }
+}
+
+class PromotionCartPage extends StatefulWidget {
+  PromotionCartPage({Key key}) : super(key: key);
+
+  @override
+  _PromotionCartPage createState() => _PromotionCartPage();
+}
+
+class _PromotionCartPage extends State<PromotionCartPage> {
+  final PromotionController promotionController =
+      Get.put(PromotionController());
+  final RewardController rewardController = Get.put(RewardController());
+  final CartController cartController = Get.put(CartController());
+  final UserController userController = Get.put(UserController());
+  final TypeController typeController = Get.put(TypeController());
+
+  @override
+  void initState() {
+    typeController.fetchTypes();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: const Color(0xfff6f6f6),
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Expanded(child: Text("Khuyến mãi của bạn")),
+              GestureDetector(
+                  onTap: () {
+                    _cancelApply();
+                  },
+                  child: Text('Hủy'))
+            ],
+          ),
+          backgroundColor: primary,
+          elevation: 0,
+          bottomOpacity: 0,
+        ),
+        body: SafeArea(
+            child: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  child: Obx(() {
+                    if (promotionController.isLoading.value)
+                      return Center(child: CircularProgressIndicator());
+                    else
+                      return Container(
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount:
+                                promotionController.promotionsList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return checkExpired(
+                                      promotionController.promotionsList[index])
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        if (_validPromotion(promotionController
+                                            .promotionsList[index])) {
+                                          _applyPromotion(promotionController
+                                              .promotionsList[index]);
+                                        }
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 5.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Card(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 1.0),
+                                                  child: Container(
+                                                    height: 90,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        15,
+                                                                    vertical:
+                                                                        15),
+                                                            child: Text(
+                                                                promotionController
+                                                                    .promotionsList[
+                                                                        index]
+                                                                    .description,
+                                                                maxLines: 4,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: _validPromotion(promotionController.promotionsList[
+                                                                            index])
+                                                                        ? black
+                                                                        : Colors
+                                                                            .grey[500]))),
+                                                        Expanded(
+                                                            child: Container(
+                                                                alignment: Alignment
+                                                                    .bottomLeft,
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            15,
+                                                                        right:
+                                                                            15.0,
+                                                                        bottom:
+                                                                            15),
+                                                                child: Text(
+                                                                    'Hết hạn ' +
+                                                                        new DateFormat('dd/MM/yyyy')
+                                                                            .format(DateTime.fromMillisecondsSinceEpoch((promotionController.promotionsList[index].endDate)
+                                                                                .toInt()))
+                                                                            .toString(),
+                                                                    style: TextStyle(
+                                                                        color: _validPromotion(promotionController.promotionsList[index])
+                                                                            ? black
+                                                                            : Colors.grey[500])))),
+                                                      ],
+                                                    ),
+                                                  )),
+                                            ),
+                                            Card(
+                                              margin: const EdgeInsets.only(
+                                                  left: 1.0),
+                                              child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 10.0,
+                                                      bottom: 10.0,
+                                                      left: 10.0,
+                                                      right: 10.0),
+                                                  height: 70,
+                                                  width: 70,
+                                                  color: _validPromotion(
+                                                          promotionController
+                                                                  .promotionsList[
+                                                              index])
+                                                      ? lightYellow
+                                                      : Colors.grey[400],
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 4.0,
+                                                            vertical: 4.0),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 2.0,
+                                                                vertical: 4.0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      2.0),
+                                                          color: _validPromotion(
+                                                                  promotionController
+                                                                          .promotionsList[
+                                                                      index])
+                                                              ? Color(
+                                                                  0xffe5b06c)
+                                                              : Colors
+                                                                  .grey[500],
+                                                        ),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                                Icons
+                                                                    .coffee_sharp,
+                                                                size: 11,
+                                                                color: black),
+                                                            Container(
+                                                              child: Text(
+                                                                  "A&T Coffee",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          10,
+                                                                      color:
+                                                                          white)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 5),
+                                                        child: Text(
+                                                            promotionController
+                                                                    .promotionsList[
+                                                                        index]
+                                                                    .discount
+                                                                    .toString() +
+                                                                "%",
+                                                            style: TextStyle(
+                                                                fontSize: 35,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: white)),
+                                                      )
+                                                    ],
+                                                  )),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container();
+                            }),
+                      );
+                  }),
+                ),
+                Container(
+                  child: Obx(() {
+                    if (promotionController.isLoading.value)
+                      return Center(child: CircularProgressIndicator());
+                    else
+                      return Container(
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: rewardController.rewardsList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (_validReward(
+                                      rewardController.rewardsList[index])) {
+                                    _applyReward(
+                                        rewardController.rewardsList[index]);
+                                  }
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Card(
+                                            margin: const EdgeInsets.only(
+                                                right: 1.0),
+                                            child: Container(
+                                              height: 90,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 15,
+                                                              vertical: 15),
+                                                      child: Text(
+                                                          rewardController
+                                                              .rewardsList[
+                                                                  index]
+                                                              .name,
+                                                          maxLines: 4,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: _validReward(
+                                                                      rewardController
+                                                                              .rewardsList[
+                                                                          index])
+                                                                  ? black
+                                                                  : Colors.grey[
+                                                                      500]))),
+                                                ],
+                                              ),
+                                            )),
+                                      ),
+                                      Card(
+                                        margin:
+                                            const EdgeInsets.only(left: 1.0),
+                                        child: Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 10.0,
+                                                bottom: 10.0,
+                                                left: 10.0,
+                                                right: 10.0),
+                                            height: 70,
+                                            width: 70,
+                                            color: _validReward(rewardController
+                                                    .rewardsList[index])
+                                                ? lightYellow
+                                                : Colors.grey[400],
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 4.0,
+                                                      vertical: 4.0),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 2.0,
+                                                      vertical: 4.0),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2.0),
+                                                    color: _validReward(
+                                                            rewardController
+                                                                    .rewardsList[
+                                                                index])
+                                                        ? Color(0xffe5b06c)
+                                                        : Colors.grey[500],
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(Icons.coffee_sharp,
+                                                          size: 11,
+                                                          color: black),
+                                                      Container(
+                                                        child: Text(
+                                                            "A&T Coffee",
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: white)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      EdgeInsets.only(top: 5),
+                                                  child: Text(
+                                                      (rewardController
+                                                                      .rewardsList[
+                                                                          index]
+                                                                      .redution ~/
+                                                                  1000)
+                                                              .toString() +
+                                                          'K',
+                                                      style: TextStyle(
+                                                          fontSize: 35,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: white)),
+                                                )
+                                              ],
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                      );
+                  }),
+                )
+              ],
+            ),
+          ),
+        )));
+  }
+
+  bool checkExpired(item) {
+    int milis = DateTime.now().millisecondsSinceEpoch;
+    print(item.endDate.toString() + ' ' + milis.toString());
+    if (item.endDate > milis) {
+      return true;
+    }
+    return false;
+  }
+
+  bool _validPromotion(Promotion promotion) {
+    if (promotion.proviso > cartController.total["amount"]) {
+      return false;
+    }
+
+    if (userController.user.value.typeId == null ||
+        userController.user.value.typeId <
+            typeController.typesList
+                .firstWhere((type) => type.code == promotion.object)
+                .id) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _validReward(Reward reward) {
+    if (userController.user.value.currentPoints < reward.proviso) {
+      return false;
+    }
+    return true;
+  }
+
+  void _applyPromotion(Promotion promotion) {
+    cartController.promotion.value = promotion;
+    cartController.type.value = 1;
+    Navigator.pop(context);
+  }
+
+  void _applyReward(Reward reward) {
+    cartController.reward.value = reward;
+    cartController.type.value = 2;
+    Navigator.pop(context);
+  }
+
+  void _cancelApply() {
+    cartController.promotion.value = new Promotion();
+    cartController.reward.value = new Reward();
+    cartController.type.value = 0;
+    Navigator.pop(context);
   }
 }

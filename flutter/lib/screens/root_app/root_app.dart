@@ -13,6 +13,8 @@ import 'package:at_coffee/screens/home_page/home_page.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/screens/test_location.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/controllers/type_controller.dart';
+import 'package:at_coffee/controllers/reward_controller.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({Key key}) : super(key: key);
@@ -24,9 +26,13 @@ class RootApp extends StatefulWidget {
 class _RootAppState extends State<RootApp> {
   // get carts
   final cartController = Get.put(CartController());
+  final TypeController typeController = Get.put(TypeController());
+  final UserController userController = Get.put(UserController());
+  final RewardController rewardController = Get.put(RewardController());
 
   @override
   void initState() {
+    cartController.fetchCartsByCustomerId(userController.user.value.id);
     super.initState();
   }
 

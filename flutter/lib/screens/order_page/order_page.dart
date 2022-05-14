@@ -89,9 +89,9 @@ class _OrderPage extends State<OrderPage> {
     _sugar = _sugarPercents[2];
     rateController.fetchRates(_product.id);
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      cartController.fetchCartsByCustomerId(userController.user.value.id);
-    });
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   cartController.fetchCartsByCustomerId(userController.user.value.id);
+    // });
   }
 
   @override

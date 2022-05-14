@@ -24,6 +24,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	private String image;
 	private String description;
 	private int discount;
+	private boolean milk;
 	
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
@@ -83,6 +84,14 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	public void setDiscount(int discount) {
 		this.discount = discount;
+	}
+
+	public boolean isMilk() {
+		return milk;
+	}
+
+	public void setMilk(boolean milk) {
+		this.milk = milk;
 	}
 
 	public List<CategoryEntity> getCategories() {

@@ -34,6 +34,7 @@ class Product {
     this.description,
     this.discount,
     this.rate,
+    this.milk,
     this.numberReviewers,
     this.categories,
     this.stores,
@@ -54,6 +55,7 @@ class Product {
   String description;
   int discount;
   double rate;
+  bool milk;
   int numberReviewers;
   List<Category> categories;
   List<Store> stores;
@@ -74,6 +76,7 @@ class Product {
         description: json["description"],
         discount: json["discount"],
         rate: json["rate"],
+        milk: json["milk"],
         numberReviewers: json["numberReviewers"],
         categories: List<Category>.from(
             json["categories"].map((x) => Category.fromJson(x))),
@@ -96,6 +99,7 @@ class Product {
         "description": description,
         "discount": discount,
         "rate": rate,
+        "milk": milk,
         "numberReviewers": numberReviewers,
         "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
         "stores": List<dynamic>.from(stores.map((x) => x.toJson())),

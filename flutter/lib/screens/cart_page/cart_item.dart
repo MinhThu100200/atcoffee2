@@ -60,32 +60,29 @@ class _CartItem extends State<CartItem> {
           child: Column(children: [
             Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 4.0),
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   _cart.quantity.toString() +
                       " x " +
                       _cart.product.name +
                       " x " +
-                      oCcy.format(_cart
-                          .product
-                          .sizes[_cart.size == 'S'
-                              ? 0
-                              : _cart.size == 'M'
-                                  ? 1
-                                  : 2]
-                          .price),
-                  style: const TextStyle(fontSize: 20.0),
+                      oCcy.format((_cart
+                                  .product
+                                  .sizes[_cart.size == 'S'
+                                      ? 0
+                                      : _cart.size == 'M'
+                                          ? 1
+                                          : 2]
+                                  .price *
+                              (1 - _cart.product.discount / 100))
+                          .toInt()),
+                  style: const TextStyle(
+                      fontSize: 16.0, fontWeight: FontWeight.w600),
                 )),
             Container(
-                alignment: Alignment.centerLeft,
-                child: Text('ĐCCH: ' +
-                    _cart.product.stores
-                        .firstWhere((s) => s.id == _cart.storeId)
-                        .address)),
-            Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 4.0),
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
                 alignment: Alignment.centerLeft,
                 child: Text('Size: ' + _cart.size + ', ' + _cart.description)),
           ]),

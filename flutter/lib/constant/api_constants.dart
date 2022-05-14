@@ -1,6 +1,5 @@
 class ApiConstants {
-  static String HOST =
-      'https://c45d-2402-800-3cc4-7e7d-61e4-5d57-686a-f7c1.ap.ngrok.io';
+  static String HOST = 'https://7fa7-14-169-8-177.ngrok.io';
   static String GET_CATEGORY = '/api/info/category/?list=true';
   static String GET_STORE = '/api/info/store';
   static String GET_PRODUCT =
@@ -28,6 +27,12 @@ class ApiConstants {
   static String DELETE_CART = '/api/user/cart';
   static String DELETE_CART_BY_USER_ID = '/api/user/cart';
   static String DELETE_CART_PAYMENT = '/api/user/cart/delete';
+
+  // Api Type
+  static String FETCH_TYPES = '/api/info/type';
+
+  // Api Reward
+  static String FETCH_REWARDS = '/api/info/reward';
 
   // Api Payment
   static String GET_PAYMENTS = '/api/info/payment';

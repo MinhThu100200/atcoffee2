@@ -15,6 +15,7 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	private int discount;
 	private float rate;
 	private int numberReviewers;
+	private boolean milk;
 	private List<CategoryDTO> categories;
 	private List<StoreDTO> stores;
 	private List<SizeDTO> sizes;
@@ -65,6 +66,13 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	}
 	public void setNumberReviewers(int numberReviewers) {
 		this.numberReviewers = numberReviewers;
+	}
+	
+	public boolean isMilk() {
+		return milk;
+	}
+	public void setMilk(boolean milk) {
+		this.milk = milk;
 	}
 	public List<CategoryDTO> getCategories() {
 		return categories;
