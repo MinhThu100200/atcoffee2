@@ -9,6 +9,9 @@ class CartController extends GetxController {
   var cartsList = new List<Cart>().obs;
   var promotion = new Promotion().obs;
   var reward = new Reward().obs;
+  var isAdd = true.obs;
+  // 0 - Mang đi; 1 - Giao tận nơi
+  var indexSelectedOrder = 0.obs;
   // 0 - none; 1 - promotion; 2 - reward
   var type = 0.obs;
 

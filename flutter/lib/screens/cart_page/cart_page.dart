@@ -39,8 +39,7 @@ class _CartPage extends State<CartPage> {
   final PromotionController promotionController =
       Get.put(PromotionController());
 
-  String _selectedOrder = 'Mang đi';
-  int _indexSelectedOrder = 0;
+  String _selectedOrder = '';
 
   String _selectedPayment = '';
 
@@ -60,6 +59,9 @@ class _CartPage extends State<CartPage> {
 
       storeController.storeNearYou();
     });
+
+    _selectedOrder = cartController.indexSelectedOrder.value == 0 ? 'Mang đi' : 'Giao tận nơi';
+    cartController.isAdd.value = true;
   }
 
   double _calPromotion(carts) {
@@ -223,7 +225,7 @@ class _CartPage extends State<CartPage> {
                                               children: [
                                                 Flexible(
                                                     child: Text(
-                                                        _indexSelectedOrder == 0
+                                                        cartController.indexSelectedOrder.value == 0
                                                             ? storeController
                                                                 .myAddress.value
                                                             : storeController
@@ -668,13 +670,13 @@ class _CartPage extends State<CartPage> {
                         GestureDetector(
                           onTap: () {
                             cartController.isLoading.value = true;
-                            _indexSelectedOrder = 1;
+                            cartController.indexSelectedOrder.value = 1;
                             _selectedOrder = 'Giao tận nơi';
                             cartController.isLoading.value = false;
                             Navigator.pop(context);
                           },
                           child: Card(
-                              color: _indexSelectedOrder == 1
+                              color: cartController.indexSelectedOrder.value == 1
                                   ? const Color(0xfffef7e4)
                                   : white,
                               child: Row(
@@ -754,13 +756,13 @@ class _CartPage extends State<CartPage> {
                         GestureDetector(
                           onTap: () {
                             cartController.isLoading.value = true;
-                            _indexSelectedOrder = 0;
+                            cartController.indexSelectedOrder.value = 0;
                             _selectedOrder = 'Tự đến lấy';
                             cartController.isLoading.value = false;
                             Navigator.pop(context);
                           },
                           child: Card(
-                              color: _indexSelectedOrder == 0
+                              color: cartController.indexSelectedOrder.value == 0
                                   ? const Color(0xfffef7e4)
                                   : white,
                               child: Row(
