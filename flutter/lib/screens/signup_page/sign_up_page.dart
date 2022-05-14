@@ -634,7 +634,9 @@ class _signupPageState extends State<SignUpPage> {
               backgroundColor: primary,
               textColor: Colors.white,
               fontSize: 16.0);
-          Get.to(() => RootApp());
+          Get.to(() => RootApp(
+                nameRoute: 'home',
+              ));
         } else {
           Fluttertoast.showToast(
               msg: 'Đăng kí thất bại',

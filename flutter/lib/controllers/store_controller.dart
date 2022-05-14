@@ -9,6 +9,7 @@ import 'package:at_coffee/common/utils_common/utils_common.dart';
 class StoreController extends GetxController {
   var isLoading = true.obs;
   var storesList = List<Store>().obs;
+  var storeListNearYou = List<Store>().obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
   RxString myAddress = "".obs;
@@ -154,30 +155,58 @@ class StoreController extends GetxController {
       if (stores != null) {
         storesList.value = stores;
         print(stores.length);
-        print("store");
+
         var indexMin = 0;
-        var minDistance = UtilsCommon.getAddress(stores[0].latitude,
-            stores[0].longitude, latitude.value, longitude.value);
+        var minDistance = 1000000;
         print(minDistance);
-        for (var i = 1; i > stores.length - 1; i++) {
+        for (var i = 0; i < stores.length; i++) {
           print("store");
-          print(stores[i]);
+
           var distance = UtilsCommon.getAddress(stores[i].latitude,
               stores[i].longitude, latitude.value, longitude.value);
           if (distance < minDistance) {
-            minDistance = distance;
+            minDistance = distance.round();
             indexMin = i;
           }
         }
         storeNearYou.value = stores[indexMin];
         storeMinDistance.value = minDistance.round();
-        print(minDistance);
-        print(stores[indexMin]);
+        print(minDistance.toString() + " " + minDistance.toString());
+        // print(minDistance);
+        // print(stores[indexMin]);
       }
     } catch (error) {
       print(error);
     } finally {
       //isLoading(false);
+    }
+  }
+
+  void getStoreListNearYou() async {
+    try {
+      isLoading(true);
+      List<Store> newList = new List<Store>();
+      print(storesList.value.length.toString() + "minthu");
+
+      //var minDistance = 7;
+
+      for (var i = 0; i < storesList.value.length; i++) {
+        var distance = UtilsCommon.getAddress(storesList.value[i].latitude,
+                storesList.value[i].longitude, latitude.value, longitude.value)
+            .round();
+
+        if (distance <= 7) {
+          newList.add(storesList.value[i]);
+          print(distance.toString() + "minthu");
+        }
+      }
+      storeListNearYou.value = newList;
+
+      print(storeListNearYou.value.length.toString() + " stores");
+    } catch (error) {
+      print(error);
+    } finally {
+      isLoading(false);
     }
   }
 }

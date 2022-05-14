@@ -47,7 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
     print(user);
     if (user != null) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => new RootApp()));
+          context,
+          MaterialPageRoute(
+              builder: (context) => new RootApp(
+                    nameRoute: "home",
+                  )));
       // Get.off(() => RootApp());
     } else {
       // Timer(Duration(seconds: 3), openOnBoard);

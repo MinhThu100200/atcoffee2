@@ -21,71 +21,39 @@ class _locationPageState extends State<LocationPage> {
 
   final StoreController storeController = Get.put(StoreController());
 
-  String _getAddress(double lat, double long) {
-    double distanceInMeters = 0;
-    print(storeController.latitude.value.toString() +
-        storeController.longitude.value.toString());
-    //_getLocationData().then((value) {
-    if (lat == 0 ||
-        long == 0 ||
-        storeController.latitude.value == 0 ||
-        storeController.longitude.value == 0) return 0.toString();
-    // GeoCode geoCode = GeoCode();
-    //print(currentLocation);
-
-    //LocationData location = value;
-
-    // Address address =
-    //     await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
-    // print(address);
-    // Coordinates coordinates =
-    //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
-    // print(coordinates);
-    //getDistance(lat, lang, 10.9021, 106.7754);
-
-    // List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
-    // //print(placemarks);
-    // Placemark place = placemarks[0];
-    // print(place);
-
-    distanceInMeters = (Geolocator.distanceBetween(
-                storeController.latitude.value,
-                storeController.longitude.value,
-                lat,
-                long) +
-            1000) /
-        1000;
-    // lệch 1km cho phép
-    print("distanceInMeters");
-    print(distanceInMeters);
-
-    return distanceInMeters.round().toString();
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // _getLocationData().then((value) => setState(() {
-      //       currentLocation = value;
-      //     }));
-      //storeController.fetchStores();
-      storeController.getAddress();
-      // productController.fetchProductsByCategory(codeCategory[0]);
-      // print("Build Completed");
-    });
+    // storeController.getStoreListNearYou();
+    // storeController.getAddress();
+    //WidgetsBinding.instance?.addPostFrameCallback((_) {
+    // _getLocationData().then((value) => setState(() {
+    //       currentLocation = value;
+    //     }));
+    //storeController.getStoreListNearYou();
+    //storeController.getAddress();
+    // productController.fetchProductsByCategory(codeCategory[0]);
+    print("Build Completed");
+    //});
   }
 
   void setStateValue(value) {
-    selectedTab = value;
-    setState(() {});
+    setState(() {
+      selectedTab = value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      storeController.getAddress();
+      storeController.getStoreListNearYou();
+    });
+    var data = selectedTab != 0
+        ? storeController.storesList.value
+        : storeController.storeListNearYou.value;
     return Scaffold(
       backgroundColor: lightGray3,
       body: Container(
@@ -150,6 +118,8 @@ class _locationPageState extends State<LocationPage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
                                   onTap: () {
+                                    // if (selectedTab == 0)
+                                    //   storeController.getStoreListNearYou();
                                     setStateValue(index);
                                   },
                                   child: Column(children: [
@@ -180,8 +150,7 @@ class _locationPageState extends State<LocationPage> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 10),
                               child: ListView.builder(
-                                  itemCount: storeController.storesList.length,
-                                  //itemCount: listTab.length,
+                                  itemCount: data.length,
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -203,7 +172,10 @@ class _locationPageState extends State<LocationPage> {
                                                     BorderRadius.circular(5.0),
                                                 child: Image.asset(
                                                     'assets/images/store' +
-                                                        (index + 1).toString() +
+                                                        (data[index]
+                                                                .id
+                                                                .toString())
+                                                            .toString() +
                                                         '.jpg',
                                                     height: 60,
                                                     width: 60))),
@@ -236,9 +208,7 @@ class _locationPageState extends State<LocationPage> {
                                                         children: [
                                                           Flexible(
                                                             child: Text(
-                                                                storeController
-                                                                    .storesList[
-                                                                        index]
+                                                                data[index]
                                                                     .address,
                                                                 style: TextStyle(
                                                                     fontSize:
@@ -253,13 +223,9 @@ class _locationPageState extends State<LocationPage> {
                                                     child: Text(
                                                         "Cách khoảng đây " +
                                                             UtilsCommon.getAddress(
-                                                                    storeController
-                                                                        .storesList[
-                                                                            index]
+                                                                    data[index]
                                                                         .latitude,
-                                                                    storeController
-                                                                        .storesList[
-                                                                            index]
+                                                                    data[index]
                                                                         .longitude,
                                                                     storeController
                                                                         .latitude

@@ -35,7 +35,7 @@ class _ProductItem extends State<ProductItem> {
                   builder: (context) => OrderPage(product: _product)));
         },
         child: Container(
-          height: 160.0,
+          height: 140.0,
           padding: const EdgeInsets.only(left: 20.0, right: 0.0),
           child: SizedBox(
               height: size.width,
@@ -43,16 +43,16 @@ class _ProductItem extends State<ProductItem> {
               child: Stack(
                 children: [
                   Positioned(
-                    top: 30.0,
+                    top: 20.0,
                     left: 70.0,
                     child: Container(
                       padding: const EdgeInsets.only(
-                          left: 60.0, right: 10.0, top: 10.0, bottom: 10.0),
+                          left: 50.0, right: 10.0, top: 5.0, bottom: 5.0),
                       decoration: BoxDecoration(
                         color: primary,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      height: 120.0,
+                      height: 100.0,
                       width: size.width - 110.0,
                       child: Column(
                         children: [
@@ -62,7 +62,7 @@ class _ProductItem extends State<ProductItem> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(_product.name,
                                     style: const TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white))),
                           ),
@@ -80,7 +80,7 @@ class _ProductItem extends State<ProductItem> {
                                         color: white1)),
                                 Text("S, M, L",
                                     style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: lightYellow)),
                               ],
@@ -105,7 +105,7 @@ class _ProductItem extends State<ProductItem> {
                                           .format(_product.sizes[2].price)
                                           .toString(),
                                   style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: lightYellow))
                             ]),
@@ -151,8 +151,8 @@ class _ProductItem extends State<ProductItem> {
                     ),
                   ),
                   Container(
-                    height: 130.0,
-                    width: 120.0,
+                    height: 110.0,
+                    width: 110.0,
                     decoration: BoxDecoration(
                       color: lightYellow,
                       borderRadius: BorderRadius.circular(10),
@@ -189,8 +189,8 @@ class _ProductItem extends State<ProductItem> {
                       child: ((() {
                         if (_product.discount > 0) {
                           return Container(
-                            height: 45,
-                            width: 45,
+                            height: 40,
+                            width: 40,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(23),
@@ -200,7 +200,7 @@ class _ProductItem extends State<ProductItem> {
                                 "-" + _product.discount.toString() + "%",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     color: lightYellow)),
                           );
                         } else {
