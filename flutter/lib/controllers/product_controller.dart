@@ -6,6 +6,7 @@ class ProductController extends GetxController {
   var isLoading = true.obs;
   var productsList = List<Product>().obs;
   var productsSuggestion = List<Product>().obs;
+  var reload = true.obs;
 
   @override
   void onInit() {

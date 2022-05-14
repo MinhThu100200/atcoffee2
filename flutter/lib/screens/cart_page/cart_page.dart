@@ -1,6 +1,7 @@
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
+import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ticketview/ticketview.dart';
 import 'package:at_coffee/models/store.dart';
@@ -50,11 +51,15 @@ class _CartPage extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    _store = _getNearestStore();
     _selectedPayment = paymentController.paymentsList != null &&
-            paymentController.paymentsList.length > 0
+            paymentController.paymentsList.isEmpty == false
         ? paymentController.paymentsList[0].id.toString()
         : '';
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _store = _getNearestStore();
+
+      storeController.storeNearYou();
+    });
   }
 
   double _calPromotion(carts) {
@@ -117,8 +122,7 @@ class _CartPage extends State<CartPage> {
   }
 
   double _calTotalAmount(carts) {
-    double amount = cartController.total["amount"].toDouble() -
-        cartController.total["promotion"];
+    double amount = _calAmount(carts) - _calPromotion(carts);
     cartController.total["totalAmount"] = amount.toInt();
     return amount;
   }
@@ -134,7 +138,7 @@ class _CartPage extends State<CartPage> {
         quantity += carts[i].quantity;
       }
     }
-    cartController.total["quanity"] = quantity.toInt();
+    cartController.total["quantity"] = quantity.toInt();
 
     return quantity;
   }
@@ -179,7 +183,7 @@ class _CartPage extends State<CartPage> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(_selectedOrder,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 20.0,
                                                         fontWeight:
                                                             FontWeight.w600)),
@@ -197,11 +201,17 @@ class _CartPage extends State<CartPage> {
                                                       color: primary
                                                           .withOpacity(0.3),
                                                     ),
-                                                    child: const Text(
-                                                        "Thay đổi",
-                                                        style: TextStyle(
-                                                            fontSize: 16.0,
-                                                            color: primary)),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        _showModelButtonSheet(
+                                                            context);
+                                                      },
+                                                      child: const Text(
+                                                          "Thay đổi",
+                                                          style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              color: primary)),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -213,7 +223,13 @@ class _CartPage extends State<CartPage> {
                                               children: [
                                                 Flexible(
                                                     child: Text(
-                                                        "01 Đ. Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh")),
+                                                        _indexSelectedOrder == 0
+                                                            ? storeController
+                                                                .myAddress.value
+                                                            : storeController
+                                                                .storeNearYou
+                                                                .value
+                                                                .address))
                                               ],
                                             )),
                                       ],
@@ -251,10 +267,16 @@ class _CartPage extends State<CartPage> {
                                                   color:
                                                       primary.withOpacity(0.3),
                                                 ),
-                                                child: const Text(" + Thêm ",
-                                                    style: TextStyle(
-                                                        fontSize: 16.0,
-                                                        color: primary)),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(
+                                                        () => ProductsPage());
+                                                  },
+                                                  child: const Text("+ Thêm",
+                                                      style: TextStyle(
+                                                          fontSize: 16.0,
+                                                          color: primary)),
+                                                ),
                                               ),
                                             ),
                                           ]),
@@ -282,7 +304,7 @@ class _CartPage extends State<CartPage> {
                                           child: const Text(
                                               'Chưa có sản phẩm nào được chọn!',
                                               style:
-                                                  TextStyle(fontSize: 18.0))),
+                                                  TextStyle(fontSize: 16.0))),
                                     ]
                                   ]),
                                 ),
@@ -453,9 +475,12 @@ class _CartPage extends State<CartPage> {
                                               value: _selectedPayment ?? '',
                                               iconSize: 30.0,
                                               onChanged: (newValue) {
-                                                setState(() {
-                                                  _selectedPayment = newValue;
-                                                });
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback(
+                                                        (_) => setState(() {
+                                                              _selectedPayment =
+                                                                  newValue;
+                                                            }));
                                               },
                                               items: paymentController
                                                   .paymentsList
@@ -478,8 +503,10 @@ class _CartPage extends State<CartPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
+                                    cartController.isLoading.value = true;
                                     deleteCartByUserId(
                                         userController.user.value.id);
+                                    cartController.isLoading.value = false;
                                   },
                                   child: Card(
                                     child: Container(
@@ -535,7 +562,8 @@ class _CartPage extends State<CartPage> {
                               child: Text(
                                   _selectedOrder +
                                       ' - ' +
-                                      cartController.total["quantity"]
+                                      _calTotalQuantity(
+                                              cartController.cartsList)
                                           .toString() +
                                       ' sản phẩm',
                                   style: const TextStyle(
@@ -559,9 +587,7 @@ class _CartPage extends State<CartPage> {
                           ]),
                         ),
                         ElevatedButton(
-                            onPressed: () {
-                              _showModelButtonSheet(context);
-                            },
+                            onPressed: () {},
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12.0, vertical: 12.0),
@@ -641,11 +667,11 @@ class _CartPage extends State<CartPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            setState(() {
-                              _indexSelectedOrder = 1;
-                              _selectedOrder = 'Giao tận nơi';
-                              Navigator.pop(context);
-                            });
+                            cartController.isLoading.value = true;
+                            _indexSelectedOrder = 1;
+                            _selectedOrder = 'Giao tận nơi';
+                            cartController.isLoading.value = false;
+                            Navigator.pop(context);
                           },
                           child: Card(
                               color: _indexSelectedOrder == 1
@@ -727,11 +753,11 @@ class _CartPage extends State<CartPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            setState(() {
-                              _indexSelectedOrder = 0;
-                              _selectedOrder = 'Tự đến lấy';
-                              Navigator.pop(context);
-                            });
+                            cartController.isLoading.value = true;
+                            _indexSelectedOrder = 0;
+                            _selectedOrder = 'Tự đến lấy';
+                            cartController.isLoading.value = false;
+                            Navigator.pop(context);
                           },
                           child: Card(
                               color: _indexSelectedOrder == 0

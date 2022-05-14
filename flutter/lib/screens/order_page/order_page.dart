@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -26,10 +27,10 @@ class _OrderPage extends State<OrderPage> {
   Product _product;
   bool _isSaving = false;
 
-  RateController rateController = Get.put(new RateController());
-  CartController cartController = Get.put(new CartController());
-  UserController userController = Get.put(new UserController());
-  PaymentController paymentController = Get.put(new PaymentController());
+  RateController rateController = Get.put(RateController());
+  CartController cartController = Get.put(CartController());
+  UserController userController = Get.put(UserController());
+  PaymentController paymentController = Get.put(PaymentController());
 
   final _milkNames = ["Sữa tươi", "Sữa tươi1", "Sữa tươi2", "Sữa tươi3"];
   final _sugarPercents = [0, 25, 50, 75, 100];
@@ -49,32 +50,32 @@ class _OrderPage extends State<OrderPage> {
   int _index = 2;
 
   void _updateQuantity(String operator) {
-    setState(() {
-      if (operator == "add") {
-        _quantity += 1;
-      } else {
-        if (_quantity > 1) {
-          _quantity -= 1;
-        }
-      }
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          if (operator == "add") {
+            _quantity += 1;
+          } else {
+            if (_quantity > 1) {
+              _quantity -= 1;
+            }
+          }
+        }));
   }
 
   void _updateSize(SizeEnum size) {
     _index = size.index;
 
-    setState(() {
-      _urlS = _urlDefault;
-      _urlM = _urlDefault;
-      _urlL = _urlDefault;
-      if (size == SizeEnum.S) {
-        _urlS = _urlSelected;
-      } else if (size == SizeEnum.M) {
-        _urlM = _urlSelected;
-      } else {
-        _urlL = _urlSelected;
-      }
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _urlS = _urlDefault;
+          _urlM = _urlDefault;
+          _urlL = _urlDefault;
+          if (size == SizeEnum.S) {
+            _urlS = _urlSelected;
+          } else if (size == SizeEnum.M) {
+            _urlM = _urlSelected;
+          } else {
+            _urlL = _urlSelected;
+          }
+        }));
   }
 
   final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
@@ -87,7 +88,10 @@ class _OrderPage extends State<OrderPage> {
     _milk = _milkNames[0];
     _ice = _icePercents[2];
     _sugar = _sugarPercents[2];
-    rateController.fetchRates(_product.id);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      cartController.fetchCartsByCustomerId(userController.user.value.id);
+      rateController.fetchRates(_product.id);
+    });
 
     // WidgetsBinding.instance?.addPostFrameCallback((_) {
     //   cartController.fetchCartsByCustomerId(userController.user.value.id);
@@ -512,16 +516,23 @@ class _OrderPage extends State<OrderPage> {
                                                     int _indexMilk = _milkNames
                                                         .indexOf(_milk);
                                                     if (_indexMilk == 0) {
-                                                      setState(() {
-                                                        _milk = _milkNames[
-                                                            _milkNames.length -
-                                                                1];
-                                                      });
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) =>
+                                                                  setState(() {
+                                                                    _milk = _milkNames[
+                                                                        _milkNames.length -
+                                                                            1];
+                                                                  }));
                                                     } else {
-                                                      setState(() {
-                                                        _milk = _milkNames[
-                                                            _indexMilk - 1];
-                                                      });
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) =>
+                                                                  setState(() {
+                                                                    _milk = _milkNames[
+                                                                        _indexMilk -
+                                                                            1];
+                                                                  }));
                                                     }
                                                   },
                                                   child: Container(
@@ -547,14 +558,23 @@ class _OrderPage extends State<OrderPage> {
                                                         .indexOf(_milk);
                                                     if (_indexMilk ==
                                                         _milkNames.length - 1) {
-                                                      setState(() {
-                                                        _milk = _milkNames[0];
-                                                      });
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) =>
+                                                                  setState(() {
+                                                                    _milk =
+                                                                        _milkNames[
+                                                                            0];
+                                                                  }));
                                                     } else {
-                                                      setState(() {
-                                                        _milk = _milkNames[
-                                                            _indexMilk + 1];
-                                                      });
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) =>
+                                                                  setState(() {
+                                                                    _milk = _milkNames[
+                                                                        _indexMilk +
+                                                                            1];
+                                                                  }));
                                                     }
                                                   },
                                                   child: Container(
@@ -641,12 +661,14 @@ class _OrderPage extends State<OrderPage> {
                                                           _sugarPercents
                                                               .indexOf(_sugar);
                                                       if (_indexSugar > 0) {
-                                                        setState(() {
-                                                          _sugar =
-                                                              _sugarPercents[
-                                                                  _indexSugar -
-                                                                      1];
-                                                        });
+                                                        WidgetsBinding.instance
+                                                            .addPostFrameCallback(
+                                                                (_) => setState(
+                                                                        () {
+                                                                      _sugar = _sugarPercents[
+                                                                          _indexSugar -
+                                                                              1];
+                                                                    }));
                                                       }
                                                     },
                                                     child: Container(
@@ -679,12 +701,14 @@ class _OrderPage extends State<OrderPage> {
                                                           _sugarPercents
                                                                   .length -
                                                               1) {
-                                                        setState(() {
-                                                          _sugar =
-                                                              _sugarPercents[
-                                                                  _indexSugar +
-                                                                      1];
-                                                        });
+                                                        WidgetsBinding.instance
+                                                            .addPostFrameCallback(
+                                                                (_) => setState(
+                                                                        () {
+                                                                      _sugar = _sugarPercents[
+                                                                          _indexSugar +
+                                                                              1];
+                                                                    }));
                                                       }
                                                     },
                                                     child: Container(
@@ -757,10 +781,14 @@ class _OrderPage extends State<OrderPage> {
                                                           _icePercents
                                                               .indexOf(_ice);
                                                       if (_indexIce > 0) {
-                                                        setState(() {
-                                                          _ice = _icePercents[
-                                                              _indexIce - 1];
-                                                        });
+                                                        WidgetsBinding.instance
+                                                            .addPostFrameCallback(
+                                                                (_) => setState(
+                                                                        () {
+                                                                      _ice = _icePercents[
+                                                                          _indexIce -
+                                                                              1];
+                                                                    }));
                                                       }
                                                     },
                                                     child: Container(
@@ -792,10 +820,14 @@ class _OrderPage extends State<OrderPage> {
                                                       if (_indexIce <
                                                           _icePercents.length -
                                                               1) {
-                                                        setState(() {
-                                                          _ice = _icePercents[
-                                                              _indexIce + 1];
-                                                        });
+                                                        WidgetsBinding.instance
+                                                            .addPostFrameCallback(
+                                                                (_) => setState(
+                                                                        () {
+                                                                      _ice = _icePercents[
+                                                                          _indexIce +
+                                                                              1];
+                                                                    }));
                                                       }
                                                     },
                                                     child: Container(
@@ -1166,9 +1198,9 @@ class _OrderPage extends State<OrderPage> {
   }
 
   void addToCart() async {
-    setState(() {
-      _isSaving = true;
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _isSaving = true;
+        }));
     Cart cart = new Cart();
     cart.code = 'CART' +
         ((DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt()).toString();
@@ -1213,8 +1245,8 @@ class _OrderPage extends State<OrderPage> {
     }
 
     cartController.calcTotal();
-    setState(() {
-      _isSaving = false;
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _isSaving = false;
+        }));
   }
 }

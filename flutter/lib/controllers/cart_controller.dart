@@ -32,7 +32,6 @@ class CartController extends GetxController {
       var carts = await RemoteServices.fetchCartsByCustomerId(id);
       if (carts != null) {
         cartsList.value = carts;
-        calcTotal();
       }
     } finally {
       isLoading(false);
@@ -45,7 +44,6 @@ class CartController extends GetxController {
       if (cart != null) {
         var index = cartsList.indexWhere((c) => c.id == cart.id);
         cartsList[index].state = cart.state;
-        calcTotal();
         return cart;
       }
     } finally {
@@ -59,7 +57,6 @@ class CartController extends GetxController {
       cart = await RemoteServices.addCart(cart);
       if (cart != null) {
         cartsList.add(cart);
-        calcTotal();
         return cart;
       }
     } finally {
@@ -72,7 +69,7 @@ class CartController extends GetxController {
       bool isDeleted = await RemoteServices.deleteCart(cartId);
       if (isDeleted) {
         cartsList.removeWhere((c) => c.id == cartId);
-        calcTotal();
+        return true;
       }
       return isDeleted;
     } finally {
@@ -85,7 +82,7 @@ class CartController extends GetxController {
       bool isDeleted = await RemoteServices.deleteCartByUserId(userId);
       if (isDeleted) {
         cartsList.value = new List<Cart>();
-        calcTotal();
+        return true;
       }
       return isDeleted;
     } finally {
@@ -98,7 +95,7 @@ class CartController extends GetxController {
       bool isDeleted = await RemoteServices.deleteCartPayment(ids);
       if (isDeleted) {
         cartsList.removeWhere((c) => ids.contains(c.id));
-        calcTotal();
+        return true;
       }
       return isDeleted;
     } finally {

@@ -15,6 +15,7 @@ import 'package:at_coffee/screens/test_location.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/reward_controller.dart';
+import 'package:at_coffee/controllers/payment_controller.dart';
 
 class RootApp extends StatefulWidget {
   RootApp({Key key, this.nameRoute}) : super(key: key);
@@ -30,6 +31,7 @@ class _RootAppState extends State<RootApp> {
   final TypeController typeController = Get.put(TypeController());
   final UserController userController = Get.put(UserController());
   final RewardController rewardController = Get.put(RewardController());
+  final PaymentController paymentController = Get.put(PaymentController());
 
   int pageIndex = 0;
   String _nameRoute;

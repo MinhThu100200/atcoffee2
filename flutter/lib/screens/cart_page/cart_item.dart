@@ -49,11 +49,10 @@ class _CartItem extends State<CartItem> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           value: _cart.state,
           onChanged: (val) {
-            // _cart.state = val;
-            setState(() {
-              _cart.state = val;
-            });
+            cartController.isLoading.value = true;
+            _cart.state = val;
             _updateState(_cart);
+            cartController.isLoading.value = false;
           },
         )),
         Expanded(
@@ -94,7 +93,9 @@ class _CartItem extends State<CartItem> {
                 color: Colors.red,
               ),
               onPressed: () {
-                deleteCart(_cart.id);
+                cartController.isLoading.value = true;
+                _deleteCart(_cart.id);
+                cartController.isLoading.value = false;
               }),
         )
       ]),
@@ -105,7 +106,7 @@ class _CartItem extends State<CartItem> {
     cartController.updateCart(cart);
   }
 
-  void deleteCart(int cartId) async {
+  void _deleteCart(int cartId) async {
     cartController.deleteCart(cartId);
   }
 }
