@@ -1,7 +1,8 @@
 class ApiConstants {
-  static String HOST = 'https://7fa7-14-169-8-177.ngrok.io';
+  static String HOST = 'https://06dc-116-108-122-110.ap.ngrok.io';
   static String GET_CATEGORY = '/api/info/category/?list=true';
   static String GET_STORE = '/api/info/store';
+  static String GET_ADRRESS = 'https://provinces.open-api.vn/api/?depth=3';
   static String GET_PRODUCT =
       '/api/info/product?page=1&size=100&store=AT_THUDUC&category&keyword';
   static String GET_PRODUCT_BY_CATEGORY(cate) =>

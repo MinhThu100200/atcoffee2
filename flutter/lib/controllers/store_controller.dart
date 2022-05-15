@@ -74,7 +74,7 @@ class StoreController extends GetxController {
 
   void getAddress() async {
     try {
-      isLoading.value = true;
+      //isLoading.value = true;
       Location location = new Location();
       LocationData _locationData;
 
@@ -145,6 +145,17 @@ class StoreController extends GetxController {
       print(error);
     } finally {
       isLoading(false);
+    }
+  }
+
+  void updateMyStoreNearYou(store) {
+    try {
+      storeNearYou.value = store;
+      storeMinDistance.value = UtilsCommon.getAddress(
+              store.latitude, store.longitude, latitude.value, longitude.value)
+          .round();
+    } catch (error) {
+      print(error);
     }
   }
 

@@ -32,7 +32,7 @@ class _OrderPage extends State<OrderPage> {
   UserController userController = Get.put(UserController());
   PaymentController paymentController = Get.put(PaymentController());
 
-  final _milkNames = ["Sữa tươi", "Sữa tươi1", "Sữa tươi2", "Sữa tươi3"];
+  final _milkNames = ["Sữa ngôi sao", "Sữa ông thọ", "Sữa tươi"];
   final _sugarPercents = [0, 25, 50, 75, 100];
   final _icePercents = [0, 25, 50, 75, 100];
 
@@ -1200,6 +1200,7 @@ class _OrderPage extends State<OrderPage> {
   void addToCart() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
           _isSaving = true;
+          print("minhthu");
         }));
     Cart cart = new Cart();
     cart.code = 'CART' +

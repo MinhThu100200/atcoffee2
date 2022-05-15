@@ -1,6 +1,8 @@
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/screens/location_page/location_store.dart';
+import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/models/product.dart';
@@ -31,7 +33,6 @@ class _PopUpAddress extends State<PopUpAddress> {
     return InkWell(
       onTap: () {
         if (storeController.myAddress.value != "") {
-          //storeController.myStoreNearYou();
           showModalBottomSheet(
             backgroundColor: Colors.transparent,
             context: context,
@@ -213,7 +214,17 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(14)),
-                                                    child: Text("Sửa")),
+                                                    child: InkWell(
+                                                        onTap: () {
+                                                          if (index == 1)
+                                                            Get.to(() =>
+                                                                LocationStore());
+                                                          else {
+                                                            Get.to(() =>
+                                                                AddressDelivery());
+                                                          }
+                                                        },
+                                                        child: Text("Sửa"))),
                                               ],
                                             )),
                                       ),

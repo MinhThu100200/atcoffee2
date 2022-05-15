@@ -51,9 +51,7 @@ class _locationPageState extends State<LocationPage> {
       storeController.getAddress();
       storeController.getStoreListNearYou();
     });
-    var data = selectedTab != 0
-        ? storeController.storesList.value
-        : storeController.storeListNearYou.value;
+
     return Scaffold(
       backgroundColor: lightGray3,
       body: Container(
@@ -142,6 +140,9 @@ class _locationPageState extends State<LocationPage> {
                               }),
                         ),
                         Obx(() {
+                          var data = selectedTab != 0
+                              ? storeController.storesList.value
+                              : storeController.storeListNearYou.value;
                           if (storeController.isLoading.value)
                             return Center(child: CircularProgressIndicator());
                           else
@@ -150,7 +151,9 @@ class _locationPageState extends State<LocationPage> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 10),
                               child: ListView.builder(
-                                  itemCount: data.length,
+                                  itemCount: selectedTab == 0
+                                      ? storeController.storeListNearYou.length
+                                      : storeController.storesList.length,
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
