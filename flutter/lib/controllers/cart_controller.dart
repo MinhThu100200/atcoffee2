@@ -9,7 +9,8 @@ class CartController extends GetxController {
   var cartsList = new List<Cart>().obs;
   var promotion = new Promotion().obs;
   var reward = new Reward().obs;
-  var isAdd = true.obs;
+  // khi nhấn "Thêm" tại giỏ hàng
+  var isAdd = false.obs;
   // 0 - Mang đi; 1 - Giao tận nơi
   var indexSelectedOrder = 0.obs;
   // 0 - none; 1 - promotion; 2 - reward
@@ -69,9 +70,10 @@ class CartController extends GetxController {
 
   Future<bool> deleteCart(int cartId) async {
     try {
+      isLoading(true);
       bool isDeleted = await RemoteServices.deleteCart(cartId);
       if (isDeleted) {
-        cartsList.removeWhere((c) => c.id == cartId);
+        cartsList.value = cartsList.where((c) => c.id != cartId).toList();
         return true;
       }
       return isDeleted;

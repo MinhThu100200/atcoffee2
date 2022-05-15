@@ -60,8 +60,9 @@ class _CartPage extends State<CartPage> {
       storeController.storeNearYou();
     });
 
-    _selectedOrder = cartController.indexSelectedOrder.value == 0 ? 'Mang đi' : 'Giao tận nơi';
-    cartController.isAdd.value = true;
+    _selectedOrder = cartController.indexSelectedOrder.value == 0
+        ? 'Mang đi'
+        : 'Giao tận nơi';
   }
 
   double _calPromotion(carts) {
@@ -125,6 +126,7 @@ class _CartPage extends State<CartPage> {
 
   double _calTotalAmount(carts) {
     double amount = _calAmount(carts) - _calPromotion(carts);
+    amount = amount < 0 ? 0 : amount;
     cartController.total["totalAmount"] = amount.toInt();
     return amount;
   }
@@ -172,8 +174,12 @@ class _CartPage extends State<CartPage> {
                               children: [
                                 Card(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0, vertical: 8.0),
+                                    padding: const EdgeInsets.only(
+                                      left: 24.0,
+                                      right: 22.0,
+                                      top: 8.0,
+                                      bottom: 8.0,
+                                    ),
                                     child: Column(
                                       children: [
                                         Container(
@@ -224,14 +230,16 @@ class _CartPage extends State<CartPage> {
                                             child: Row(
                                               children: [
                                                 Flexible(
-                                                    child: Text(
-                                                        cartController.indexSelectedOrder.value == 0
-                                                            ? storeController
-                                                                .myAddress.value
-                                                            : storeController
-                                                                .storeNearYou
-                                                                .value
-                                                                .address))
+                                                    child: Text(cartController
+                                                                .indexSelectedOrder
+                                                                .value ==
+                                                            0
+                                                        ? storeController
+                                                            .storeNearYou
+                                                            .value
+                                                            .address
+                                                        : storeController
+                                                            .myAddress.value))
                                               ],
                                             )),
                                       ],
@@ -283,8 +291,9 @@ class _CartPage extends State<CartPage> {
                                             ),
                                           ]),
                                     ),
-                                    if (cartController.cartsList.value.length >
-                                        0) ...[
+                                    if (cartController
+                                            .cartsList.value.isEmpty ==
+                                        false) ...[
                                       Container(
                                         child: ListView.builder(
                                             primary: false,
@@ -676,9 +685,10 @@ class _CartPage extends State<CartPage> {
                             Navigator.pop(context);
                           },
                           child: Card(
-                              color: cartController.indexSelectedOrder.value == 1
-                                  ? const Color(0xfffef7e4)
-                                  : white,
+                              color:
+                                  cartController.indexSelectedOrder.value == 1
+                                      ? const Color(0xfffef7e4)
+                                      : white,
                               child: Row(
                                 children: [
                                   Container(
@@ -762,9 +772,10 @@ class _CartPage extends State<CartPage> {
                             Navigator.pop(context);
                           },
                           child: Card(
-                              color: cartController.indexSelectedOrder.value == 0
-                                  ? const Color(0xfffef7e4)
-                                  : white,
+                              color:
+                                  cartController.indexSelectedOrder.value == 0
+                                      ? const Color(0xfffef7e4)
+                                      : white,
                               child: Row(
                                 children: [
                                   Container(
