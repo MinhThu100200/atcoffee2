@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:at_coffee/screens/reward_page/reward_page.dart';
@@ -25,6 +26,7 @@ class _homePageState extends State<HomePage> {
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
   final ProductController productController = Get.put(ProductController());
+  final AddressController addressController = Get.put(AddressController());
   //var selected = 0.obs;
 
   @override
@@ -34,8 +36,9 @@ class _homePageState extends State<HomePage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       storeController.getAddress();
       productController.fetchProductSuggest(userController.user.value.id, 3);
-
       storeController.getStoreListNearYou();
+      addressController.fetchDistrictByCity();
+      //addressController.fetchAddress();
       print("Build Completed:" + userController.user.value.id.toString());
     });
   }

@@ -28,6 +28,10 @@ class StoreController extends GetxController {
     selected.value = value;
   }
 
+  void updateMyAddress(city, dis, ward, numStreet) {
+    myAddress.value = numStreet.trim() + ", " + ward + " " + dis + " " + city;
+  }
+
   void setLocationData() async {
     try {
       isLoading(true);

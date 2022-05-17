@@ -6,10 +6,10 @@ import 'dart:convert';
 
 import 'package:at_coffee/models/district.dart';
 
-List<City> storeFromJson(String str) =>
-    List<City>.from(json.decode(str).map((x) => City.fromJson(x)));
+List<City> cityFromJson(dynamic str) =>
+    List<City>.from(json.decode(utf8.decode(str)).map((x) => City.fromJson(x)));
 
-String storeToJson(List<City> data) =>
+String cityToJson(List<City> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class City {
