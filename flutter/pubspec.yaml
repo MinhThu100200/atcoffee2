@@ -53,6 +53,8 @@ dependencies:
   shared_preferences: ^2.0.13
   geolocator: ^8.2.0
   geocoding: ^2.0.4
+  bottom_sheet: ^3.0.0
+  modal_bottom_sheet: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
