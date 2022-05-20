@@ -24,7 +24,7 @@ class StoreController extends GetxController {
     super.onInit();
   }
 
-  void setSeleted(value) {
+  void setSeleted(int value) {
     selected.value = value;
   }
 
@@ -166,27 +166,30 @@ class StoreController extends GetxController {
   void myStoreNearYou() async {
     try {
       //isLoading(true);
-      var stores = await RemoteServices.fetchStores();
-      if (stores != null) {
-        storesList.value = stores;
-        print(stores.length);
+      if (storeNearYou.value == null) {
+        var stores = await RemoteServices.fetchStores();
+        if (stores != null) {
+          storesList.value = stores;
+          //print(stores.length);
 
-        var indexMin = 0;
-        var minDistance = 1000000;
-        print(minDistance);
-        for (var i = 0; i < stores.length; i++) {
-          print("store");
+          var indexMin = 0;
+          var minDistance = 1000000;
+          //print(minDistance);
+          for (var i = 0; i < stores.length; i++) {
+            //print("store");
 
-          var distance = UtilsCommon.getAddress(stores[i].latitude,
-              stores[i].longitude, latitude.value, longitude.value);
-          if (distance < minDistance) {
-            minDistance = distance.round();
-            indexMin = i;
+            var distance = UtilsCommon.getAddress(stores[i].latitude,
+                stores[i].longitude, latitude.value, longitude.value);
+            if (distance < minDistance) {
+              minDistance = distance.round();
+              indexMin = i;
+            }
           }
+          storeNearYou.value = stores[indexMin];
+          storeMinDistance.value = minDistance.round();
+          print(minDistance.toString() + " " + minDistance.toString());
         }
-        storeNearYou.value = stores[indexMin];
-        storeMinDistance.value = minDistance.round();
-        print(minDistance.toString() + " " + minDistance.toString());
+
         // print(minDistance);
         // print(stores[indexMin]);
       }
@@ -201,7 +204,7 @@ class StoreController extends GetxController {
     try {
       isLoading(true);
       List<Store> newList = new List<Store>();
-      print(storesList.value.length.toString() + "minthu");
+      //print(storesList.value.length.toString() + "minthu");
 
       //var minDistance = 7;
 
@@ -212,12 +215,12 @@ class StoreController extends GetxController {
 
         if (distance <= 7) {
           newList.add(storesList.value[i]);
-          print(distance.toString() + "minthu");
+          //print(distance.toString() + "minthu");
         }
       }
       storeListNearYou.value = newList;
 
-      print(storeListNearYou.value.length.toString() + " stores");
+      //print(storeListNearYou.value.length.toString() + " stores");
     } catch (error) {
       print(error);
     } finally {

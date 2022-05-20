@@ -107,7 +107,7 @@ class _RootAppState extends State<RootApp> {
       Icons.account_circle
     ];
     return Container(
-      height: 90,
+      height: 60,
       width: double.infinity,
       decoration: BoxDecoration(
         color: white,
@@ -115,8 +115,7 @@ class _RootAppState extends State<RootApp> {
             Border(top: BorderSide(width: 1, color: black.withOpacity(0.06))),
       ),
       child: Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 15),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(items.length, (index) {

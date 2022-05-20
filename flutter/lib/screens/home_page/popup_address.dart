@@ -9,9 +9,7 @@ import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 
 class PopUpAddress extends StatefulWidget {
-  PopUpAddress({Key key, this.product}) : super(key: key);
-
-  Product product;
+  PopUpAddress({Key key}) : super(key: key);
 
   @override
   _PopUpAddress createState() => _PopUpAddress();
@@ -214,13 +212,13 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(14)),
-                                                    child: InkWell(
+                                                    child: GestureDetector(
                                                         onTap: () {
                                                           if (index == 1)
-                                                            Get.to(() =>
+                                                            return Get.to(() =>
                                                                 LocationStore());
                                                           else {
-                                                            Get.to(() =>
+                                                            return Get.to(() =>
                                                                 AddressDelivery());
                                                           }
                                                         },

@@ -1,5 +1,5 @@
 class ApiConstants {
-  static String HOST = 'https://058d-116-108-122-110.ap.ngrok.io';
+  static String HOST = 'https://a0de-116-108-122-110.ap.ngrok.io';
   static String GET_CATEGORY = '/api/info/category/?list=true';
   static String GET_STORE = '/api/info/store';
   static String GET_ADRRESS(depth) =>
