@@ -1,10 +1,12 @@
 import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
+import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:at_coffee/screens/reward_page/reward_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart'
@@ -273,55 +275,60 @@ class _homePageState extends State<HomePage> {
                                         ),
                                       )),
                                 ),
-                                Container(
-                                    alignment: Alignment.center,
-                                    height: size.width / 2 - 40,
-                                    width: size.width / 2 - 30,
-                                    decoration: BoxDecoration(
-                                        color: lightGreen2,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    margin: EdgeInsets.only(
-                                      left: 20,
-                                    ),
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 80,
-                                            child: Image.asset(
-                                                'assets/images/strawberry-background.png'),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Container(
-                                                  padding:
-                                                      EdgeInsets.only(left: 8),
-                                                  child: Text("Take away ",
-                                                      style: TextStyle(
-                                                          color: primary,
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight
-                                                              .w700))),
-                                            ],
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.only(
-                                                top: 5, left: 8, right: 5),
-                                            child: Text(
-                                                "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  //color: primary,
-                                                  fontSize: 12,
-                                                )),
-                                          ),
-                                        ],
+                                GestureDetector(
+                                  onTap: () => Get.to(() => AddressDelivery()),
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      height: size.width / 2 - 40,
+                                      width: size.width / 2 - 30,
+                                      decoration: BoxDecoration(
+                                          color: lightGreen2,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      margin: EdgeInsets.only(
+                                        left: 20,
                                       ),
-                                    )),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 80,
+                                              child: Image.asset(
+                                                  'assets/images/strawberry-background.png'),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 8),
+                                                    child: Text("Take away ",
+                                                        style: TextStyle(
+                                                            color: primary,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700))),
+                                              ],
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  top: 5, left: 8, right: 5),
+                                              child: Text(
+                                                  "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    //color: primary,
+                                                    fontSize: 12,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                ),
                               ],
                             ),
                             Row(

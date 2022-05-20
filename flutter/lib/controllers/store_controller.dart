@@ -166,7 +166,9 @@ class StoreController extends GetxController {
   void myStoreNearYou() async {
     try {
       //isLoading(true);
-      if (storeNearYou.value == null) {
+      if (storeNearYou.value.address != null) {
+        print("minh thu inside");
+      } else {
         var stores = await RemoteServices.fetchStores();
         if (stores != null) {
           storesList.value = stores;
@@ -189,9 +191,6 @@ class StoreController extends GetxController {
           storeMinDistance.value = minDistance.round();
           print(minDistance.toString() + " " + minDistance.toString());
         }
-
-        // print(minDistance);
-        // print(stores[indexMin]);
       }
     } catch (error) {
       print(error);
