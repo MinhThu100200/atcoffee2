@@ -42,19 +42,6 @@ class CartController extends GetxController {
     }
   }
 
-  Future<Cart> updateCart(Cart cart) async {
-    try {
-      cart = await RemoteServices.updateCart(cart);
-      if (cart != null) {
-        var index = cartsList.indexWhere((c) => c.id == cart.id);
-        cartsList[index].state = cart.state;
-        return cart;
-      }
-    } finally {
-      isLoading(false);
-    }
-  }
-
   Future<Cart> addCart(Cart cart) async {
     try {
       isLoading(true);
@@ -63,6 +50,28 @@ class CartController extends GetxController {
         cartsList.add(cart);
         return cart;
       }
+      return null;
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<Cart> updateCart(Cart cart) async {
+    try {
+      // update in list
+      Cart prevCart = Cart.fromJson(cart.toJson());
+      var index = cartsList.indexWhere((c) => c.id == cart.id);
+      cartsList[index] = cart;
+      // update in database
+      cart = await RemoteServices.updateCart(cart);
+      if (cart != null) {
+        return cart;
+      } else {
+        // rollback in list
+        var prevIndex = cartsList.indexWhere((c) => c.id == prevCart.id);
+        cartsList[prevIndex] = prevCart;
+      }
+      return null;
     } finally {
       isLoading(false);
     }
@@ -70,11 +79,18 @@ class CartController extends GetxController {
 
   Future<bool> deleteCart(int cartId) async {
     try {
-      isLoading(true);
+      // remove in list
+      Cart prevCart =
+          Cart.fromJson(cartsList.firstWhere((c) => c.id != cartId).toJson());
+      var index = cartsList.indexWhere((c) => c.id == cartId);
+      cartsList.value = cartsList.where((c) => c.id != cartId).toList();
+      // remove in database
       bool isDeleted = await RemoteServices.deleteCart(cartId);
       if (isDeleted) {
-        cartsList.value = cartsList.where((c) => c.id != cartId).toList();
         return true;
+      } else {
+        // rollback list
+        cartsList.insert(index, prevCart);
       }
       return isDeleted;
     } finally {
@@ -84,10 +100,16 @@ class CartController extends GetxController {
 
   Future<bool> deleteCartByUserId(int userId) async {
     try {
+      // remove list
+      var prevCarts = cartFromJson(cartToJson(cartsList));
+      cartsList.removeRange(0, cartsList.length);
+      // remove in database
       bool isDeleted = await RemoteServices.deleteCartByUserId(userId);
       if (isDeleted) {
-        cartsList.value = new List<Cart>();
         return true;
+      } else {
+        //rollback list
+        cartsList.value = prevCarts;
       }
       return isDeleted;
     } finally {
