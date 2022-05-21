@@ -1,3 +1,4 @@
+import 'package:at_coffee/screens/notification_page/notification_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -89,7 +90,7 @@ class _RootAppState extends State<RootApp> {
         // Center(
         //   child: Text("Notification Page"),
         // ),
-        GetUserLocation(),
+        NotificationPage(),
         ProfilePage(),
         // Center(
         //   child: Text("Personal Page"),
