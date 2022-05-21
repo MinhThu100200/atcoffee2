@@ -1,4 +1,5 @@
 import 'package:at_coffee/controllers/address_controller.dart';
+import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
@@ -29,6 +30,7 @@ class _homePageState extends State<HomePage> {
   final UserController userController = Get.put(UserController());
   final ProductController productController = Get.put(ProductController());
   final AddressController addressController = Get.put(AddressController());
+  final CartController cartController = Get.put(CartController());
   //var selected = 0.obs;
 
   @override
@@ -40,6 +42,7 @@ class _homePageState extends State<HomePage> {
       productController.fetchProductSuggest(userController.user.value.id, 3);
       storeController.getStoreListNearYou();
       addressController.fetchDistrictByCity();
+      cartController.fetchCartsByCustomerId(userController.user.value.id);
       //addressController.fetchAddress();
       print("Build Completed:" + userController.user.value.id.toString());
     });
@@ -221,7 +224,7 @@ class _homePageState extends State<HomePage> {
                             Row(
                               children: [
                                 GestureDetector(
-                                  onTap: () => Get.to(ProductsPage()),
+                                  onTap: () => _delivery(),
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: size.width / 2 - 40,
@@ -276,7 +279,7 @@ class _homePageState extends State<HomePage> {
                                       )),
                                 ),
                                 GestureDetector(
-                                  onTap: () => Get.to(() => AddressDelivery()),
+                                  onTap: () => _takeAway(),
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: size.width / 2 - 40,
@@ -372,5 +375,17 @@ class _homePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _delivery() {
+    storeController.setSeleted(0);
+
+    Get.to(() => ProductsPage());
+  }
+
+  Future<void> _takeAway() {
+    storeController.setSeleted(1);
+
+    Get.to(() => ProductsPage());
   }
 }
