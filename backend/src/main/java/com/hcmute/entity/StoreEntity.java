@@ -23,6 +23,7 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	private String address;
 	private String timeOpen;
 	private String timeClose;
+	private String image;
 	private double latitude;
 	private double longitude;
 	
@@ -91,6 +92,14 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public List<ProductEntity> getProducts() {
