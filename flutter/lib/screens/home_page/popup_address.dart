@@ -301,7 +301,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                                       )),
                                 ],
                               ))
-                          : null
+                          : Container(child: Text(""))
                     ],
                   );
                 }

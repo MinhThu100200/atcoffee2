@@ -1,4 +1,5 @@
 import 'package:at_coffee/screens/change_password/change_password.dart';
+import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
@@ -292,7 +293,7 @@ class _ProfilePage extends State<ProfilePage> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => Get.to(() => ManageOrderPage()),
                 child: Card(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
