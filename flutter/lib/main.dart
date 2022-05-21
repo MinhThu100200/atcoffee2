@@ -7,11 +7,30 @@ import 'package:get/get.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/screens/root_app/root_app.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+  //..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatelessWidget {
@@ -24,6 +43,7 @@ class MyApp extends StatelessWidget {
       // theme: ThemeData(fontFamily: 'avenir'),
       initialRoute: "/",
       getPages: [GetPage(name: '/', page: () => MyHomePage())],
+      builder: EasyLoading.init(),
     );
   }
 }

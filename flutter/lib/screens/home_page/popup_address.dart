@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
@@ -9,9 +10,7 @@ import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 
 class PopUpAddress extends StatefulWidget {
-  PopUpAddress({Key key, this.product}) : super(key: key);
-
-  Product product;
+  PopUpAddress({Key key}) : super(key: key);
 
   @override
   _PopUpAddress createState() => _PopUpAddress();
@@ -21,6 +20,7 @@ class _PopUpAddress extends State<PopUpAddress> {
   final ProductController productController = Get.put(ProductController());
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
+  final CartController cartController = Get.put(CartController());
   var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
   var wayImage = [
     'assets/icons/delivery-man.png',
@@ -214,13 +214,13 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(14)),
-                                                    child: InkWell(
+                                                    child: GestureDetector(
                                                         onTap: () {
                                                           if (index == 1)
-                                                            Get.to(() =>
+                                                            return Get.to(() =>
                                                                 LocationStore());
                                                           else {
-                                                            Get.to(() =>
+                                                            return Get.to(() =>
                                                                 AddressDelivery());
                                                           }
                                                         },
@@ -274,9 +274,36 @@ class _PopUpAddress extends State<PopUpAddress> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 13));
                 } else {
                   storeController.myStoreNearYou();
-                  return Text(storeController.myAddress.value,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 13));
+                  return Row(
+                    children: [
+                      Container(
+                        child: Text(
+                            storeController.selected.value == 0
+                                ? storeController.myAddress.value
+                                : storeController.storeNearYou.value.address,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 13)),
+                      ),
+                      cartController.cartsList.length > 0
+                          ? Container(
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color: primary,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                      decoration: BoxDecoration(),
+                                      child: Text(
+                                        "${cartController.cartsList.length}",
+                                      )),
+                                ],
+                              ))
+                          : Container(child: Text(""))
+                    ],
+                  );
                 }
               })
             ],
