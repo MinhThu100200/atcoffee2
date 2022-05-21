@@ -14,3 +14,15 @@ class VariableConstants {
     };
   }
 }
+
+class StatusBillConstants {
+  static double POINTS_REFUND = 0.001;
+  static String REQUESTED = 'REQUESTED';
+  static String APPROVED = 'APPROVED';
+  static String UNAPPROVED = 'UNAPPROVED';
+  static String PAID = 'PAID';
+  static String UNPAID = 'UNPAID';
+  static String CANCELED = 'CANCELED';
+  static String DELIVERING = 'DELIVERING';
+  static String COMPLETED = 'COMPLETED';
+}

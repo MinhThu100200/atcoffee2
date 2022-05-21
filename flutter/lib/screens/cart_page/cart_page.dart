@@ -3,8 +3,9 @@ import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ticketview/ticketview.dart';
 import 'package:at_coffee/models/store.dart';
+import 'package:at_coffee/models/bill.dart';
+import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/models/payment.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/payment_controller.dart';
@@ -13,7 +14,9 @@ import 'package:at_coffee/controllers/reward_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/promotion_controller.dart';
+import 'package:at_coffee/services/service_firebase.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:at_coffee/constant/variable_constants.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
@@ -598,7 +601,9 @@ class _CartPage extends State<CartPage> {
                           ]),
                         ),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _paymentOrder();
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12.0, vertical: 12.0),
@@ -628,6 +633,65 @@ class _CartPage extends State<CartPage> {
         }
       }),
     );
+  }
+
+  void _paymentOrder() {
+    if (cartController.cartsList.where((c) => c.state).isEmpty == true) {
+      return;
+    }
+    var now = DateTime.now();
+    String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
+
+    Bill bill = Bill();
+    bill.code = code;
+    bill.amount = cartController.total["amount"].toDouble();
+    bill.price = cartController.total["totalAmount"].toDouble();
+    bill.discount = cartController.total["promotion"];
+    bill.point = (bill.amount * StatusBillConstants.POINTS_REFUND).toInt();
+    bill.address = cartController.indexSelectedOrder.value == 0
+        ? storeController.storeNearYou.value.address
+        : storeController.myAddress.value;
+    bill.status = StatusBillConstants.REQUESTED;
+    bill.rewardId =
+        cartController.type.value == 2 ? cartController.reward.value.id : 0;
+    bill.promotionId = cartController.type.value == 1 && _isValidPromotion
+        ? cartController.promotion.value.id
+        : 0;
+    bill.promotionCode = cartController.type.value == 1 && _isValidPromotion
+        ? cartController.promotion.value.code
+        : '';
+    bill.paymentId = _selectedPayment != '' ? int.parse(_selectedPayment) : 0;
+    bill.paymentName = paymentController.paymentsList
+        .firstWhere((p) => p.id == int.parse(_selectedPayment))
+        .name;
+    bill.storeId = storeController.storeNearYou.value.id;
+    bill.staffId = 0;
+    bill.staffName = '';
+    bill.customerId = userController.user.value.id;
+    bill.customerName = userController.user.value.name;
+
+    int count = 1;
+    bill.billDetails = List<BillDetail>();
+    cartController.cartsList.where((c) => c.state == true).forEach((c) {
+      double priceItem =
+          c.product.sizes.firstWhere((element) => element.size == c.size).price;
+      BillDetail billDetail = BillDetail();
+
+      billDetail.code = code + 'D' + (count++).toString();
+      billDetail.quantity = c.quantity;
+      billDetail.description = c.description;
+      billDetail.amount = priceItem * (1 - c.product.discount / 100);
+      billDetail.price = priceItem;
+      billDetail.size = c.size;
+      billDetail.discount = c.product.discount;
+      billDetail.productId = c.productId;
+      bill.billDetails.add(billDetail);
+    });
+    bill.createdDate = DateTime.now().millisecondsSinceEpoch;
+    bill.state = true;
+    bill.read = false;
+
+    FireBaseService.addBill(bill);
   }
 
   void deleteCartByUserId(int userId) async {

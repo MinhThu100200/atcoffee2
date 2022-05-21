@@ -38,7 +38,7 @@ class RemoteServices {
 
   static Future<Cart> addCart(Cart cart) async {
     try {
-      String url = ApiConstants.HOST + ApiConstants.UPDATE_CART;
+      String url = ApiConstants.HOST + ApiConstants.ADD_CART;
       String body = jsonEncode(cart.toJson());
       var response = await ApiService.instance().post(url, body);
       if (response.statusCode == 200) {
