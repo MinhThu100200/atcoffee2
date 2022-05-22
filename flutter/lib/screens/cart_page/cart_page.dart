@@ -644,8 +644,8 @@ class _CartPage extends State<CartPage> {
 
     Bill bill = Bill();
     bill.code = code;
-    bill.amount = cartController.total["amount"].toDouble();
-    bill.price = cartController.total["totalAmount"].toDouble();
+    bill.amount = cartController.total["totalAmount"].toDouble();
+    bill.price = cartController.total["amount"].toDouble();
     bill.discount = cartController.total["promotion"];
     bill.point = (bill.amount * StatusBillConstants.POINTS_REFUND).toInt();
     bill.address = cartController.indexSelectedOrder.value == 0

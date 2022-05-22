@@ -2,12 +2,15 @@ import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:at_coffee/models/cart.dart';
+import 'package:at_coffee/constant/variable_constants.dart';
+import 'package:collection/collection.dart';
 
 class PopUpAddress extends StatefulWidget {
   PopUpAddress({Key key}) : super(key: key);
@@ -244,68 +247,183 @@ class _PopUpAddress extends State<PopUpAddress> {
           padding:
               const EdgeInsets.only(top: 10, bottom: 5, left: 10, right: 10),
           color: white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          color: lightGreen2,
-                          borderRadius: BorderRadius.circular(14)),
-                      height: 20,
-                      padding: const EdgeInsets.all(3),
-                      child: Image.asset('assets/icons/delivery-man.png')),
-                  SizedBox(width: 5),
-                  Text("Giao đến",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: gray3))
-                ],
-              ),
-              SizedBox(height: 6),
-              Obx(() {
-                if (storeController.isLoading.value ||
-                    storeController.myAddress.value == '') {
-                  return Text("Đang định vị vị trí của bạn...",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 13));
-                } else {
-                  storeController.myStoreNearYou();
-                  return Row(
-                    children: [
-                      Container(
-                        child: Text(
-                            storeController.selected.value == 0
-                                ? storeController.myAddress.value
-                                : storeController.storeNearYou.value.address,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: lightGreen2,
+                                borderRadius: BorderRadius.circular(14)),
+                            height: 20,
+                            padding: const EdgeInsets.all(3),
+                            child:
+                                Image.asset('assets/icons/delivery-man.png')),
+                        const SizedBox(width: 5),
+                        const Text("Giao đến",
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 13)),
-                      ),
-                      cartController.cartsList.length > 0
-                          ? Container(
-                              padding: EdgeInsets.all(6),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: gray3))
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Obx(() {
+                      if (storeController.isLoading.value ||
+                          storeController.myAddress.value == '') {
+                        return const Text("Đang định vị vị trí của bạn...",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 13));
+                      } else {
+                        storeController.myStoreNearYou();
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                  storeController.selected.value == 0
+                                      ? storeController.myAddress.value
+                                      : storeController
+                                          .storeNearYou.value.address,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13)),
+                            ),
+                          ],
+                        );
+                      }
+                    })
+                  ],
+                ),
+              ),
+              Obx(() {
+                if (cartController.cartsList.isEmpty) {
+                  return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: const Text(""));
+                } else {
+                  return GestureDetector(
+                    onTap: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartPage()));
+                      });
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 8.0),
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5.0, vertical: 2.0),
                               decoration: BoxDecoration(
-                                  color: primary,
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Row(
-                                children: [
-                                  Container(
-                                      decoration: BoxDecoration(),
-                                      child: Text(
-                                        "${cartController.cartsList.length}",
-                                      )),
-                                ],
-                              ))
-                          : Container(child: Text(""))
-                    ],
+                                color: white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Text(
+                                  "${cartFromJson(cartToJson(cartController.cartsList.where((c) => c.state).toList())).reduce((value, element) {
+                                    value.quantity += element.quantity;
+                                    return value;
+                                  }).quantity}",
+                                  style: const TextStyle(
+                                      color: primary, fontSize: 12.0)),
+                            ),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Text(
+                                  MethodConstants.oCcy.format(
+                                      cartController.calTotalAmount(
+                                          cartController.cartsList)),
+                                  style: const TextStyle(
+                                      color: white,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 0.0),
+                                child: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: white,
+                                  size: 12.0,
+                                ))
+                          ],
+                        )),
                   );
                 }
-              })
+              }),
+              // cartController.cartsList.isEmpty == false
+              //     ? GestureDetector(
+              //         onTap: () {
+              //           WidgetsBinding.instance.addPostFrameCallback((_) {
+              //             Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => CartPage()));
+              //           });
+              //         },
+              //         child: Container(
+              //             margin: const EdgeInsets.only(left: 8.0),
+              //             padding: const EdgeInsets.all(6),
+              //             decoration: BoxDecoration(
+              //                 color: primary,
+              //                 borderRadius: BorderRadius.circular(20)),
+              //             child: Row(
+              //               children: [
+              //                 Container(
+              //                   padding: const EdgeInsets.symmetric(
+              //                       horizontal: 5.0, vertical: 2.0),
+              //                   decoration: BoxDecoration(
+              //                     color: white,
+              //                     borderRadius: BorderRadius.circular(20.0),
+              //                   ),
+              //                   child: Text(
+              //                       "${cartFromJson(cartToJson(cartController.cartsList.where((c) => c.state).toList())).reduce((value, element) {
+              //                         value.quantity += element.quantity;
+              //                         return value;
+              //                       }).quantity}",
+              //                       style: const TextStyle(
+              //                           color: primary, fontSize: 12.0)),
+              //                 ),
+              //                 Container(
+              //                     padding: const EdgeInsets.symmetric(
+              //                         horizontal: 4.0),
+              //                     child: Text(
+              //                       MethodConstants.oCcy.format(
+              //                           cartController.calTotalAmount(
+              //                               cartController.cartsList)),
+              //                       style: const TextStyle(
+              //                           color: white,
+              //                           fontSize: 14.0,
+              //                           fontWeight: FontWeight.w600),
+              //                     )),
+              //                 Container(
+              //                     padding: const EdgeInsets.symmetric(
+              //                         horizontal: 0.0),
+              //                     child: const Icon(
+              //                       Icons.arrow_forward_ios,
+              //                       color: white,
+              //                       size: 12.0,
+              //                     ))
+              //               ],
+              //             )),
+              //       )
+              //     : Container(
+              //         padding: const EdgeInsets.symmetric(horizontal: 0.0),
+              //         child: const Text(""))
             ],
           )),
     );

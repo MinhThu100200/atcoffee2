@@ -3,6 +3,9 @@ import 'package:at_coffee/models/reward.dart';
 import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:at_coffee/services/service_cart.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/controllers/type_controller.dart';
+import 'package:get/get.dart';
 
 class CartController extends GetxController {
   var isLoading = true.obs;
@@ -24,6 +27,9 @@ class CartController extends GetxController {
         .where((c) => c.state == true)
         .fold(0, (sum, item) => sum + item.quantity);
   }
+
+  final userController = Get.put(UserController());
+  final typeController = Get.put(TypeController());
 
   @override
   void onInit() {
@@ -128,5 +134,86 @@ class CartController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  double _calPromotion(carts) {
+    if (carts == null || carts.length == 0) {
+      total["promotion"] = 0.toInt();
+      return 0;
+    }
+    double promotionValue = 0;
+
+    switch (type.value) {
+      case 0:
+        break;
+      case 1:
+        if (_validPromotion(promotion.value)) {
+          promotionValue = total["amount"] * promotion.value.discount / 100;
+        }
+        break;
+      case 2:
+        if (_validReward(reward.value)) {
+          promotionValue = reward.value.redution.toDouble();
+        }
+        break;
+    }
+    total["promotion"] = promotionValue.toInt();
+    return promotionValue;
+  }
+
+  double _calAmount(carts) {
+    if (carts == null || carts.length == 0) {
+      return 0;
+    }
+
+    double amount = 0;
+    for (int i = 0; i < carts.length; i++) {
+      if (carts[i].state == true) {
+        amount += (carts[i]
+                        .product
+                        .sizes[carts[i].size == 'S'
+                            ? 0
+                            : carts[i].size == 'M'
+                                ? 1
+                                : 2]
+                        .price *
+                    (1 - carts[i].product.discount / 100))
+                .toInt() *
+            carts[i].quantity;
+      }
+    }
+    total["amount"] = amount.toInt();
+    return amount;
+  }
+
+  double calTotalAmount(carts) {
+    isLoading(true);
+    double amount = _calAmount(carts) - _calPromotion(carts);
+    amount = amount < 0 ? 0 : amount;
+    total["totalAmount"] = amount.toInt();
+    isLoading(false);
+    return amount;
+  }
+
+  bool _validPromotion(Promotion promotion) {
+    if (promotion.proviso > total["amount"]) {
+      return false;
+    }
+
+    if (userController.user.value.typeId == null ||
+        userController.user.value.typeId <
+            typeController.typesList
+                .firstWhere((type) => type.code == promotion.object)
+                .id) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _validReward(Reward reward) {
+    if (userController.user.value.currentPoints < reward.proviso) {
+      return false;
+    }
+    return true;
   }
 }
