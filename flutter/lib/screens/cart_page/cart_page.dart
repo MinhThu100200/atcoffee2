@@ -1169,7 +1169,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                 ),
                 Container(
                   child: Obx(() {
-                    if (promotionController.isLoading.value)
+                    if (rewardController.isLoading.value)
                       return Center(child: CircularProgressIndicator());
                     else
                       return Container(
