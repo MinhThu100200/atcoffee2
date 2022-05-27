@@ -1,5 +1,6 @@
 import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
+import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
@@ -15,6 +16,7 @@ import 'package:geocoding/geocoding.dart'
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
+import 'package:at_coffee/controllers/reward_controller.dart';
 
 import '../products_page/product_item.dart';
 import '../products_page/products_page.dart';
@@ -31,6 +33,7 @@ class _homePageState extends State<HomePage> {
   final ProductController productController = Get.put(ProductController());
   final AddressController addressController = Get.put(AddressController());
   final CartController cartController = Get.put(CartController());
+  final RewardController rewardController = Get.put(RewardController());
   //var selected = 0.obs;
 
   @override
@@ -153,7 +156,7 @@ class _homePageState extends State<HomePage> {
                                                                   .value
                                                                   .currentPoints
                                                                   .toString(),
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontSize: 11,
                                                                   color: white,
                                                                   fontWeight:
@@ -174,9 +177,10 @@ class _homePageState extends State<HomePage> {
                                             child: Column(
                                               children: [
                                                 Container(
-                                                    padding: EdgeInsets.only(
-                                                        top: 16),
-                                                    child: Text(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 16),
+                                                    child: const Text(
                                                         "Phần thưởng khả dụng",
                                                         style: TextStyle(
                                                             color: primary,
@@ -184,21 +188,30 @@ class _homePageState extends State<HomePage> {
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w800))),
-                                                SizedBox(height: 6),
+                                                const SizedBox(height: 6),
                                                 Container(
                                                     height: 48,
                                                     alignment: Alignment.center,
-                                                    margin: EdgeInsets.only(
-                                                        left: 34, right: 34),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 34,
+                                                            right: 34),
                                                     decoration: BoxDecoration(
                                                         color: primary,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(16)),
                                                     child: Text(
-                                                        "Chưa đạt phần thưởng",
-                                                        style: TextStyle(
+                                                        _availableRewards() ==
+                                                                null
+                                                            ? "Chưa đạt phần thưởng"
+                                                            : _availableRewards()
+                                                                .name,
+                                                        style: const TextStyle(
                                                             color: white,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
@@ -375,6 +388,18 @@ class _homePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Reward _availableRewards() {
+    Reward result = Reward();
+    var flg = false;
+    for (var reward in rewardController.rewardsList) {
+      if (userController.user.value.currentPoints >= reward.proviso) {
+        result = reward;
+        flg = true;
+      }
+    }
+    return flg == true ? result : null;
   }
 
   Future<void> _delivery() {
