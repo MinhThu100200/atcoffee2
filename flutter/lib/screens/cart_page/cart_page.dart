@@ -1,7 +1,9 @@
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
+import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/Bill.dart';
@@ -17,8 +19,11 @@ import 'package:at_coffee/controllers/promotion_controller.dart';
 import 'package:at_coffee/services/service_firebase.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
+import 'package:at_coffee/screens/location_page/location_store.dart';
+import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
@@ -42,7 +47,11 @@ class _CartPage extends State<CartPage> {
   final PromotionController promotionController =
       Get.put(PromotionController());
 
-  String _selectedOrder = '';
+  var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
+  var wayImage = [
+    'assets/icons/delivery-man.png',
+    'assets/images/strawberry-background.png'
+  ];
 
   String _selectedPayment = '';
 
@@ -57,15 +66,6 @@ class _CartPage extends State<CartPage> {
             paymentController.paymentsList.isEmpty == false
         ? paymentController.paymentsList[0].id.toString()
         : '';
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _store = _getNearestStore();
-
-      storeController.storeNearYou();
-    });
-
-    _selectedOrder = cartController.indexSelectedOrder.value == 0
-        ? 'Mang đi'
-        : 'Giao tận nơi';
   }
 
   double _calPromotion(carts) {
@@ -155,7 +155,7 @@ class _CartPage extends State<CartPage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Giỏ hàng"),
+        title: const Text("Giỏ hàng"),
         elevation: 0,
         bottomOpacity: 0.0,
         backgroundColor: primary,
@@ -193,11 +193,15 @@ class _CartPage extends State<CartPage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(_selectedOrder,
-                                                    style: const TextStyle(
-                                                        fontSize: 20.0,
-                                                        fontWeight:
-                                                            FontWeight.w600)),
+                                                Obx(() {
+                                                  return Text(
+                                                      wayTitle[storeController
+                                                          .selected.value],
+                                                      style: const TextStyle(
+                                                          fontSize: 20.0,
+                                                          fontWeight:
+                                                              FontWeight.w600));
+                                                }),
                                                 GestureDetector(
                                                   onTap: () {},
                                                   child: Container(
@@ -233,10 +237,10 @@ class _CartPage extends State<CartPage> {
                                             child: Row(
                                               children: [
                                                 Flexible(
-                                                    child: Text(cartController
-                                                                .indexSelectedOrder
+                                                    child: Text(storeController
+                                                                .selected
                                                                 .value ==
-                                                            0
+                                                            1
                                                         ? storeController
                                                             .storeNearYou
                                                             .value
@@ -266,36 +270,35 @@ class _CartPage extends State<CartPage> {
                                                     fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.w600)),
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10.0,
-                                                        vertical: 4.0),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  color:
-                                                      primary.withOpacity(0.3),
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(
-                                                        () => ProductsPage());
-                                                  },
-                                                  child: const Text("+ Thêm",
-                                                      style: TextStyle(
-                                                          fontSize: 16.0,
-                                                          color: primary)),
-                                                ),
-                                              ),
-                                            ),
+                                            // GestureDetector(
+                                            //   onTap: () {},
+                                            //   child: Container(
+                                            //     padding:
+                                            //         const EdgeInsets.symmetric(
+                                            //             horizontal: 10.0,
+                                            //             vertical: 4.0),
+                                            //     decoration: BoxDecoration(
+                                            //       borderRadius:
+                                            //           BorderRadius.circular(
+                                            //               10.0),
+                                            //       color:
+                                            //           primary.withOpacity(0.3),
+                                            //     ),
+                                            //     child: GestureDetector(
+                                            //       onTap: () {
+                                            //         Get.to(
+                                            //             () => ProductsPage());
+                                            //       },
+                                            //       child: const Text("+ Thêm",
+                                            //           style: TextStyle(
+                                            //               fontSize: 16.0,
+                                            //               color: primary)),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ]),
                                     ),
-                                    if (cartController
-                                            .cartsList.value.isEmpty ==
+                                    if (cartController.cartsList.isEmpty ==
                                         false) ...[
                                       Container(
                                         child: ListView.builder(
@@ -574,7 +577,7 @@ class _CartPage extends State<CartPage> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 4.0),
                               child: Text(
-                                  _selectedOrder +
+                                  wayTitle[storeController.selected.value] +
                                       ' - ' +
                                       _calTotalQuantity(
                                               cartController.cartsList)
@@ -635,20 +638,33 @@ class _CartPage extends State<CartPage> {
     );
   }
 
-  void _paymentOrder() {
+  void _paymentOrder() async {
     if (cartController.cartsList.where((c) => c.state).isEmpty == true) {
+      Fluttertoast.showToast(
+          msg: "Chưa có sản phẩm được chọn",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: googleColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
       return;
     }
+
+    cartController.isLoading.value = true;
+
+    String token = await FirebaseMessaging.instance.getToken();
+
     var now = DateTime.now();
     String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
 
     Bill bill = Bill();
     bill.code = code;
-    bill.amount = cartController.total["amount"].toDouble();
-    bill.price = cartController.total["totalAmount"].toDouble();
+    bill.amount = cartController.total["totalAmount"].toDouble();
+    bill.price = cartController.total["amount"].toDouble();
     bill.discount = cartController.total["promotion"];
     bill.point = (bill.amount * StatusBillConstants.POINTS_REFUND).toInt();
-    bill.address = cartController.indexSelectedOrder.value == 0
+    bill.address = storeController.selected.value == 1
         ? storeController.storeNearYou.value.address
         : storeController.myAddress.value;
     bill.status = StatusBillConstants.REQUESTED;
@@ -690,7 +706,24 @@ class _CartPage extends State<CartPage> {
     bill.createdDate = DateTime.now().millisecondsSinceEpoch;
     bill.state = true;
     bill.read = false;
-    FireBaseService.addBill(bill);
+    bill.token = token;
+
+    await FireBaseService.addBill(bill);
+
+    await cartController.deleteCartPayment();
+
+    cartController.isLoading.value = false;
+
+    Fluttertoast.showToast(
+        msg: "Đặt hàng thành công",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: primary,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    Get.to(() => ManageOrderPage());
   }
 
   void deleteCartByUserId(int userId) async {
@@ -701,208 +734,180 @@ class _CartPage extends State<CartPage> {
   }
 
   void _showModelButtonSheet(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            height: 260.0,
-            color: Colors.transparent, //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
-                decoration: const BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0))),
-                child: Scaffold(
-                  appBar: AppBar(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10),
-                    )),
-                    title: const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Chọn phương thức đặt hàng',
-                        style: TextStyle(color: black),
+      backgroundColor: Colors.transparent,
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+            height: 200,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(width: 5),
+                      Container(
+                        padding: const EdgeInsets.only(left: 16, top: 5),
+                        child: const Text("Chọn phương thức giao hàng",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
-                    ),
-                    backgroundColor: white,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                  ),
-                  body: Container(
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            cartController.isLoading.value = true;
-                            cartController.indexSelectedOrder.value = 1;
-                            _selectedOrder = 'Giao tận nơi';
-                            cartController.isLoading.value = false;
-                            Navigator.pop(context);
-                          },
-                          child: Card(
-                              color:
-                                  cartController.indexSelectedOrder.value == 1
-                                      ? const Color(0xfffef7e4)
+                      GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                              padding: const EdgeInsets.only(top: 5, right: 10),
+                              child:
+                                  const Icon(Icons.close_rounded, size: 25))),
+                    ]),
+                Container(
+                  color: Colors.grey[200],
+                  width: size.width,
+                  child: const SizedBox(height: 0.5),
+                ),
+                Container(
+                  //padding: const EdgeInsets.only(left: 10),
+                  child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: wayTitle.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          child: GestureDetector(
+                            onTap: () => storeController.setSeleted(index),
+                            child: Obx(
+                              () => Container(
+                                  color: storeController.selected.value == index
+                                      ? greenTransparent
                                       : white,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 80.0,
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Image.asset(
-                                        'assets/icons/delivery-man.png'),
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      width: MediaQuery.of(context).size.width -
-                                          100.0,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                              height: 20.0,
-                                              alignment: Alignment.centerLeft,
-                                              child: const Text(
-                                                'Giao hàng',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 18.0),
-                                              )),
-                                          Container(
-                                            height: 20.0,
-                                            alignment: Alignment.centerLeft,
-                                            child: Obx(() {
-                                              if (storeController
-                                                  .isLoading.value) {
-                                                return const Text(
-                                                    "đang định vị, vị trí của bạn...",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        fontSize: 16.0));
-                                              } else {
-                                                return Text(
-                                                    storeController
-                                                        .myAddress.value,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                  padding: const EdgeInsets.only(
+                                      top: 10, left: 16, bottom: 10),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                              color: lightGreen3,
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Container(
+                                              height: 26,
+                                              width: 26,
+                                              child: Image.asset(
+                                                  wayImage[index]))),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                child: Text(wayTitle[index],
                                                     style: const TextStyle(
+                                                        fontSize: 15,
                                                         fontWeight:
-                                                            FontWeight.w300,
-                                                        fontSize: 16.0));
-                                              }
-                                            }),
-                                          ),
-                                          Container(
-                                              height: 20.0,
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '0 km - ' +
-                                                    userController
-                                                        .user.value.name +
-                                                    ' - ' +
-                                                    userController
-                                                        .user.value.phone,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 17.0),
-                                              )),
-                                        ],
-                                      ))
-                                ],
-                              )),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            cartController.isLoading.value = true;
-                            cartController.indexSelectedOrder.value = 0;
-                            _selectedOrder = 'Tự đến lấy';
-                            cartController.isLoading.value = false;
-                            Navigator.pop(context);
-                          },
-                          child: Card(
-                              color:
-                                  cartController.indexSelectedOrder.value == 0
-                                      ? const Color(0xfffef7e4)
-                                      : white,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 80.0,
-                                    width: 80.0,
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Image.asset(
-                                        'assets/images/strawberry-background.png'),
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0),
-                                      width: MediaQuery.of(context).size.width -
-                                          100.0,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                              height: 20.0,
-                                              alignment: Alignment.centerLeft,
-                                              child: const Text(
-                                                'Mang đi',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 18.0),
-                                              )),
-                                          Container(
-                                              height: 20.0,
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                _store.address,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize: 16.0),
-                                              )),
-                                          Container(
-                                              height: 20.0,
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Cách đây ' +
-                                                    _getDistance(
-                                                            _store.latitude,
-                                                            _store.longitude)
-                                                        .toString() +
-                                                    ' km',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 17.0),
-                                              )),
-                                        ],
-                                      ))
-                                ],
-                              )),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-          );
-        });
+                                                            FontWeight.w500))),
+                                            FittedBox(
+                                              child: Container(
+                                                width: size.width - 140,
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                // height: 50,
+                                                child: Text(
+                                                    wayTitle[index] ==
+                                                            "Giao tận nơi"
+                                                        ? storeController
+                                                            .myAddress.value
+                                                        : "A&T Coffee, " +
+                                                            storeController
+                                                                .storeNearYou
+                                                                .value
+                                                                .address,
+                                                    style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
+                                            ),
+                                            FittedBox(
+                                              child: Container(
+                                                width: size.width - 150,
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                // height: 50,
+                                                child: Text(
+                                                    wayTitle[index] ==
+                                                            "Giao tận nơi"
+                                                        ? userController.user
+                                                                .value.name +
+                                                            " " +
+                                                            userController.user
+                                                                .value.phone
+                                                        : "Cách đây khoảng " +
+                                                            storeController
+                                                                .storeMinDistance
+                                                                .toString() +
+                                                            "km",
+                                                    style: const TextStyle(
+                                                      // color: Colors.lightBlueAccent,
+                                                      fontSize: 13,
+
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              color: primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(14)),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                if (index == 1) {
+                                                  Get.to(() => LocationStore());
+                                                } else {
+                                                  Get.to(
+                                                      () => AddressDelivery());
+                                                }
+                                              },
+                                              child: const Text("Sửa"))),
+                                    ],
+                                  )),
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ));
+      },
+    );
   }
 
   bool _validPromotion(Promotion promotion) {
@@ -941,20 +946,6 @@ class _CartPage extends State<CartPage> {
     }
 
     return '';
-  }
-
-  Store _getNearestStore() {
-    int _min = 2000000000;
-    Store nearestStore = new Store();
-    storeController.storesList.forEach((store) {
-      int _distance = _getDistance(store.latitude, store.longitude);
-      if (_distance < _min) {
-        _min = _distance;
-        nearestStore = store;
-      }
-    });
-
-    return nearestStore;
   }
 
   int _getDistance(double lat, double long) {
@@ -1004,12 +995,12 @@ class _PromotionCartPage extends State<PromotionCartPage> {
         appBar: AppBar(
           title: Row(
             children: [
-              Expanded(child: Text("Khuyến mãi của bạn")),
+              const Expanded(child: Text("Khuyến mãi của bạn")),
               GestureDetector(
                   onTap: () {
                     _cancelApply();
                   },
-                  child: Text('Hủy'))
+                  child: const Text('Hủy'))
             ],
           ),
           backgroundColor: primary,
@@ -1209,7 +1200,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                 ),
                 Container(
                   child: Obx(() {
-                    if (promotionController.isLoading.value)
+                    if (rewardController.isLoading.value)
                       return Center(child: CircularProgressIndicator());
                     else
                       return Container(

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class VariableConstants {
   static API_HEADERS(String token) {
     return {
@@ -13,6 +15,10 @@ class VariableConstants {
       'Authorization': 'Bearer ' + token,
     };
   }
+}
+
+class MethodConstants {
+  static final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
 }
 
 class StatusBillConstants {
