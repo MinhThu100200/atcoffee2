@@ -3,6 +3,7 @@ import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/bill.dart';
@@ -650,10 +651,9 @@ class _CartPage extends State<CartPage> {
       return;
     }
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-    //       _isSaving = true;
-    //     }));
     cartController.isLoading.value = true;
+
+    String token = await FirebaseMessaging.instance.getToken();
 
     var now = DateTime.now();
     String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
@@ -706,13 +706,11 @@ class _CartPage extends State<CartPage> {
     bill.createdDate = DateTime.now().millisecondsSinceEpoch;
     bill.state = true;
     bill.read = false;
+    bill.token = token;
 
     await FireBaseService.addBill(bill);
 
     await cartController.deleteCartPayment();
-    // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-    //       _isSaving = false;
-    //     }));
 
     cartController.isLoading.value = false;
 
@@ -997,12 +995,12 @@ class _PromotionCartPage extends State<PromotionCartPage> {
         appBar: AppBar(
           title: Row(
             children: [
-              Expanded(child: Text("Khuyến mãi của bạn")),
+              const Expanded(child: Text("Khuyến mãi của bạn")),
               GestureDetector(
                   onTap: () {
                     _cancelApply();
                   },
-                  child: Text('Hủy'))
+                  child: const Text('Hủy'))
             ],
           ),
           backgroundColor: primary,

@@ -58,6 +58,7 @@ class Bill {
   String staffName;
   String customerName;
   bool read;
+  String token;
 
   factory Bill.fromJson(Map<String, dynamic> json) => Bill(
       id: json["id"],
@@ -132,6 +133,7 @@ class Bill {
         "customerName": customerName,
         "storeId": storeId,
         "read": read,
+        "token": token,
         "billDetails": List<dynamic>.from(billDetails.map((x) => x.toJson()))
       };
 }
