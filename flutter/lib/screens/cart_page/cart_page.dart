@@ -21,6 +21,7 @@ import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart'
     show Placemark, placemarkFromCoordinates;
@@ -267,32 +268,32 @@ class _CartPage extends State<CartPage> {
                                                     fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.w600)),
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10.0,
-                                                        vertical: 4.0),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  color:
-                                                      primary.withOpacity(0.3),
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(
-                                                        () => ProductsPage());
-                                                  },
-                                                  child: const Text("+ Thêm",
-                                                      style: TextStyle(
-                                                          fontSize: 16.0,
-                                                          color: primary)),
-                                                ),
-                                              ),
-                                            ),
+                                            // GestureDetector(
+                                            //   onTap: () {},
+                                            //   child: Container(
+                                            //     padding:
+                                            //         const EdgeInsets.symmetric(
+                                            //             horizontal: 10.0,
+                                            //             vertical: 4.0),
+                                            //     decoration: BoxDecoration(
+                                            //       borderRadius:
+                                            //           BorderRadius.circular(
+                                            //               10.0),
+                                            //       color:
+                                            //           primary.withOpacity(0.3),
+                                            //     ),
+                                            //     child: GestureDetector(
+                                            //       onTap: () {
+                                            //         Get.to(
+                                            //             () => ProductsPage());
+                                            //       },
+                                            //       child: const Text("+ Thêm",
+                                            //           style: TextStyle(
+                                            //               fontSize: 16.0,
+                                            //               color: primary)),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ]),
                                     ),
                                     if (cartController
@@ -636,10 +637,23 @@ class _CartPage extends State<CartPage> {
     );
   }
 
-  void _paymentOrder() {
+  void _paymentOrder() async {
     if (cartController.cartsList.where((c) => c.state).isEmpty == true) {
+      Fluttertoast.showToast(
+          msg: "Chưa có sản phẩm được chọn",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: googleColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
       return;
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _isSaving = true;
+        }));
+
     var now = DateTime.now();
     String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
 
@@ -692,7 +706,11 @@ class _CartPage extends State<CartPage> {
     bill.state = true;
     bill.read = false;
 
-    FireBaseService.addBill(bill);
+    await FireBaseService.addBill(bill);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _isSaving = false;
+        }));
   }
 
   void deleteCartByUserId(int userId) async {
