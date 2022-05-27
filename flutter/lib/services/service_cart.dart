@@ -88,7 +88,7 @@ class RemoteServices {
     try {
       String url = ApiConstants.HOST + ApiConstants.DELETE_CART_PAYMENT;
       String body = jsonEncode(<String, dynamic>{
-        'ids': jsonEncode(ids),
+        'ids': ids,
       });
       var response = await ApiService.instance().post(url, body);
       if (response.statusCode == 200) {

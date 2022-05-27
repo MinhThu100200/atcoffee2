@@ -123,12 +123,24 @@ class CartController extends GetxController {
     }
   }
 
-  Future<bool> deleteCartPayment(List<int> ids) async {
+  Future<bool> deleteCartPayment() async {
     try {
+      List<int> ids = new List<int>();
+      for (var cart in cartsList) {
+        if (cart.state == true) {
+          ids.add(cart.id);
+        }
+      }
+      // remove list
+      //var prevCarts = cartFromJson(cartToJson(cartsList));
+      //cartsList.value = cartsList.where((c) => c.state == false).toList();
       bool isDeleted = await RemoteServices.deleteCartPayment(ids);
       if (isDeleted) {
         cartsList.removeWhere((c) => ids.contains(c.id));
         return true;
+      } else {
+        //rollback list
+        //cartsList.value = prevCarts;
       }
       return isDeleted;
     } finally {

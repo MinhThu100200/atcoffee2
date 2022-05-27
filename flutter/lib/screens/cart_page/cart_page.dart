@@ -1,6 +1,7 @@
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
+import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
@@ -296,8 +297,7 @@ class _CartPage extends State<CartPage> {
                                             // ),
                                           ]),
                                     ),
-                                    if (cartController
-                                            .cartsList.value.isEmpty ==
+                                    if (cartController.cartsList.isEmpty ==
                                         false) ...[
                                       Container(
                                         child: ListView.builder(
@@ -650,9 +650,10 @@ class _CartPage extends State<CartPage> {
       return;
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          _isSaving = true;
-        }));
+    // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+    //       _isSaving = true;
+    //     }));
+    cartController.isLoading.value = true;
 
     var now = DateTime.now();
     String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
@@ -708,9 +709,23 @@ class _CartPage extends State<CartPage> {
 
     await FireBaseService.addBill(bill);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          _isSaving = false;
-        }));
+    await cartController.deleteCartPayment();
+    // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+    //       _isSaving = false;
+    //     }));
+
+    cartController.isLoading.value = false;
+
+    Fluttertoast.showToast(
+        msg: "Đặt hàng thành công",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: primary,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    Get.to(() => ManageOrderPage());
   }
 
   void deleteCartByUserId(int userId) async {
