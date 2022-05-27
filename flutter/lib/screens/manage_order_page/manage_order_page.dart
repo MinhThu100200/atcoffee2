@@ -1,14 +1,22 @@
+import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/models/Bill.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
-import 'package:at_coffee/screens/manage_order_page/item_order.dart';
+import 'package:at_coffee/screens/manage_order_page/detail_order.dart';
+import 'package:at_coffee/screens/manage_order_page/list_item.dart';
+import 'package:at_coffee/screens/root_app/root_app.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/screens/products_page/product_item.dart';
+import 'package:at_coffee/services/service_firebase.dart';
 
 class ManageOrderPage extends StatefulWidget {
   ManageOrderPage({Key key}) : super(key: key);
@@ -18,7 +26,8 @@ class ManageOrderPage extends StatefulWidget {
 
 class _ManageOrderPage extends State<ManageOrderPage> {
   final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
-  int indexCategory = 0;
+  String indexCategory = 'REQUESTED';
+
   var cateData = [
     {
       "id": 1,
@@ -51,39 +60,34 @@ class _ManageOrderPage extends State<ManageOrderPage> {
       "status": 'RATE',
     },
   ];
+  final BillController billController = Get.put(BillController());
 
   void setStateValue(value) {
-    indexCategory = value;
-    setState(() {});
+    setState(() {
+      indexCategory = value;
+    });
+    billController.updateSelected(value);
   }
 
   final CategoryController categoryController = Get.put(CategoryController());
   final StoreController storeController = Get.put(StoreController());
   final ProductController productController = Get.put(ProductController());
+
+  final UserController userController = Get.put(UserController());
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // storeController.getStoreListNearYou();
-    // storeController.getAddress();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // _getLocationData().then((value) => setState(() {
-    //       currentLocation = value;
-    //     }));
-    //storeController.getStoreListNearYou();
-    //storeController.getAddress();
-    // productController.fetchProductsByCategory(codeCategory[0]);
-    print("Build Completed");
-    //});
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      print(
+          "Build Completed" + productController.allProducts.length.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      storeController.getAddress();
-      storeController.getStoreListNearYou();
-    });
 
     return Scaffold(
       backgroundColor: lightGray3,
@@ -98,15 +102,14 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
                     Positioned(
-                      child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
+                        child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onPressed: () =>
+                          Get.to(() => RootApp(nameRoute: 'profile')),
+                    )),
                     Positioned(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -149,13 +152,14 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
                                   onTap: () {
-                                    setStateValue(index);
+                                    setStateValue(cateData[index]['status']);
                                   },
                                   child: Container(
                                     //width: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: indexCategory == index
+                                      color: indexCategory ==
+                                              cateData[index]['status']
                                           ? primary
                                           : Colors.grey[300],
                                     ),
@@ -196,29 +200,243 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                             ),
                           ),
                         ),
+
                         Obx(() {
-                          if (productController.isLoading.value)
+                          if (billController.isLoading.value)
                             return Center(child: CircularProgressIndicator());
-                          else
+                          else {
+                            var data = billController.billsList
+                                .where((element) =>
+                                    element.status == indexCategory)
+                                .toList();
+
                             return Container(
-                              child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: productController
-                                      .productsSuggestion.length,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return ItemOrder(
-                                        product: productController
-                                            .productsSuggestion[index]);
-                                  }),
-                            );
+                                child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: data.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DetailOrderPage(
+                                                            bill:
+                                                                data[index])));
+                                          },
+                                          child: Container(
+                                            height: 140.0,
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0, right: 0.0),
+                                            child: SizedBox(
+                                                height: size.width,
+                                                width: size.width,
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      top: 20.0,
+                                                      left: 70.0,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 50.0,
+                                                                right: 10.0,
+                                                                top: 5.0,
+                                                                bottom: 5.0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primary,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                        height: 100.0,
+                                                        width:
+                                                            size.width - 110.0,
+                                                        child: Column(
+                                                          children: [
+                                                            Container(
+                                                              child: Container(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerLeft,
+                                                                  child: Text(
+                                                                      "${data[index].billDetails[0].quantity} x " +
+                                                                          "${productController.allProducts.where((item) => item.id == data[index].billDetails[0].productId).toList()[0].name}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          color:
+                                                                              Colors.white))),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 6,
+                                                            ),
+                                                            Container(
+                                                              child: Row(
+                                                                  children: [
+                                                                    data[index].billDetails[0].discount >
+                                                                            0
+                                                                        ? Text(
+                                                                            oCcy.format(data[index].billDetails[0].price * data[index].billDetails[0].quantity).toString(),
+                                                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: black, decoration: TextDecoration.lineThrough))
+                                                                        : Container(child: Text("")),
+                                                                    Text(" " + oCcy.format(data[index].billDetails[0].amount).toString(),
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color: lightYellow)),
+                                                                  ]),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 6,
+                                                            ),
+                                                            Container(
+                                                              child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Text(
+                                                                        '${data[index].billDetails.length} sản phẩm' +
+                                                                            " - " +
+                                                                            oCcy
+                                                                                .format(data[index]
+                                                                                    .amount)
+                                                                                .toString(),
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color: lightYellow))
+                                                                  ]),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {},
+                                                              child: Container(
+                                                                  child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  Text(
+                                                                      ">>>>> Xem chi tiết",
+                                                                      style: TextStyle(
+                                                                          color: Colors.grey[
+                                                                              800],
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontStyle:
+                                                                              FontStyle.italic)),
+                                                                ],
+                                                              )),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      height: 110.0,
+                                                      width: 110.0,
+                                                      decoration: BoxDecoration(
+                                                        color: lightYellow,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: Container(
+                                                        child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    10),
+                                                            child: Image.network(
+                                                                productController
+                                                                    .allProducts
+                                                                    .where((item) =>
+                                                                        item.id ==
+                                                                        data[index]
+                                                                            .billDetails[
+                                                                                0]
+                                                                            .productId)
+                                                                    .toList()[0]
+                                                                    .image,
+                                                                fit: BoxFit.contain,
+                                                                errorBuilder: (BuildContext context,
+                                                                    Object exception,
+                                                                    StackTrace stackTrace) {
+                                                              return const Text(
+                                                                  '😢');
+                                                            }, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              } else
+                                                                return Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    value: loadingProgress.expectedTotalBytes !=
+                                                                            null
+                                                                        ? loadingProgress.cumulativeBytesLoaded /
+                                                                            loadingProgress.expectedTotalBytes
+                                                                        : null,
+                                                                  ),
+                                                                );
+                                                            })),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ));
+                                    }));
+                          }
                         })
+
+                        // status == 'REQUESTED'
+                        //     ? _getMessageList('REQUESTED')
+                        //     : _getMessageList('COMPLETED'),
                       ]),
                 ),
               ],
             )),
           )),
     );
+  }
+
+  Widget _getMessageList(status) {
+    return FirebaseAnimatedList(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        query: FirebaseDatabase.instance
+            .ref('bills')
+            .orderByChild('status')
+            .equalTo(status),
+        //sort: (a, b) => ,
+        itemBuilder: (context, snapshot, animation, index) {
+          final json = snapshot.value as Map<Object, Object>;
+          final yourBill = Bill.fromDocumentSnapshot(json);
+          // json.forEach((key, values) {
+          //   print(values);
+          //   //bills.add(Bill.fromDocumentSnapshot(values));
+          // });
+          print(json);
+          //return ItemOrder(bill: yourBill);
+        });
   }
 }

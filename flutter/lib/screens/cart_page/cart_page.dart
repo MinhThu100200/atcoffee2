@@ -4,7 +4,7 @@ import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
-import 'package:at_coffee/models/bill.dart';
+import 'package:at_coffee/models/Bill.dart';
 import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/models/payment.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
@@ -690,7 +690,6 @@ class _CartPage extends State<CartPage> {
     bill.createdDate = DateTime.now().millisecondsSinceEpoch;
     bill.state = true;
     bill.read = false;
-
     FireBaseService.addBill(bill);
   }
 
@@ -1164,14 +1163,14 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                                                             Icon(
                                                                 Icons
                                                                     .coffee_sharp,
-                                                                size: 11,
+                                                                size: 10,
                                                                 color: black),
                                                             Container(
                                                               child: Text(
                                                                   "A&T Coffee",
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                          10,
+                                                                          9,
                                                                       color:
                                                                           white)),
                                                             ),
@@ -1179,9 +1178,9 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                                                         ),
                                                       ),
                                                       Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 5),
+                                                        // padding:
+                                                        //     EdgeInsets.only(
+                                                        //         top: 5),
                                                         child: Text(
                                                             promotionController
                                                                     .promotionsList[
@@ -1190,7 +1189,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                                                                     .toString() +
                                                                 "%",
                                                             style: TextStyle(
-                                                                fontSize: 35,
+                                                                fontSize: 33,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w700,
@@ -1313,21 +1312,21 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                                                             .center,
                                                     children: [
                                                       Icon(Icons.coffee_sharp,
-                                                          size: 11,
+                                                          size: 10,
                                                           color: black),
                                                       Container(
                                                         child: Text(
                                                             "A&T Coffee",
                                                             style: TextStyle(
-                                                                fontSize: 10,
+                                                                fontSize: 9,
                                                                 color: white)),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                                 Container(
-                                                  padding:
-                                                      EdgeInsets.only(top: 5),
+                                                  // padding:
+                                                  //     EdgeInsets.only(top: 5),
                                                   child: Text(
                                                       (rewardController
                                                                       .rewardsList[
@@ -1337,7 +1336,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
                                                               .toString() +
                                                           'K',
                                                       style: TextStyle(
-                                                          fontSize: 35,
+                                                          fontSize: 33,
                                                           fontWeight:
                                                               FontWeight.w700,
                                                           color: white)),

@@ -2,6 +2,7 @@ import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:flutter/material.dart';
@@ -294,18 +295,31 @@ class _PopUpAddress extends State<PopUpAddress> {
                                   borderRadius: BorderRadius.circular(20)),
                               child: Row(
                                 children: [
-                                  Container(
-                                      decoration: BoxDecoration(),
-                                      child: Text(
-                                        "${cartController.cartsList.length}",
-                                      )),
+                                  GestureDetector(
+                                    onTap: () => Get.to(() => CartPage()),
+                                    child: Container(
+                                        decoration: BoxDecoration(),
+                                        child: Text(
+                                          "${cartController.cartsList.length}",
+                                        )),
+                                  ),
                                 ],
                               ))
-                          : Container(child: Text(""))
+                          : Container(child: Text("")),
                     ],
                   );
                 }
-              })
+              }),
+              Obx(
+                () => GestureDetector(
+                  onTap: () => Get.to(() => CartPage()),
+                  child: Container(
+                      decoration: BoxDecoration(),
+                      child: Text(
+                        "${cartController.cartsList.length}",
+                      )),
+                ),
+              ),
             ],
           )),
     );

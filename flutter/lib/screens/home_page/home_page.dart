@@ -43,6 +43,7 @@ class _homePageState extends State<HomePage> {
       storeController.getStoreListNearYou();
       addressController.fetchDistrictByCity();
       cartController.fetchCartsByCustomerId(userController.user.value.id);
+
       //addressController.fetchAddress();
       print("Build Completed:" + userController.user.value.id.toString());
     });
@@ -51,6 +52,7 @@ class _homePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: lightGray3,
       body: Column(

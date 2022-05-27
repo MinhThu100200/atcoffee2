@@ -1143,23 +1143,33 @@ class _OrderPage extends State<OrderPage> {
                     color: primary,
                     height: 60.0,
                     width: size.width / 3,
-                    child: TextButton(onPressed: () {
-                      if (cartController.isLoading.value == false) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CartPage()));
-                      }
-                    }, child: Obx(() {
-                      return Text(
-                          'Giỏ hàng (' +
-                              cartController.cartsList.length.toString() +
-                              ')',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.white));
-                    }))),
+                    child: Obx(() {
+                      if (cartController.isLoading.value == true) {
+                        return TextButton(
+                            onPressed: () {},
+                            child: Text(
+                                'Giỏ hàng (' +
+                                    cartController.cartsList.length.toString() +
+                                    ')',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.white)));
+                      } else
+                        return TextButton(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CartPage())),
+                            child: Text(
+                                'Giỏ hàng (' +
+                                    cartController.cartsList.length.toString() +
+                                    ')',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.white)));
+                    })),
                 Container(
                     color: lightGray3,
                     height: 60.0,

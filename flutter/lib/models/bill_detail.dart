@@ -41,6 +41,23 @@ class BillDetail {
   int billId;
   int productId;
 
+  BillDetail.fromMap(Map<dynamic, dynamic> json)
+      : id = json["id"],
+        createdDate = json["createdDate"],
+        modifiedDate = json["modifiedDate"],
+        createdBy = json["createdBy"],
+        modifiedBy = json["modifiedBy"],
+        code = json["code"],
+        state = json["state"],
+        results = json["results"],
+        quantity = json["quantity"],
+        description = json["description"],
+        amount = json["amount"].toDouble(),
+        price = json["price"].toDouble(),
+        size = json["size"],
+        discount = json["discount"],
+        billId = json["billId"],
+        productId = json["productId"];
   factory BillDetail.fromJson(Map<String, dynamic> json) => BillDetail(
       id: json["id"],
       createdDate: json["createdDate"],

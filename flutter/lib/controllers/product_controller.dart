@@ -6,6 +6,7 @@ class ProductController extends GetxController {
   var isLoading = true.obs;
   var productsList = List<Product>().obs;
   var productsSuggestion = List<Product>().obs;
+  var allProducts = List<Product>().obs;
   var reload = true.obs;
 
   @override
@@ -16,15 +17,15 @@ class ProductController extends GetxController {
 
   void fetchProducts() async {
     try {
-      isLoading(true);
+      //isLoading(true);
       var products = await RemoteServices.fetchProducts();
       if (products != null) {
-        productsList.value = products;
+        allProducts.value = products;
         print("sản phẩm");
         print(products);
       }
     } finally {
-      isLoading(false);
+      //isLoading(false);
     }
   }
 

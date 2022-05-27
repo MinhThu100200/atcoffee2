@@ -2,7 +2,9 @@
 cloud_firestore=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-3.1.14/
 cloud_firestore_web=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.6.14/
 firebase_core=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.16.0/
-firebase_core_web=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.6.3/
+firebase_core_web=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.6.4/
+firebase_database=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-9.0.14/
+firebase_database_web=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database_web-0.2.0+13/
 fluttertoast=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.0.9/
 geocoding=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.4/
 geolocator=/Users/minhthu/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.2.0/

@@ -1,3 +1,5 @@
+import 'package:at_coffee/controllers/bill_controller.dart';
+import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/screens/change_password/change_password.dart';
 import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +19,19 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePage extends State<ProfilePage> {
   final UserController userController = Get.put(UserController());
+  final BillController billController = Get.put(BillController());
+  final ProductController productController = Get.put(ProductController());
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      //billController.fetchBills(userController.user.value.id);
+      billController.getBill();
+      productController.fetchProducts();
+      print("Build Completed");
+    });
   }
 
   @override
