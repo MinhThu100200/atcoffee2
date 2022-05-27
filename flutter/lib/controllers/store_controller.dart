@@ -34,7 +34,7 @@ class StoreController extends GetxController {
 
   void setLocationData() async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       if (latitude.value == 0.0 && longitude.value == 0.0) {
         Location location = new Location();
         LocationData _locationData;
@@ -72,7 +72,7 @@ class StoreController extends GetxController {
 
       //print(currentLocation.value);
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
@@ -140,7 +140,7 @@ class StoreController extends GetxController {
 
   void fetchStores() async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var stores = await RemoteServices.fetchStores();
       if (stores != null) {
         storesList.value = stores;
@@ -148,7 +148,7 @@ class StoreController extends GetxController {
     } catch (error) {
       print(error);
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
@@ -201,7 +201,7 @@ class StoreController extends GetxController {
 
   void getStoreListNearYou() async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       List<Store> newList = new List<Store>();
       //print(storesList.value.length.toString() + "minthu");
 
@@ -223,7 +223,7 @@ class StoreController extends GetxController {
     } catch (error) {
       print(error);
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 }

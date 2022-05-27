@@ -61,10 +61,10 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           value: _cart.state,
           onChanged: (val) {
-            cartController.isLoading.value = true;
+            // cartController.isLoading.value = true;
             _cart.state = val;
             _updateCart(_cart);
-            cartController.isLoading.value = false;
+            // cartController.isLoading.value = false;
           },
         )),
         Expanded(
@@ -111,9 +111,9 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                 color: Colors.red,
               ),
               onPressed: () {
-                cartController.isLoading.value = true;
+                // cartController.isLoading.value = true;
                 _deleteCart(_cart.id);
-                cartController.isLoading.value = false;
+                //  cartController.isLoading.value = false;
               }),
         )
       ]),
@@ -1024,7 +1024,7 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                         children: [
                           ElevatedButton(
                               onPressed: () {
-                                cartController.isLoading.value = true;
+                                // cartController.isLoading.value = true;
                                 _cart.description = 'Sữa: ' +
                                     _cart.milk +
                                     ', Đường: ' +
@@ -1059,7 +1059,7 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                           ),
                           ElevatedButton(
                               onPressed: () {
-                                cartController.isLoading.value = true;
+                                // cartController.isLoading.value = true;
                                 _deleteCart(_cart.id);
                                 Navigator.pop(context);
                               },

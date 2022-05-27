@@ -205,6 +205,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                         Container(
                           child: ListView.builder(
                               itemCount: _bill.billDetails.length,
+                              physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
                                 return ItemOrderDetail(

@@ -13,54 +13,54 @@ class UserController extends GetxController {
 
   Future<void> authUser(String username, String password) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var userFetched = await RemoteServices.authUser(username, password);
       if (userFetched != null) {
         user.value = userFetched;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<User> authUserByToken() async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var userFetched = await RemoteServices.authUserByToken();
       if (userFetched != null) {
         user.value = userFetched;
         return user.value;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
     return null;
   }
 
   Future<bool> updateUser(User userUpdate) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var userFetched = await RemoteServices.updateUser(userUpdate);
       if (userFetched != null) {
         user.value = userFetched;
         return true;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
     return false;
   }
 
   Future<User> signUp(User userAdd) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var userFetched = await RemoteServices.signUp(userAdd);
       if (userFetched != null) {
         user.value = userFetched;
         return user.value;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
     return null;
   }
@@ -78,27 +78,27 @@ class UserController extends GetxController {
 
   Future<bool> resetPassword(String emailReset) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var isSuccess = await RemoteServices.resetPassword(emailReset);
       if (isSuccess != null) {
         return isSuccess;
       }
       return false;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<bool> changePassword(String oldPassword, String newPassword) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       bool isSuccess = await RemoteServices.changePassword(
           user.value, oldPassword, newPassword);
       return isSuccess;
     } catch (e) {
       return false;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 }

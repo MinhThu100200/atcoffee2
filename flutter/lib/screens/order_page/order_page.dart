@@ -1144,7 +1144,7 @@ class _OrderPage extends State<OrderPage> {
                     height: 60.0,
                     width: size.width / 3,
                     child: Obx(() {
-                      if (cartController.isLoading.value == true) {
+                      if (cartController.isLoading.value) {
                         return TextButton(
                             onPressed: () {},
                             child: Text(

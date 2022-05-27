@@ -31,19 +31,19 @@ class ProductController extends GetxController {
 
   void fetchProductsByCategory(cate) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var products = await RemoteServices.fetchProductsByCategory(cate);
       if (products != null) {
         productsList.value = products;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   void fetchProductSuggest(customerId, size) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var products = await RemoteServices.fetchProductSuggest(customerId, size);
       if (products != null) {
         productsSuggestion.value = products;
@@ -51,7 +51,7 @@ class ProductController extends GetxController {
         print(products);
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 }

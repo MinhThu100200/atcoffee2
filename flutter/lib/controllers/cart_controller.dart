@@ -18,6 +18,7 @@ class CartController extends GetxController {
   var indexSelectedOrder = 0.obs;
   // 0 - none; 1 - promotion; 2 - reward
   var type = 0.obs;
+  var amount = 0.0.obs;
 
   var total =
       {"amount": 0, "promotion": 0, "totalAmount": 0, "quantity": 0}.obs;
@@ -38,19 +39,20 @@ class CartController extends GetxController {
 
   void fetchCartsByCustomerId(id) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var carts = await RemoteServices.fetchCartsByCustomerId(id);
       if (carts != null) {
         cartsList.value = carts;
+        calTotalAmounts(carts);
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<Cart> addCart(Cart cart) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       cart = await RemoteServices.addCart(cart);
       if (cart != null) {
         cartsList.add(cart);
@@ -58,12 +60,13 @@ class CartController extends GetxController {
       }
       return null;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<Cart> updateCart(Cart cart) async {
     try {
+      isLoading.value = true;
       // update in list
       Cart prevCart = Cart.fromJson(cart.toJson());
       var index = cartsList.indexWhere((c) => c.id == cart.id);
@@ -79,12 +82,13 @@ class CartController extends GetxController {
       }
       return null;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<bool> deleteCart(int cartId) async {
     try {
+      isLoading.value = true;
       // remove in list
       Cart prevCart =
           Cart.fromJson(cartsList.firstWhere((c) => c.id != cartId).toJson());
@@ -100,12 +104,13 @@ class CartController extends GetxController {
       }
       return isDeleted;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<bool> deleteCartByUserId(int userId) async {
     try {
+      isLoading.value = true;
       // remove list
       var prevCarts = cartFromJson(cartToJson(cartsList));
       cartsList.removeRange(0, cartsList.length);
@@ -119,12 +124,13 @@ class CartController extends GetxController {
       }
       return isDeleted;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
   Future<bool> deleteCartPayment() async {
     try {
+      isLoading.value = true;
       List<int> ids = new List<int>();
       for (var cart in cartsList) {
         if (cart.state == true) {
@@ -144,7 +150,7 @@ class CartController extends GetxController {
       }
       return isDeleted;
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
@@ -199,12 +205,23 @@ class CartController extends GetxController {
   }
 
   double calTotalAmount(carts) {
-    isLoading(true);
-    double amount = _calAmount(carts) - _calPromotion(carts);
-    amount = amount < 0 ? 0 : amount;
-    total["totalAmount"] = amount.toInt();
-    isLoading(false);
-    return amount;
+    isLoading.value = true;
+    double amounts = _calAmount(carts) - _calPromotion(carts);
+    amounts = amounts < 0 ? 0 : amounts;
+    total["totalAmount"] = amounts.toInt();
+    isLoading.value = false;
+    //amount.value = amounts;
+    return amounts;
+  }
+
+  void calTotalAmounts(carts) {
+    isLoading.value = true;
+    double amounts = _calAmount(carts) - _calPromotion(carts);
+    amounts = amounts < 0 ? 0 : amounts;
+    total["totalAmount"] = amounts.toInt();
+    isLoading.value = false;
+    amount.value = amounts;
+    //return amount;
   }
 
   bool _validPromotion(Promotion promotion) {

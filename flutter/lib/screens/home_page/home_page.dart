@@ -45,9 +45,8 @@ class _homePageState extends State<HomePage> {
       productController.fetchProductSuggest(userController.user.value.id, 3);
       storeController.getStoreListNearYou();
       addressController.fetchDistrictByCity();
-      cartController.fetchCartsByCustomerId(userController.user.value.id);
-
-      //addressController.fetchAddress();
+      cartController.fetchCartsByCustomerId(
+          userController.user.value.id); //addressController.fetchAddress();
       print("Build Completed:" + userController.user.value.id.toString());
     });
   }
@@ -386,6 +385,7 @@ class _homePageState extends State<HomePage> {
             )),
           ),
           //popup
+
           PopUpAddress(),
         ],
       ),

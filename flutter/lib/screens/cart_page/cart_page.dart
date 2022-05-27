@@ -520,10 +520,10 @@ class _CartPage extends State<CartPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    cartController.isLoading.value = true;
+                                    //cartController.isLoading.value = true;
                                     deleteCartByUserId(
                                         userController.user.value.id);
-                                    cartController.isLoading.value = false;
+                                    //cartController.isLoading.value = false;
                                   },
                                   child: Card(
                                     child: Container(
@@ -651,7 +651,7 @@ class _CartPage extends State<CartPage> {
       return;
     }
 
-    cartController.isLoading.value = true;
+    //cartController.isLoading.value = true;
 
     String token = await FirebaseMessaging.instance.getToken();
 
@@ -712,7 +712,7 @@ class _CartPage extends State<CartPage> {
 
     await cartController.deleteCartPayment();
 
-    cartController.isLoading.value = false;
+    //cartController.isLoading.value = false;
 
     Fluttertoast.showToast(
         msg: "Đặt hàng thành công",

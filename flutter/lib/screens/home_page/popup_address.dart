@@ -29,10 +29,22 @@ class _PopUpAddress extends State<PopUpAddress> {
     'assets/icons/delivery-man.png',
     'assets/images/strawberry-background.png'
   ];
+  var total = 0.0;
+  @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
+  //     total = cartController.calTotalAmount(cartController.cartsList);
+  //     //addressController.fetchAddress();
+  //     print("Build Completed:" + userController.user.value.id.toString());
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return InkWell(
       onTap: () {
         if (storeController.myAddress.value != "") {
@@ -303,20 +315,14 @@ class _PopUpAddress extends State<PopUpAddress> {
                 ),
               ),
               Obx(() {
-                if (cartController.cartsList.isEmpty) {
+                if (cartController.isLoading.value ||
+                    cartController.cartsList.isEmpty) {
                   return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: const Text(""));
                 } else {
                   return GestureDetector(
-                    onTap: () {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CartPage()));
-                      });
-                    },
+                    onTap: () => Get.to(() => CartPage()),
                     child: Container(
                         margin: const EdgeInsets.only(left: 8.0),
                         padding: const EdgeInsets.all(6),
@@ -344,9 +350,8 @@ class _PopUpAddress extends State<PopUpAddress> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Text(
-                                  MethodConstants.oCcy.format(
-                                      cartController.calTotalAmount(
-                                          cartController.cartsList)),
+                                  MethodConstants.oCcy
+                                      .format(cartController.amount.value),
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 14.0,
@@ -365,6 +370,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                   );
                 }
               }),
+
               // cartController.cartsList.isEmpty == false
               //     ? GestureDetector(
               //         onTap: () {

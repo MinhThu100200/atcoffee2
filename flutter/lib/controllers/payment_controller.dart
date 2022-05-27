@@ -14,13 +14,13 @@ class PaymentController extends GetxController {
 
   void fetchPayments() async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var payments = await RemoteServices.fetchPayments();
       if (payments != null) {
         paymentsList.value = payments;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 }

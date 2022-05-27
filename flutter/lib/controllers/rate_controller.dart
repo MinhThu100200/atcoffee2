@@ -13,13 +13,13 @@ class RateController extends GetxController {
 
   void fetchRates(id) async {
     try {
-      isLoading(true);
+      isLoading.value = true;
       var rates = await RemoteServices.fetchRates(id);
       if (rates != null) {
         ratesList.value = rates;
       }
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 }
