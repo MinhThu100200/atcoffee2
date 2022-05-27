@@ -247,14 +247,14 @@ class _RewardPage extends State<RewardPage> {
                                                               Icon(
                                                                   Icons
                                                                       .coffee_sharp,
-                                                                  size: 11,
+                                                                  size: 10,
                                                                   color: black),
                                                               Container(
                                                                 child: Text(
                                                                     "A&T Coffee",
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            10,
+                                                                            8,
                                                                         color:
                                                                             white)),
                                                               ),
@@ -264,7 +264,7 @@ class _RewardPage extends State<RewardPage> {
                                                         Container(
                                                           padding:
                                                               EdgeInsets.only(
-                                                                  top: 5),
+                                                                  top: 2),
                                                           child: Text(
                                                               promotionController
                                                                       .promotionsList[
@@ -273,7 +273,7 @@ class _RewardPage extends State<RewardPage> {
                                                                       .toString() +
                                                                   "%",
                                                               style: TextStyle(
-                                                                  fontSize: 35,
+                                                                  fontSize: 33,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -419,13 +419,13 @@ class _RewardPage extends State<RewardPage> {
                                                               .center,
                                                       children: [
                                                         Icon(Icons.coffee_sharp,
-                                                            size: 11,
+                                                            size: 10,
                                                             color: black),
                                                         Container(
                                                           child: Text(
                                                               "A&T Coffee",
                                                               style: TextStyle(
-                                                                  fontSize: 10,
+                                                                  fontSize: 8,
                                                                   color:
                                                                       white)),
                                                         ),
@@ -434,7 +434,7 @@ class _RewardPage extends State<RewardPage> {
                                                   ),
                                                   Container(
                                                     padding:
-                                                        EdgeInsets.only(top: 5),
+                                                        EdgeInsets.only(top: 2),
                                                     child: Text(
                                                         (rewardController
                                                                         .rewardsList[
@@ -444,7 +444,7 @@ class _RewardPage extends State<RewardPage> {
                                                                 .toString() +
                                                             'K',
                                                         style: TextStyle(
-                                                            fontSize: 35,
+                                                            fontSize: 33,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                             color: white)),

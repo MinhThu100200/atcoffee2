@@ -168,7 +168,7 @@ class _homePageState extends State<HomePage> {
                                             )),
                                         GestureDetector(
                                           onTap: () => Get.to(() =>
-                                              RootApp(nameRoute: 'reward')),
+                                              new RootApp(nameRoute: 'reward')),
                                           child: Container(
                                             width: size.width - 130,
                                             decoration: BoxDecoration(
@@ -190,33 +190,34 @@ class _homePageState extends State<HomePage> {
                                                                 FontWeight
                                                                     .w800))),
                                                 const SizedBox(height: 6),
-                                                Container(
-                                                    height: 48,
-                                                    alignment: Alignment.center,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            left: 34,
-                                                            right: 34),
-                                                    decoration: BoxDecoration(
-                                                        color: primary,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(16)),
-                                                    child: Text(
-                                                        _availableRewards() ==
-                                                                null
-                                                            ? "Chưa đạt phần thưởng"
-                                                            : _availableRewards()
-                                                                .name,
-                                                        style: const TextStyle(
-                                                            color: white,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600)))
+                                                Obx(
+                                                  () => Container(
+                                                      height: 48,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      margin: const EdgeInsets.only(
+                                                          left: 34, right: 34),
+                                                      decoration: BoxDecoration(
+                                                          color: primary,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  16)),
+                                                      child: Text(
+                                                          _availableRewards() ==
+                                                                  null
+                                                              ? "Chưa đạt phần thưởng"
+                                                              : _availableRewards()
+                                                                  .name,
+                                                          style: const TextStyle(
+                                                              color: white,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600))),
+                                                )
                                               ],
                                             ),
                                           ),
