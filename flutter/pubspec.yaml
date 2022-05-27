@@ -57,6 +57,8 @@ dependencies:
   bottom_sheet: ^3.0.0
   modal_bottom_sheet: ^2.0.1
   firebase_database: ^9.0.14
+  flutter_local_notifications: ^9.5.3+1
+  firebase_messaging: ^11.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
