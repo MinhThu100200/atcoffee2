@@ -465,6 +465,7 @@ class _RewardPage extends State<RewardPage> {
               .id;
     } catch (e) {
       print(e.toString());
+      return false;
     }
 
     if (userController.user.value.typeId == null || isValid) {

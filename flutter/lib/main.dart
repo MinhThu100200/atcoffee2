@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:at_coffee/controllers/promotion_controller.dart';
+import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/screens/on_boarding.dart';
@@ -73,7 +75,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(fontFamily: 'avenir'),
       initialRoute: "/",
-      getPages: [GetPage(name: '/', page: () => MyHomePage())],
+      getPages: [GetPage(name: '/', page: () => const MyHomePage())],
       builder: EasyLoading.init(),
     );
   }
@@ -104,10 +106,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final UserController userController = Get.put(UserController());
-
+  final PromotionController promotionController =
+      Get.put(PromotionController());
+  final TypeController typeController = Get.put(TypeController());
   @override
   void initState() {
     authUserByToken();
+    promotionController.fetchPromotions();
+    typeController.fetchTypes();
     super.initState();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {

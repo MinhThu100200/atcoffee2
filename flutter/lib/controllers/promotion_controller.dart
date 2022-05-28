@@ -8,7 +8,7 @@ class PromotionController extends GetxController {
 
   @override
   void onInit() {
-    fetchPromotions();
+    //fetchPromotions();
     super.onInit();
   }
 

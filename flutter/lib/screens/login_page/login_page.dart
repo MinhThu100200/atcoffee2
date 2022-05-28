@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/promotion_controller.dart';
 import 'package:at_coffee/screens/forget_password/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -49,10 +50,8 @@ class _loginPageState extends State<LoginPage> {
     await userController.authUser('0346279377', '1234567890');
     if (userController.user.value.name != "" &&
         userController.user.value.name != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => RootApp(nameRoute: 'home')));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => RootApp(nameRoute: 'home')));
       // Get.off(() => new RootApp());
     }
   }
@@ -121,7 +120,8 @@ class _loginPageState extends State<LoginPage> {
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     labelText: 'Nhập email',
-                                    labelStyle: const TextStyle(color: Colors.black),
+                                    labelStyle:
+                                        const TextStyle(color: Colors.black),
                                     //hintText: "Email",
                                     border: InputBorder.none,
                                     errorText: _validateEmail
@@ -163,7 +163,8 @@ class _loginPageState extends State<LoginPage> {
                                   obscureText: _statePassword,
                                   decoration: InputDecoration(
                                     labelText: 'Nhập mật khẩu',
-                                    labelStyle: const TextStyle(color: Colors.black),
+                                    labelStyle:
+                                        const TextStyle(color: Colors.black),
 
                                     //hintText: "Email",
                                     border: InputBorder.none,

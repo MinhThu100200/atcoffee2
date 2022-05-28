@@ -8,7 +8,7 @@ class TypeController extends GetxController {
 
   @override
   void onInit() {
-    fetchTypes();
+    //fetchTypes();
     super.onInit();
   }
 
