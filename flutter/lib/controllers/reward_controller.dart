@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_reward.dart';
 
 class RewardController extends GetxController {
   var isLoading = true.obs;
-  var rewardsList = List<Reward>().obs;
+  var rewardsList = <Reward>[].obs;
 
   @override
   void onInit() {

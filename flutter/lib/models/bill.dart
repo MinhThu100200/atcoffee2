@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:at_coffee/models/bill_detail.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<Bill> billFromJson(String str) =>
     List<Bill>.from(json.decode(str).map((x) => Bill.fromJson(x)));

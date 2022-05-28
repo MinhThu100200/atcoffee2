@@ -1,4 +1,3 @@
-import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -92,10 +91,6 @@ class _OrderPage extends State<OrderPage> {
       cartController.fetchCartsByCustomerId(userController.user.value.id);
       rateController.fetchRates(_product.id);
     });
-
-    // WidgetsBinding.instance?.addPostFrameCallback((_) {
-    //   cartController.fetchCartsByCustomerId(userController.user.value.id);
-    // });
   }
 
   @override
@@ -336,29 +331,27 @@ class _OrderPage extends State<OrderPage> {
                                     onTap: () {
                                       _updateSize(SizeEnum.L);
                                     },
-                                    child: Container(
-                                      child: SizedBox(
-                                          child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                            Positioned(
-                                              child: Image.asset(
-                                                  'assets/icons/coffee-cup.png',
-                                                  height: 100,
-                                                  color: _index == 2
-                                                      ? primary
-                                                      : black,
-                                                  fit: BoxFit.fitHeight),
-                                            ),
-                                            Positioned(
-                                              top: 35,
-                                              child: Text(SizeEnum.L.name,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white)),
-                                            )
-                                          ])),
-                                    ),
+                                    child: SizedBox(
+                                        child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                          Positioned(
+                                            child: Image.asset(
+                                                'assets/icons/coffee-cup.png',
+                                                height: 100,
+                                                color: _index == 2
+                                                    ? primary
+                                                    : black,
+                                                fit: BoxFit.fitHeight),
+                                          ),
+                                          Positioned(
+                                            top: 35,
+                                            child: Text(SizeEnum.L.name,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white)),
+                                          )
+                                        ])),
                                   ),
                                 )
                               ]),
@@ -940,20 +933,14 @@ class _OrderPage extends State<OrderPage> {
                                         ],
                                       ),
                                       Row(
-                                        children: [
-                                          Container(
-                                            child: Text("Xem tất cả",
-                                                style: TextStyle(
-                                                    color: primary,
-                                                    fontSize: 13,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                          ),
-                                          Container(
-                                              child: Icon(
-                                                  CupertinoIcons.right_chevron,
+                                        children: const [
+                                          Text("Xem tất cả",
+                                              style: TextStyle(
                                                   color: primary,
-                                                  size: 15)),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w700)),
+                                          Icon(CupertinoIcons.right_chevron,
+                                              color: primary, size: 15),
                                         ],
                                       ),
                                     ],
@@ -967,10 +954,10 @@ class _OrderPage extends State<OrderPage> {
                                     width: size.width,
                                   )),
                               Obx(() {
-                                if (rateController.isLoading.value)
+                                if (rateController.isLoading.value) {
                                   return Center(
                                       child: CircularProgressIndicator());
-                                else
+                                } else {
                                   return Container(
                                     color: white,
                                     child: ListView.builder(
@@ -1029,7 +1016,7 @@ class _OrderPage extends State<OrderPage> {
                                                                               index]
                                                                           .userId
                                                                           .toString(),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontSize:
                                                                           11,
                                                                       fontWeight:
@@ -1038,19 +1025,16 @@ class _OrderPage extends State<OrderPage> {
                                                                       color:
                                                                           gray)),
                                                             ),
-                                                            Container(
-                                                              child: Text(
-                                                                  '★★★★★',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      color: Colors
-                                                                              .yellow[
-                                                                          700])),
-                                                            ),
+                                                            Text('★★★★★',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        11,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    color: Colors
+                                                                            .yellow[
+                                                                        700])),
                                                           ],
                                                         ),
                                                       ),
@@ -1065,9 +1049,10 @@ class _OrderPage extends State<OrderPage> {
                                                               .ratesList[index]
                                                               .comment
                                                               .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: gray)),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: gray)),
                                                     ),
                                                   ],
                                                 ),
@@ -1085,10 +1070,11 @@ class _OrderPage extends State<OrderPage> {
                                           );
                                         }),
                                   );
+                                }
                               }),
                             ],
                           )),
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Container(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: InkWell(
@@ -1098,16 +1084,14 @@ class _OrderPage extends State<OrderPage> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    child: Text('Xem tất cả (100)',
-                                        style: TextStyle(
-                                            color: primary,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700)),
-                                  ),
-                                  Container(
-                                      child: Icon(CupertinoIcons.right_chevron,
-                                          color: primary, size: 18))
+                                  Text(
+                                      'Xem tất cả (${_product.numberReviewers.toString()})',
+                                      style: const TextStyle(
+                                          color: primary,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700)),
+                                  const Icon(CupertinoIcons.right_chevron,
+                                      color: primary, size: 18)
                                 ])),
                       ),
                       Container(
@@ -1155,7 +1139,7 @@ class _OrderPage extends State<OrderPage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                     color: Colors.white)));
-                      } else
+                      } else {
                         return TextButton(
                             onPressed: () => Navigator.push(
                                 context,
@@ -1169,6 +1153,7 @@ class _OrderPage extends State<OrderPage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                     color: Colors.white)));
+                      }
                     })),
                 Container(
                     color: lightGray3,
@@ -1210,9 +1195,8 @@ class _OrderPage extends State<OrderPage> {
   void addToCart() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
           _isSaving = true;
-          print("minhthu");
         }));
-    Cart cart = new Cart();
+    Cart cart = Cart();
     cart.code = 'CART' +
         ((DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt()).toString();
     cart.state = true;

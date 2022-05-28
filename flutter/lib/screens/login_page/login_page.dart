@@ -1,8 +1,6 @@
 import 'package:at_coffee/screens/forget_password/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:at_coffee/screens/on_boarding.dart';
-import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
 import 'package:at_coffee/screens/root_app/root_app.dart';
@@ -32,7 +30,7 @@ class _loginPageState extends State<LoginPage> {
   bool _validatePassword = false;
   bool _statePassword = true;
 
-  final UserController userController = Get.put(new UserController());
+  final UserController userController = Get.put(UserController());
 
   @override
   void dispose() {
@@ -54,7 +52,7 @@ class _loginPageState extends State<LoginPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => new RootApp(nameRoute: 'home')));
+              builder: (context) => RootApp(nameRoute: 'home')));
       // Get.off(() => new RootApp());
     }
   }
@@ -81,14 +79,14 @@ class _loginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(30),
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   height: (size.height - 30) * 0.5,
                   child: Column(
                     children: [
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 150,
                               height: 150,
                               child: Image.asset(
@@ -111,19 +109,19 @@ class _loginPageState extends State<LoginPage> {
                                 Icons.email,
                                 color: black.withOpacity(0.5),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
                               Flexible(
                                 child: TextField(
                                   cursorColor: black.withOpacity(0.5),
-                                  style: TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 15),
                                   cursorHeight: 20,
                                   controller: _email,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     labelText: 'Nhập email',
-                                    labelStyle: TextStyle(color: Colors.black),
+                                    labelStyle: const TextStyle(color: Colors.black),
                                     //hintText: "Email",
                                     border: InputBorder.none,
                                     errorText: _validateEmail
@@ -136,7 +134,7 @@ class _loginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Container(
@@ -153,19 +151,19 @@ class _loginPageState extends State<LoginPage> {
                                 Icons.lock,
                                 color: black.withOpacity(0.5),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
                               Flexible(
                                 child: TextField(
                                   cursorColor: black.withOpacity(0.5),
                                   controller: _password,
-                                  style: TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 15),
                                   cursorHeight: 20,
                                   obscureText: _statePassword,
                                   decoration: InputDecoration(
                                     labelText: 'Nhập mật khẩu',
-                                    labelStyle: TextStyle(color: Colors.black),
+                                    labelStyle: const TextStyle(color: Colors.black),
 
                                     //hintText: "Email",
                                     border: InputBorder.none,
@@ -191,7 +189,7 @@ class _loginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
@@ -199,7 +197,7 @@ class _loginPageState extends State<LoginPage> {
                         children: [
                           InkWell(
                             onTap: openForgetPassword,
-                            child: Text(
+                            child: const Text(
                               "Quên mật khẩu?",
                               style: TextStyle(
                                   fontSize: 13,
@@ -213,7 +211,7 @@ class _loginPageState extends State<LoginPage> {
                 ),
 
                 // login button and social login
-                Container(
+                SizedBox(
                     height: (size.height - 60) * 0.5,
                     child: Column(
                       children: [
@@ -229,8 +227,8 @@ class _loginPageState extends State<LoginPage> {
                                   ? _validatePassword = true
                                   : _validatePassword = false;
                             });
-                            if (!_password.text.isEmpty &&
-                                !_email.text.isEmpty) {
+                            if (_password.text.isNotEmpty &&
+                                _email.text.isNotEmpty) {
                               _login(_email.text, _password.text);
                             }
                           },
@@ -242,7 +240,7 @@ class _loginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(30)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.arrow_forward_sharp,
                                   color: white,
@@ -261,11 +259,11 @@ class _loginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
-                          children: [
+                          children: const [
                             Flexible(
                               child: Divider(
                                 thickness: 0.8,
@@ -285,7 +283,7 @@ class _loginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -305,7 +303,7 @@ class _loginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             Container(
@@ -324,13 +322,13 @@ class _loginPageState extends State<LoginPage> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Bạn chưa có tài khoản?",
                               style: TextStyle(
                                 fontSize: 13,
@@ -338,7 +336,7 @@ class _loginPageState extends State<LoginPage> {
                             ),
                             InkWell(
                               onTap: openSignUp,
-                              child: Text(
+                              child: const Text(
                                 "Đăng ký",
                                 style: TextStyle(
                                     fontSize: 13,
@@ -363,10 +361,10 @@ class _loginPageState extends State<LoginPage> {
   // }
 
   void openSignUp() {
-    Get.to(() => SignUpPage());
+    Get.to(() => const SignUpPage());
   }
 
   void openForgetPassword() {
-    Get.to(() => ForgetPassword());
+    Get.to(() => const ForgetPassword());
   }
 }

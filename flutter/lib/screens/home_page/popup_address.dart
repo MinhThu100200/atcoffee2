@@ -10,10 +10,9 @@ import 'package:get/get.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
-import 'package:collection/collection.dart';
 
 class PopUpAddress extends StatefulWidget {
-  PopUpAddress({Key key}) : super(key: key);
+  const PopUpAddress({Key key}) : super(key: key);
 
   @override
   _PopUpAddress createState() => _PopUpAddress();
@@ -55,7 +54,7 @@ class _PopUpAddress extends State<PopUpAddress> {
             builder: (BuildContext context) {
               return Container(
                   height: 200,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30.0),
@@ -68,10 +67,10 @@ class _PopUpAddress extends State<PopUpAddress> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Container(
                               padding: const EdgeInsets.only(left: 16, top: 5),
-                              child: Text("Chọn phương thức giao hàng",
+                              child: const Text("Chọn phương thức giao hàng",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600)),
@@ -81,172 +80,167 @@ class _PopUpAddress extends State<PopUpAddress> {
                                 child: Container(
                                     padding: const EdgeInsets.only(
                                         top: 5, right: 10),
-                                    child:
-                                        Icon(Icons.close_rounded, size: 25))),
+                                    child: const Icon(Icons.close_rounded,
+                                        size: 25))),
                           ]),
                       Container(
                         color: Colors.grey[200],
                         width: size.width,
-                        child: SizedBox(height: 0.5),
+                        child: const SizedBox(height: 0.5),
                       ),
                       Obx(() {
-                        if (productController.isLoading.value)
-                          return Center(child: CircularProgressIndicator());
-                        else
-                          return Container(
-                            //padding: const EdgeInsets.only(left: 10),
-                            child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: wayTitle.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    child: GestureDetector(
-                                      onTap: () =>
-                                          storeController.setSeleted(index),
-                                      child: Obx(
-                                        () => Container(
-                                            color: storeController
-                                                        .selected.value ==
-                                                    index
-                                                ? greenTransparent
-                                                : white,
-                                            padding: const EdgeInsets.only(
-                                                top: 10, left: 16, bottom: 10),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                    height: 50,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                        color: lightGreen3,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25)),
+                        if (productController.isLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: wayTitle.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return GestureDetector(
+                                  onTap: () =>
+                                      storeController.setSeleted(index),
+                                  child: Obx(
+                                    () => Container(
+                                        color: storeController.selected.value ==
+                                                index
+                                            ? greenTransparent
+                                            : white,
+                                        padding: const EdgeInsets.only(
+                                            top: 10, left: 16, bottom: 10),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                                height: 50,
+                                                width: 50,
+                                                decoration: BoxDecoration(
+                                                    color: lightGreen3,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                                child: SizedBox(
+                                                    height: 26,
+                                                    width: 26,
+                                                    child: Image.asset(
+                                                        wayImage[index]))),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                      wayTitle[index],
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight
+                                                                  .w500)),
+                                                  FittedBox(
                                                     child: Container(
-                                                        height: 26,
-                                                        width: 26,
-                                                        child: Image.asset(
-                                                            wayImage[index]))),
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                          child: Text(
-                                                              wayTitle[index],
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500))),
-                                                      FittedBox(
-                                                        child: Container(
-                                                          width:
-                                                              size.width - 140,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 5),
-                                                          // height: 50,
-                                                          child: Text(
-                                                              wayTitle[index] ==
-                                                                      "Giao tận nơi"
-                                                                  ? storeController
-                                                                      .myAddress
+                                                      width: size.width - 140,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5),
+                                                      // height: 50,
+                                                      child: Text(
+                                                          wayTitle[index] ==
+                                                                  "Giao tận nơi"
+                                                              ? storeController
+                                                                  .myAddress
+                                                                  .value
+                                                              : "A&T Coffee, " +
+                                                                  storeController
+                                                                      .storeNearYou
                                                                       .value
-                                                                  : "A&T Coffee, " +
-                                                                      storeController
-                                                                          .storeNearYou
-                                                                          .value
-                                                                          .address,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .grey[600],
-                                                                fontSize: 13,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis),
-                                                        ),
-                                                      ),
-                                                      FittedBox(
-                                                        child: Container(
-                                                          width:
-                                                              size.width - 150,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(top: 5),
-                                                          // height: 50,
-                                                          child: Text(
-                                                              wayTitle[index] ==
-                                                                      "Giao tận nơi"
-                                                                  ? userController
-                                                                          .user
-                                                                          .value
-                                                                          .name +
-                                                                      " " +
-                                                                      userController
-                                                                          .user
-                                                                          .value
-                                                                          .phone
-                                                                  : "Cách đây khoảng " +
-                                                                      storeController
-                                                                          .storeMinDistance
-                                                                          .toString() +
-                                                                      "km",
-                                                              style: TextStyle(
-                                                                // color: Colors.lightBlueAccent,
-                                                                fontSize: 13,
-
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                                      .address,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    ),
                                                   ),
-                                                ),
-                                                Container(
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    decoration: BoxDecoration(
-                                                        color: primary,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(14)),
-                                                    child: GestureDetector(
-                                                        onTap: () {
-                                                          if (index == 1)
-                                                            return Get.to(() =>
-                                                                LocationStore());
-                                                          else {
-                                                            return Get.to(() =>
-                                                                AddressDelivery());
-                                                          }
-                                                        },
-                                                        child: Text("Sửa"))),
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                          );
+                                                  FittedBox(
+                                                    child: Container(
+                                                      width: size.width - 150,
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5),
+                                                      // height: 50,
+                                                      child: Text(
+                                                          wayTitle[index] ==
+                                                                  "Giao tận nơi"
+                                                              ? userController
+                                                                      .user
+                                                                      .value
+                                                                      .name +
+                                                                  " " +
+                                                                  userController
+                                                                      .user
+                                                                      .value
+                                                                      .phone
+                                                              : "Cách đây khoảng " +
+                                                                  storeController
+                                                                      .storeMinDistance
+                                                                      .toString() +
+                                                                  "km",
+                                                          style:
+                                                              const TextStyle(
+                                                            // color: Colors.lightBlueAccent,
+                                                            fontSize: 13,
+
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                    color: primary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            14)),
+                                                child: GestureDetector(
+                                                    onTap: () {
+                                                      if (index == 0) {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const AddressDelivery()));
+                                                      } else {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        LocationStore()));
+                                                      }
+                                                    },
+                                                    child: const Text("Sửa"))),
+                                          ],
+                                        )),
+                                  ),
+                                );
+                              });
+                        }
                       })
                     ],
                   ));
@@ -322,7 +316,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                       child: const Text(""));
                 } else {
                   return GestureDetector(
-                    onTap: () => Get.to(() => CartPage()),
+                    onTap: () => Get.to(() => const CartPage()),
                     child: Container(
                         margin: const EdgeInsets.only(left: 8.0),
                         padding: const EdgeInsets.all(6),
@@ -370,66 +364,6 @@ class _PopUpAddress extends State<PopUpAddress> {
                   );
                 }
               }),
-
-              // cartController.cartsList.isEmpty == false
-              //     ? GestureDetector(
-              //         onTap: () {
-              //           WidgetsBinding.instance.addPostFrameCallback((_) {
-              //             Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) => CartPage()));
-              //           });
-              //         },
-              //         child: Container(
-              //             margin: const EdgeInsets.only(left: 8.0),
-              //             padding: const EdgeInsets.all(6),
-              //             decoration: BoxDecoration(
-              //                 color: primary,
-              //                 borderRadius: BorderRadius.circular(20)),
-              //             child: Row(
-              //               children: [
-              //                 Container(
-              //                   padding: const EdgeInsets.symmetric(
-              //                       horizontal: 5.0, vertical: 2.0),
-              //                   decoration: BoxDecoration(
-              //                     color: white,
-              //                     borderRadius: BorderRadius.circular(20.0),
-              //                   ),
-              //                   child: Text(
-              //                       "${cartFromJson(cartToJson(cartController.cartsList.where((c) => c.state).toList())).reduce((value, element) {
-              //                         value.quantity += element.quantity;
-              //                         return value;
-              //                       }).quantity}",
-              //                       style: const TextStyle(
-              //                           color: primary, fontSize: 12.0)),
-              //                 ),
-              //                 Container(
-              //                     padding: const EdgeInsets.symmetric(
-              //                         horizontal: 4.0),
-              //                     child: Text(
-              //                       MethodConstants.oCcy.format(
-              //                           cartController.calTotalAmount(
-              //                               cartController.cartsList)),
-              //                       style: const TextStyle(
-              //                           color: white,
-              //                           fontSize: 14.0,
-              //                           fontWeight: FontWeight.w600),
-              //                     )),
-              //                 Container(
-              //                     padding: const EdgeInsets.symmetric(
-              //                         horizontal: 0.0),
-              //                     child: const Icon(
-              //                       Icons.arrow_forward_ios,
-              //                       color: white,
-              //                       size: 12.0,
-              //                     ))
-              //               ],
-              //             )),
-              //       )
-              //     : Container(
-              //         padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              //         child: const Text(""))
             ],
           )),
     );

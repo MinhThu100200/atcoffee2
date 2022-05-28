@@ -1,16 +1,14 @@
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
-import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/common/theme/colors.dart';
-import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/screens/products_page/product_item.dart';
 
 class ProductsPage extends StatefulWidget {
-  ProductsPage({Key key}) : super(key: key);
+  const ProductsPage({Key key}) : super(key: key);
   @override
   _ProductsPage createState() => _ProductsPage();
 }
@@ -56,33 +54,32 @@ class _ProductsPage extends State<ProductsPage> {
                 child: SafeArea(
                   child: Column(
                     children: [
-                      Container(
-                          child: SizedBox(
+                      SizedBox(
                         width: size.width,
                         child:
-                            Stack(alignment: Alignment.centerLeft, children: [
-                          Positioned(
-                            child: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                          ),
-                          Positioned(
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Text("Sản phẩm",
-                                  style: TextStyle(
-                                      color: white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold)),
+                        Stack(alignment: Alignment.centerLeft, children: [
+                      Positioned(
+                        child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
                             ),
-                          )
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                      ),
+                      Positioned(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Text("Sản phẩm",
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      )
                         ]),
-                      )),
+                      ),
                       Container(
                         padding: const EdgeInsets.only(
                             left: 15, right: 15, top: 10, bottom: 10),
@@ -164,7 +161,7 @@ class _ProductsPage extends State<ProductsPage> {
                                                     categoryController
                                                         .categoriesList[index]
                                                         .name,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 16)),
                                               ],
                                             ),
@@ -175,24 +172,23 @@ class _ProductsPage extends State<ProductsPage> {
                                   ),
                                 ),
                                 Obx(() {
-                                  if (productController.isLoading.value)
-                                    return Center(
+                                  if (productController.isLoading.value) {
+                                    return const Center(
                                         child: CircularProgressIndicator());
-                                  else
+                                  } else {
                                     return Expanded(
-                                      child: Container(
-                                        child: ListView.builder(
-                                            itemCount: productController
-                                                .productsList.length,
-                                            shrinkWrap: true,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ProductItem(
-                                                  product: productController
-                                                      .productsList[index]);
-                                            }),
-                                      ),
+                                      child: ListView.builder(
+                                          itemCount: productController
+                                              .productsList.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return ProductItem(
+                                                product: productController
+                                                    .productsList[index]);
+                                          }),
                                     );
+                                  }
                                 })
                               ],
                             );
@@ -203,7 +199,7 @@ class _ProductsPage extends State<ProductsPage> {
                   ),
                 )),
           ),
-          PopUpAddress()
+          const PopUpAddress()
         ],
       ),
     );

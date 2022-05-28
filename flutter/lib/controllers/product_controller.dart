@@ -4,9 +4,9 @@ import 'package:at_coffee/services/service_product.dart';
 
 class ProductController extends GetxController {
   var isLoading = true.obs;
-  var productsList = List<Product>().obs;
-  var productsSuggestion = List<Product>().obs;
-  var allProducts = List<Product>().obs;
+  var productsList = <Product>[].obs;
+  var productsSuggestion = <Product>[].obs;
+  var allProducts = <Product>[].obs;
   var reload = true.obs;
 
   @override
@@ -21,8 +21,8 @@ class ProductController extends GetxController {
       var products = await RemoteServices.fetchProducts();
       if (products != null) {
         allProducts.value = products;
-        print("sản phẩm");
-        print(products);
+        //print("sản phẩm");
+        //print(products);
       }
     } finally {
       //isLoading(false);
@@ -47,8 +47,8 @@ class ProductController extends GetxController {
       var products = await RemoteServices.fetchProductSuggest(customerId, size);
       if (products != null) {
         productsSuggestion.value = products;
-        print("suggest");
-        print(products);
+        //print("suggest");
+        //print(products);
       }
     } finally {
       isLoading.value = false;

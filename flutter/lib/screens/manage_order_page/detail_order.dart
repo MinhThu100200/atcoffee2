@@ -2,15 +2,11 @@ import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/models/Bill.dart';
-import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/manage_order_page/item_order_detail.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/common/theme/colors.dart';
-import 'package:at_coffee/models/product.dart';
-import 'package:at_coffee/screens/products_page/product_item.dart';
 
 class DetailOrderPage extends StatefulWidget {
   DetailOrderPage({Key key, this.bill}) : super(key: key);
@@ -69,17 +65,6 @@ class _DetailOrderPage extends State<DetailOrderPage> {
     // TODO: implement initState
     _bill = widget.bill;
     super.initState();
-    // storeController.getStoreListNearYou();
-    // storeController.getAddress();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // _getLocationData().then((value) => setState(() {
-    //       currentLocation = value;
-    //     }));
-    //storeController.getStoreListNearYou();
-    //storeController.getAddress();
-    // productController.fetchProductsByCategory(codeCategory[0]);
-    print("Build Completed");
-    //});
   }
 
   @override
@@ -98,37 +83,36 @@ class _DetailOrderPage extends State<DetailOrderPage> {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                Container(
-                    child: SizedBox(
+                SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                    Positioned(
-                      child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text("Chi tiết đơn hàng",
-                              style: TextStyle(
-                                  color: white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                        ),
+                Positioned(
+                  child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                ),
+                Positioned(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10,
                     ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Chi tiết đơn hàng",
+                          style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ),
                   ]),
-                )),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -145,7 +129,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 bottom: 10, left: 15, right: 15),
                             decoration: BoxDecoration(
                               border: Border(
@@ -157,16 +141,16 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                               children: [
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: Text("Tình trạng đơn hàng",
+                                    child: const Text("Tình trạng đơn hàng",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20))),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                         "${cateData.where((element) => element['status'] == _bill?.status).toList()[0]['name']}",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: lightBlue,
                                           fontSize: 14,
                                           decoration: TextDecoration.underline,
@@ -174,7 +158,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                               ],
                             )),
                         Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 bottom: 10, top: 5, left: 15, right: 15),
                             decoration: BoxDecoration(
                               border: Border(
@@ -186,34 +170,32 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                               children: [
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: Text("Địa chỉ nhận hàng",
+                                    child: const Text("Địa chỉ nhận hàng",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20))),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                        "${_bill?.address == "" || _bill?.address == null ? "Nhận tại cửa hàng" : _bill?.address}",
-                                        style: TextStyle(
+                                        _bill?.address == "" || _bill?.address == null ? "Nhận tại cửa hàng" : _bill?.address,
+                                        style: const TextStyle(
                                           color: lightBlue,
                                           fontSize: 14,
                                           decoration: TextDecoration.underline,
                                         )))
                               ],
                             )),
+                        ListView.builder(
+                            itemCount: _bill.billDetails.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ItemOrderDetail(
+                                  billDetail: _bill.billDetails[index]);
+                            }),
                         Container(
-                          child: ListView.builder(
-                              itemCount: _bill.billDetails.length,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ItemOrderDetail(
-                                    billDetail: _bill.billDetails[index]);
-                              }),
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 bottom: 10, top: 5, left: 15, right: 15),
                             decoration: BoxDecoration(
                               border: Border(
@@ -225,11 +207,11 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                               children: [
                                 Container(
                                     alignment: Alignment.topLeft,
-                                    child: Text("Tổng tiền",
+                                    child: const Text("Tổng tiền",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20))),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -237,7 +219,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text("Tổng cộng:",
+                                        child: const Text("Tổng cộng:",
                                             style: TextStyle(
                                               color: gray1,
                                               fontSize: 14,
@@ -248,13 +230,13 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                             oCcy
                                                 .format(totalPrice())
                                                 .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: gray1,
                                               fontSize: 14,
                                             ))),
                                   ],
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -262,7 +244,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text("Giảm giá:",
+                                        child: const Text("Giảm giá:",
                                             style: TextStyle(
                                               color: gray1,
                                               fontSize: 14,
@@ -271,13 +253,13 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                             oCcy.format(_bill.price).toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: gray1,
                                               fontSize: 14,
                                             ))),
                                   ],
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -285,7 +267,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text("Khuyến mãi/Phần thưởng:",
+                                        child: const Text("Khuyến mãi/Phần thưởng:",
                                             style: TextStyle(
                                               color: gray1,
                                               fontSize: 14,
@@ -297,13 +279,13 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                                 .format(
                                                     _bill.price - _bill.amount)
                                                 .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: gray1,
                                               fontSize: 14,
                                             ))),
                                   ],
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -311,7 +293,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
-                                        child: Text("Thành tiền:",
+                                        child: const Text("Thành tiền:",
                                             style: TextStyle(
                                               color: gray1,
                                               fontSize: 14,
@@ -322,7 +304,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                             oCcy
                                                 .format(_bill.amount)
                                                 .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: gray1,
                                               fontSize: 14,
                                             ))),

@@ -7,23 +7,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart'
-    show Placemark, placemarkFromCoordinates;
-import 'package:location/location.dart';
 import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LocationPage extends StatefulWidget {
+  const LocationPage({Key key}) : super(key: key);
+
   @override
-  _locationPageState createState() => _locationPageState();
+  _LocationPageState createState() => _LocationPageState();
 }
 
-class _locationPageState extends State<LocationPage> {
+class _LocationPageState extends State<LocationPage> {
   List<String> listTab = ["Gần đây", "Tất cả"];
   Timer _timer;
-  double _progress;
+
   int selectedTab = 0;
 
   final StoreController storeController = Get.put(StoreController());
@@ -32,17 +30,6 @@ class _locationPageState extends State<LocationPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // storeController.getStoreListNearYou();
-    // storeController.getAddress();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // _getLocationData().then((value) => setState(() {
-    //       currentLocation = value;
-    //     }));
-    //storeController.getStoreListNearYou();
-    //storeController.getAddress();
-    // productController.fetchProductsByCategory(codeCategory[0]);
-    print("Build Completed");
-    //});
   }
 
   void setStateValue(value) {
@@ -67,37 +54,36 @@ class _locationPageState extends State<LocationPage> {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                Container(
-                    child: SizedBox(
+                SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                    // Positioned(
-                    //   child: IconButton(
-                    //       icon: const Icon(
-                    //         Icons.arrow_back,
-                    //         color: Colors.white,
-                    //       ),
-                    //       onPressed: () {
-                    //         Navigator.of(context).pop();
-                    //       }),
-                    // ),
+                // Positioned(
+                //   child: IconButton(
+                //       icon: const Icon(
+                //         Icons.arrow_back,
+                //         color: Colors.white,
+                //       ),
+                //       onPressed: () {
+                //         Navigator.of(context).pop();
+                //       }),
+                // ),
 
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text("Cửa hàng",
-                              style: TextStyle(
-                                  color: white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    )
+                Positioned(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Cửa hàng",
+                          style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                )
                   ]),
-                )),
-                SizedBox(
+                ),
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
@@ -135,7 +121,7 @@ class _locationPageState extends State<LocationPage> {
                                                 ? primary
                                                 : gray,
                                             fontWeight: FontWeight.w600)),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Container(
                                         height: 3,
                                         width: 80,
@@ -150,9 +136,9 @@ class _locationPageState extends State<LocationPage> {
                           var data = selectedTab != 0
                               ? storeController.storesList.value
                               : storeController.storeListNearYou.value;
-                          if (storeController.isLoading.value)
-                            return Center(child: CircularProgressIndicator());
-                          else
+                          if (storeController.isLoading.value) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else {
                             return Container(
                               //color: Colors.white,
                               margin:
@@ -202,22 +188,20 @@ class _locationPageState extends State<LocationPage> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Container(
-                                                      child: Text(
-                                                          storeController
-                                                              .storesList[index]
-                                                              .name,
-                                                          style: TextStyle(
-                                                              fontSize: 11,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: gray)),
-                                                    ),
-                                                    SizedBox(
+                                                    Text(
+                                                        storeController
+                                                            .storesList[index]
+                                                            .name,
+                                                        style: const TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700,
+                                                            color: gray)),
+                                                    const SizedBox(
                                                       height: 3,
                                                     ),
-                                                    Container(
+                                                    SizedBox(
                                                         width:
                                                             size.width - 130.0,
                                                         child: Row(
@@ -226,42 +210,41 @@ class _locationPageState extends State<LocationPage> {
                                                               child: Text(
                                                                   data[index]
                                                                       .address,
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontSize:
                                                                           12)),
                                                             )
                                                           ],
                                                         )),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 12,
                                                     ),
-                                                    Container(
-                                                      child: Text(
-                                                          "Cách khoảng đây " +
-                                                              UtilsCommon.getAddress(
-                                                                      data[index]
-                                                                          .latitude,
-                                                                      data[index]
-                                                                          .longitude,
-                                                                      storeController
-                                                                          .latitude
-                                                                          .value,
-                                                                      storeController
-                                                                          .longitude
-                                                                          .value)
-                                                                  .round()
-                                                                  .toString() +
-                                                              "km",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: gray)),
-                                                    )
+                                                    Text(
+                                                        "Cách khoảng đây " +
+                                                            UtilsCommon.getAddress(
+                                                                    data[index]
+                                                                        .latitude,
+                                                                    data[index]
+                                                                        .longitude,
+                                                                    storeController
+                                                                        .latitude
+                                                                        .value,
+                                                                    storeController
+                                                                        .longitude
+                                                                        .value)
+                                                                .round()
+                                                                .toString() +
+                                                            "km",
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            color: gray))
                                                   ]))
                                         ]),
                                       ),
                                     );
                                   }),
                             );
+                          }
                         })
                       ]),
                 ),
@@ -279,7 +262,7 @@ class _locationPageState extends State<LocationPage> {
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height - 80,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0),
@@ -290,179 +273,172 @@ class _locationPageState extends State<LocationPage> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  child: Container(
-                      child: Column(
+                  child: Column(
                     children: [
-                      Container(
-                          child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Positioned(
-                            child: Container(
-                                //padding: const EdgeInsets.only(bottom: 10),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30.0),
-                                      topRight: Radius.circular(30.0),
-                                    ),
-                                    child: Image.asset(
-                                        'assets/images/store1.jpg',
-                                        // height: 100,
-                                        width: MediaQuery.of(context)
-                                            .size
-                                            .width))),
-                          ),
-                          Positioned(
-                              right: 10,
-                              top: 20,
-                              child: GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Container(
-                                    height: 26,
-                                    width: 26,
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.only(bottom: 3),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius:
-                                            BorderRadius.circular(18)),
-                                    child: Text("x",
-                                        style: TextStyle(fontSize: 20))),
-                              )),
-                        ],
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                  Positioned(
+                    child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        child: Image.asset(
+                            'assets/images/store1.jpg',
+                            // height: 100,
+                            width: MediaQuery.of(context)
+                                .size
+                                .width)),
+                  ),
+                  Positioned(
+                      right: 10,
+                      top: 20,
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                            height: 26,
+                            width: 26,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.only(bottom: 3),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius:
+                                    BorderRadius.circular(18)),
+                            child: const Text("x",
+                                style: TextStyle(fontSize: 20))),
                       )),
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 16, top: 16),
-                          child: Container(
-                              child: Text("AT Coffee",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey[800])))),
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 16, top: 4),
-                          child: Container(
-                              child: Text(item.address,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black)))),
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 16, top: 6),
-                          child: Container(
-                              child: Text(
-                                  "Giờ mở cửa: " +
-                                      item.timeOpen +
-                                      " - " +
-                                      item.timeClose,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey[800])))),
-                      Container(
-                          margin: EdgeInsets.only(top: 16),
-                          color: Colors.grey[300],
-                          child: SizedBox(
-                              height: 0.5,
-                              width: MediaQuery.of(context).size.width)),
-                      GestureDetector(
-                        onTap: () => _launchMapsUrl(item.address),
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 16, top: 16),
-                            child: Row(
-                              children: [
-                                Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(6)),
-                                    child: Icon(CupertinoIcons.location,
-                                        size: 15)),
-                                Container(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text(item.address,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black))),
-                              ],
-                            )),
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(top: 16),
-                          color: Colors.grey[300],
-                          child: SizedBox(
-                              height: 0.5,
-                              width: MediaQuery.of(context).size.width)),
-                      //Favourite store
-                      // GestureDetector(
-                      //   //onTap: () => _launchMapsUrl(item.address),
-                      //   child: Container(
-                      //       padding: const EdgeInsets.only(left: 16, top: 16),
-                      //       child: Row(
-                      //         children: [
-                      //           Container(
-                      //               padding: EdgeInsets.all(8),
-                      //               decoration: BoxDecoration(
-                      //                   color: Colors.grey[200],
-                      //                   borderRadius: BorderRadius.circular(6)),
-                      //               child:
-                      //                   Icon(CupertinoIcons.heart, size: 15)),
-                      //           Container(
-                      //               padding: EdgeInsets.only(left: 5),
-                      //               child: Text("Cửa hàng yêu thích",
-                      //                   style: TextStyle(
-                      //                       fontSize: 14,
-                      //                       color: Colors.black))),
-                      //         ],
-                      //       )),
-                      // ),
-                      // Container(
-                      //     margin: EdgeInsets.only(top: 16),
-                      //     color: Colors.grey[300],
-                      //     child: SizedBox(
-                      //         height: 0.5,
-                      //         width: MediaQuery.of(context).size.width)),
-                      GestureDetector(
-                        onTap: () => _makePhoneCall(),
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 16, top: 16),
-                            child: Row(
-                              children: [
-                                Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(6)),
-                                    child:
-                                        Icon(CupertinoIcons.phone, size: 15)),
-                                Container(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text("Liên hệ",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black))),
-                              ],
-                            )),
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(top: 16),
-                          color: Colors.grey[300],
-                          child: SizedBox(
-                              height: 0.5,
-                              width: MediaQuery.of(context).size.width)),
                     ],
-                  )),
+                  ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 16, top: 16),
+                      child: Text("AT Coffee",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[800]))),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 16, top: 4),
+                      child: Text(item.address,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black))),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 16, top: 6),
+                      child: Text(
+                          "Giờ mở cửa: " +
+                              item.timeOpen +
+                              " - " +
+                              item.timeClose,
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.grey[800]))),
+                  Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      color: Colors.grey[300],
+                      child: SizedBox(
+                          height: 0.5,
+                          width: MediaQuery.of(context).size.width)),
+                  GestureDetector(
+                    onTap: () => _launchMapsUrl(item.address),
+                    child: Container(
+                        padding: const EdgeInsets.only(left: 16, top: 16),
+                        child: Row(
+                          children: [
+                            Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: const Icon(CupertinoIcons.location,
+                                    size: 15)),
+                            Container(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(item.address,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black))),
+                          ],
+                        )),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      color: Colors.grey[300],
+                      child: SizedBox(
+                          height: 0.5,
+                          width: MediaQuery.of(context).size.width)),
+                  //Favourite store
+                  // GestureDetector(
+                  //   //onTap: () => _launchMapsUrl(item.address),
+                  //   child: Container(
+                  //       padding: const EdgeInsets.only(left: 16, top: 16),
+                  //       child: Row(
+                  //         children: [
+                  //           Container(
+                  //               padding: EdgeInsets.all(8),
+                  //               decoration: BoxDecoration(
+                  //                   color: Colors.grey[200],
+                  //                   borderRadius: BorderRadius.circular(6)),
+                  //               child:
+                  //                   Icon(CupertinoIcons.heart, size: 15)),
+                  //           Container(
+                  //               padding: EdgeInsets.only(left: 5),
+                  //               child: Text("Cửa hàng yêu thích",
+                  //                   style: TextStyle(
+                  //                       fontSize: 14,
+                  //                       color: Colors.black))),
+                  //         ],
+                  //       )),
+                  // ),
+                  // Container(
+                  //     margin: EdgeInsets.only(top: 16),
+                  //     color: Colors.grey[300],
+                  //     child: SizedBox(
+                  //         height: 0.5,
+                  //         width: MediaQuery.of(context).size.width)),
+                  GestureDetector(
+                    onTap: () => _makePhoneCall(),
+                    child: Container(
+                        padding: const EdgeInsets.only(left: 16, top: 16),
+                        child: Row(
+                          children: [
+                            Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(6)),
+                                child:
+                                    const Icon(CupertinoIcons.phone, size: 15)),
+                            Container(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: const Text("Liên hệ",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black))),
+                          ],
+                        )),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      color: Colors.grey[300],
+                      child: SizedBox(
+                          height: 0.5,
+                          width: MediaQuery.of(context).size.width)),
+                    ],
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () => _orderHere(item),
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                       color: primary, borderRadius: BorderRadius.circular(8)),
                   child: Column(
-                    children: [
+                    children: const [
                       Text("Đặt hàng",
                           style: TextStyle(
                               color: white,
@@ -481,11 +457,11 @@ class _locationPageState extends State<LocationPage> {
     );
   }
 
-  Future<void> _orderHere(Store store) {
-    print(store.address);
+  Future<void> _orderHere(Store store) async{
+    //print(store.address);
     storeController.setSeleted(1);
     storeController.updateMyStoreNearYou(store);
-    Get.to(() => ProductsPage());
+    Get.to(() => const ProductsPage());
   }
 
   Future<void> _makePhoneCall() async {
@@ -504,7 +480,7 @@ class _locationPageState extends State<LocationPage> {
     );
     var uri = 'https://www.google.com/maps/search/?api=1&query=$location';
     var myUrl = Uri.encodeFull(uri);
-    print(Uri.parse(myUrl));
+    //print(Uri.parse(myUrl));
     if (await canLaunchUrl(Uri.parse(myUrl))) {
       await launchUrl(Uri.parse(myUrl));
       _timer?.cancel();

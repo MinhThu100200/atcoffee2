@@ -8,12 +8,12 @@ import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class StoreController extends GetxController {
   var isLoading = true.obs;
-  var storesList = List<Store>().obs;
-  var storeListNearYou = List<Store>().obs;
+  var storesList = <Store>[].obs;
+  var storeListNearYou = <Store>[].obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
   RxString myAddress = "".obs;
-  var storeNearYou = new Store().obs;
+  var storeNearYou = Store().obs;
   var storeMinDistance = 0.obs;
   var selected = 0.obs;
 
@@ -36,7 +36,7 @@ class StoreController extends GetxController {
     try {
       isLoading.value = true;
       if (latitude.value == 0.0 && longitude.value == 0.0) {
-        Location location = new Location();
+        Location location = Location();
         LocationData _locationData;
 
         bool _serviceEnabled;
@@ -61,8 +61,8 @@ class StoreController extends GetxController {
         _locationData = await location.getLocation();
 
         //return _locationData;
-        print("object");
-        print(_locationData.latitude);
+        //print("object");
+        //print(_locationData.latitude);
         if (_locationData?.latitude != null &&
             _locationData?.longitude != null) {
           latitude.value = _locationData?.latitude;
@@ -79,7 +79,7 @@ class StoreController extends GetxController {
   void getAddress() async {
     try {
       //isLoading.value = true;
-      Location location = new Location();
+      Location location = Location();
       LocationData _locationData;
 
       bool _serviceEnabled;
@@ -114,7 +114,7 @@ class StoreController extends GetxController {
             _locationData.latitude, _locationData.longitude);
         //print(placemarks);
         Placemark place = placemarks[0];
-        print(place);
+        //print(place);
 
         // double distanceInMeters =
         //     Geolocator.distanceBetween(lat, lang, 10.9021, 106.7754);
@@ -202,7 +202,7 @@ class StoreController extends GetxController {
   void getStoreListNearYou() async {
     try {
       isLoading.value = true;
-      List<Store> newList = new List<Store>();
+      List<Store> newList = <Store>[];
       //print(storesList.value.length.toString() + "minthu");
 
       //var minDistance = 7;

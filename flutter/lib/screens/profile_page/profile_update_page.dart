@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfileUpdatePage extends StatefulWidget {
-  ProfileUpdatePage({Key key}) : super(key: key);
+  const ProfileUpdatePage({Key key}) : super(key: key);
   _ProfileUpdatePage createState() => _ProfileUpdatePage();
 }
 
@@ -60,252 +60,236 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
           title: Container(
               alignment: Alignment.centerLeft,
               child: Row(children: [
-                Expanded(child: Text("Cập nhật thông tin cá nhân")),
+                const Expanded(child: Text("Cập nhật thông tin cá nhân")),
                 GestureDetector(
                   onTap: () {
                     _updateUser();
                   },
-                  child: Container(
-                    child: Text("Lưu", style: TextStyle(color: Colors.white)),
-                  ),
+                  child: const Text("Lưu", style: const TextStyle(color: Colors.white)),
                 )
               ])),
           elevation: 0,
         ),
-        body: Container(
-          child: SafeArea(
-              child: SingleChildScrollView(
-            child: Stack(
-              children: [
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Positioned(
+                child: Column(
+                  children: [
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                cursorColor: black.withOpacity(0.5),
+                                style: const TextStyle(fontSize: 18),
+                                cursorHeight: 20,
+                                controller: _name,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  labelText: 'Nhập tên',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
+                                  hintText: "Tên",
+                                  // border: InputBorder.none,
+                                  errorText: _validateName
+                                      ? 'Tên không đươc để trống'
+                                      : null,
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: TextField(
+                                  readOnly: true,
+                                  cursorColor: black.withOpacity(0.5),
+                                  style: const TextStyle(fontSize: 18),
+                                  cursorHeight: 20,
+                                  controller: _dob,
+                                  keyboardType: TextInputType.datetime,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Nhập ngày sinh',
+                                    labelStyle:
+                                        TextStyle(color: Colors.black),
+                                    hintText: "Ngày sinh",
+                                    border: UnderlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: black.withOpacity(0.5),
+                                ),
+                                onPressed: () {
+                                  _selectDate(context);
+                                }),
+                          ],
+                        )),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                cursorColor: black.withOpacity(0.5),
+                                style: const TextStyle(fontSize: 18),
+                                cursorHeight: 20,
+                                controller: _phone,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                  labelText: 'Nhập số điện thoại',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
+                                  hintText: "Số điện thoại",
+                                  // border: InputBorder.none,
+                                  errorText: _validatePhone
+                                      ? 'Số điện thoại không đươc để trống'
+                                      : null,
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                cursorColor: black.withOpacity(0.5),
+                                style: const TextStyle(fontSize: 18),
+                                cursorHeight: 20,
+                                controller: _address,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  labelText: 'Nhập địa chỉ',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
+                                  hintText: "Địa chỉ",
+                                  // border: InputBorder.none,
+                                  errorText: _validateAddress
+                                      ? 'Địa chỉ không đươc để trống'
+                                      : null,
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: TextField(
+                                cursorColor: black.withOpacity(0.5),
+                                style: const TextStyle(fontSize: 18),
+                                cursorHeight: 20,
+                                controller: _email,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'Nhập email',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
+                                  hintText: "Email",
+                                  // border: InputBorder.none,
+                                  errorText: _validateEmail
+                                      ? 'Email không đươc để trống'
+                                      : null,
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Radio(
+                                  value: 0,
+                                  groupValue: _gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gender = value;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                                const Text('Nam',
+                                    style: TextStyle(fontSize: 18.0))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  value: 1,
+                                  groupValue: _gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gender = value;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                                const Text('Nữ', style: TextStyle(fontSize: 18.0))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  value: 2,
+                                  groupValue: _gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gender = value;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                                const Text('Khác',
+                                    style: TextStyle(fontSize: 18.0))
+                              ],
+                            )
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+              if (isSaving == true) ...[
                 Positioned(
-                  child: Column(
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: TextField(
-                                    cursorColor: black.withOpacity(0.5),
-                                    style: TextStyle(fontSize: 18),
-                                    cursorHeight: 20,
-                                    controller: _name,
-                                    keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nhập tên',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black),
-                                      hintText: "Tên",
-                                      // border: InputBorder.none,
-                                      errorText: _validateName
-                                          ? 'Tên không đươc để trống'
-                                          : null,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: TextField(
-                                      readOnly: true,
-                                      cursorColor: black.withOpacity(0.5),
-                                      style: TextStyle(fontSize: 18),
-                                      cursorHeight: 20,
-                                      controller: _dob,
-                                      keyboardType: TextInputType.datetime,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Nhập ngày sinh',
-                                        labelStyle:
-                                            TextStyle(color: Colors.black),
-                                        hintText: "Ngày sinh",
-                                        border: UnderlineInputBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.calendar_today_rounded,
-                                      color: black.withOpacity(0.5),
-                                    ),
-                                    onPressed: () {
-                                      _selectDate(context);
-                                    }),
-                              ],
-                            ),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: TextField(
-                                    cursorColor: black.withOpacity(0.5),
-                                    style: TextStyle(fontSize: 18),
-                                    cursorHeight: 20,
-                                    controller: _phone,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nhập số điện thoại',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black),
-                                      hintText: "Số điện thoại",
-                                      // border: InputBorder.none,
-                                      errorText: _validatePhone
-                                          ? 'Số điện thoại không đươc để trống'
-                                          : null,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: TextField(
-                                    cursorColor: black.withOpacity(0.5),
-                                    style: TextStyle(fontSize: 18),
-                                    cursorHeight: 20,
-                                    controller: _address,
-                                    keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nhập địa chỉ',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black),
-                                      hintText: "Địa chỉ",
-                                      // border: InputBorder.none,
-                                      errorText: _validateAddress
-                                          ? 'Địa chỉ không đươc để trống'
-                                          : null,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: TextField(
-                                    cursorColor: black.withOpacity(0.5),
-                                    style: TextStyle(fontSize: 18),
-                                    cursorHeight: 20,
-                                    controller: _email,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nhập email',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black),
-                                      hintText: "Email",
-                                      // border: InputBorder.none,
-                                      errorText: _validateEmail
-                                          ? 'Email không đươc để trống'
-                                          : null,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12.0, vertical: 8.0),
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    Radio(
-                                      value: 0,
-                                      groupValue: _gender,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _gender = value;
-                                        });
-                                      },
-                                      activeColor: Colors.green,
-                                    ),
-                                    Text('Nam',
-                                        style: TextStyle(fontSize: 18.0))
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Radio(
-                                      value: 1,
-                                      groupValue: _gender,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _gender = value;
-                                        });
-                                      },
-                                      activeColor: Colors.green,
-                                    ),
-                                    Text('Nữ', style: TextStyle(fontSize: 18.0))
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Radio(
-                                      value: 2,
-                                      groupValue: _gender,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _gender = value;
-                                        });
-                                      },
-                                      activeColor: Colors.green,
-                                    ),
-                                    const Text('Khác',
-                                        style: TextStyle(fontSize: 18.0))
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
-                    ],
+                  child: Container(
+                    width: size.width,
+                    height: size.height - 86.0,
+                    color: Colors.grey.withOpacity(0.3),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
                 ),
-                if (isSaving == true) ...[
-                  Positioned(
-                    child: Container(
-                      width: size.width,
-                      height: size.height - 86.0,
-                      color: Colors.grey.withOpacity(0.3),
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
-                  ),
-                ]
-              ],
-            ),
-          )),
-        ));
+              ]
+            ],
+          ),
+        )));
   }
 
   void _updateUser() async {
@@ -379,12 +363,13 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
       firstDate: DateTime(1990),
       lastDate: DateTime(2050),
     );
-    if (selected != null && selected != _selectedDate)
+    if (selected != null && selected != _selectedDate) {
       setState(() {
         _selectedDate = selected;
-        _dob = new TextEditingController(
+        _dob = TextEditingController(
             text:
-                new DateFormat('dd/MM/yyyy').format(_selectedDate).toString());
+                DateFormat('dd/MM/yyyy').format(_selectedDate).toString());
       });
+    }
   }
 }

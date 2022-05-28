@@ -2,15 +2,10 @@ import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/models/Bill.dart';
 
-import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:at_coffee/models/product.dart';
-import 'package:at_coffee/screens/order_page/order_page.dart';
-import 'package:at_coffee/common/theme/colors.dart';
 
 class ListOrder extends StatefulWidget {
   ListOrder({Key key, this.status}) : super(key: key);
@@ -67,14 +62,13 @@ class _ListOrder extends State<ListOrder> {
   ];
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       // var status = cateData[indexCategory]['name'];
       print(_status);
       print("Build Completed");
     });
     return FirebaseAnimatedList(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         query: FirebaseDatabase.instance
             .ref('bills')

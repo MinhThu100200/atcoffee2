@@ -1,4 +1,3 @@
-import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/screens/login_page/login_page.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
@@ -6,22 +5,24 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class Onboarding extends StatelessWidget {
+  const Onboarding({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //theme: ThemeData(fontFamily: 'avenir'),
-      home: onboarding(),
+      home: _Onboarding(),
     );
   }
 }
 
-class onboarding extends StatefulWidget {
+class _Onboarding extends StatefulWidget {
   @override
-  _onboardingState createState() => _onboardingState();
+  _OnboardingState createState() => _OnboardingState();
 }
 
-class _onboardingState extends State<onboarding> {
+class _OnboardingState extends State<_Onboarding> {
   @override
   void initState() {
     super.initState();
@@ -29,7 +30,7 @@ class _onboardingState extends State<onboarding> {
 
   int currentPage = 0;
   PageController _pageController =
-      new PageController(initialPage: 0, keepPage: true);
+      PageController(initialPage: 0, keepPage: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,7 @@ class _onboardingState extends State<onboarding> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: PageView(
                   controller: _pageController,
@@ -184,6 +185,6 @@ class _onboardingState extends State<onboarding> {
   }
 
   openLoginPage() {
-    Get.to(() => LoginPage());
+    Get.to(() => const LoginPage());
   }
 }

@@ -3,7 +3,6 @@
 //     final product = productFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:get/get.dart';
 
 List<Promotion> promotionFromJson(String str) =>
     List<Promotion>.from(json.decode(str).map((x) => Promotion.fromJson(x)));

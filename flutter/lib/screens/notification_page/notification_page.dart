@@ -1,17 +1,13 @@
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:at_coffee/screens/home_page/popup_address.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/common/theme/colors.dart';
-import 'package:at_coffee/models/product.dart';
-import 'package:at_coffee/screens/products_page/product_item.dart';
 
 class NotificationPage extends StatefulWidget {
-  NotificationPage({Key key}) : super(key: key);
+  const NotificationPage({Key key}) : super(key: key);
   @override
   _NotificationPage createState() => _NotificationPage();
 }
@@ -64,17 +60,6 @@ class _NotificationPage extends State<NotificationPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // storeController.getStoreListNearYou();
-    // storeController.getAddress();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // _getLocationData().then((value) => setState(() {
-    //       currentLocation = value;
-    //     }));
-    //storeController.getStoreListNearYou();
-    //storeController.getAddress();
-    // productController.fetchProductsByCategory(codeCategory[0]);
-    print("Build Completed");
-    //});
   }
 
   @override
@@ -93,35 +78,34 @@ class _NotificationPage extends State<NotificationPage> {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                Container(
-                    child: SizedBox(
+                SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                    Positioned(
-                      child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text("Thông báo",
-                              style: TextStyle(
-                                  color: white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                        ),
+                Positioned(
+                  child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
-                    )
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                ),
+                Positioned(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Thông báo",
+                          style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                )
                   ]),
-                )),
+                ),
                 Container(
                   width: size.width,
                   padding: const EdgeInsets.only(top: 20.0),
@@ -135,13 +119,13 @@ class _NotificationPage extends State<NotificationPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() {
-                          if (productController.isLoading.value)
-                            return Center(child: CircularProgressIndicator());
-                          else
+                          if (productController.isLoading.value) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else {
                             return Container(
                               padding: const EdgeInsets.only(top: 10),
                               child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: productController
                                       .productsSuggestion.length,
                                   shrinkWrap: true,
@@ -181,17 +165,17 @@ class _NotificationPage extends State<NotificationPage> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                  padding: EdgeInsets.only(
+                                                  padding: const EdgeInsets.only(
                                                       bottom: 6),
-                                                  child: Text("Thông báo",
+                                                  child: const Text("Thông báo",
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontSize: 15))),
                                               FittedBox(
-                                                child: Container(
+                                                child: SizedBox(
                                                     width: size.width - 100,
-                                                    child: Text(
+                                                    child: const Text(
                                                       "Đơn hàng của bạn đã được giao. Xin chân thành cảm ơn. Hẹn gặp lại!!!",
                                                       maxLines: 2,
                                                       overflow:
@@ -205,6 +189,7 @@ class _NotificationPage extends State<NotificationPage> {
                                     );
                                   }),
                             );
+                          }
                         })
                       ]),
                 ),

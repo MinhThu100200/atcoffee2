@@ -1,26 +1,25 @@
+import 'dart:async';
 import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/models/city.dart';
 import 'package:at_coffee/models/district.dart';
 import 'package:at_coffee/models/ward.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart'
-    show Placemark, placemarkFromCoordinates;
-import 'package:location/location.dart';
-import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class AddressDelivery extends StatefulWidget {
+  const AddressDelivery({Key key}) : super(key: key);
+
   @override
-  _addressDeliveryState createState() => _addressDeliveryState();
+  _AddressDeliveryState createState() => _AddressDeliveryState();
 }
 
-class _addressDeliveryState extends State<AddressDelivery> {
+class _AddressDeliveryState extends State<AddressDelivery> {
   final AddressController addressController = Get.put(AddressController());
   final StoreController storeController = Get.put(StoreController());
+
   City cityChoose;
   District districtChoose;
   Ward wardChoose;
@@ -35,7 +34,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       addressController.fetchWardByDistrict(addressController.districtList[0]);
     });
-    print("Build Completed");
+    //print("Build Completed");
   }
 
   void _onDropDownItemSelectedWard(Ward newSelectedWard) {
@@ -58,14 +57,18 @@ class _addressDeliveryState extends State<AddressDelivery> {
     });
   }
 
-  void saveAddress() {
-    print("minht htu");
+  Future<void> saveAddress() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
     if (_noStreet.text.isEmpty) {
       setState(() {
         _validateNoStreet = true;
       });
     } else {
-      print("minht htu íni");
+      //print("minht htu íni");
+      await EasyLoading.dismiss();
       setState(() {
         _validateNoStreet = false;
       });
@@ -77,7 +80,9 @@ class _addressDeliveryState extends State<AddressDelivery> {
             districtChoose.name, wardChoose.name, _noStreet.text);
       }
 
-      Get.back();
+      EasyLoading.dismiss();
+      Navigator.of(context).pop();
+      //Get.back();
     }
   }
 
@@ -101,8 +106,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                Container(
-                    child: SizedBox(
+                SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
                     Positioned(
@@ -112,7 +116,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Get.back();
                           }),
                     ),
                     Positioned(
@@ -123,7 +127,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                           child: Text(
                               "Chọn địa chỉ" +
                                   addressController.wardList.length.toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: white,
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold)),
@@ -131,8 +135,8 @@ class _addressDeliveryState extends State<AddressDelivery> {
                       ),
                     )
                   ]),
-                )),
-                SizedBox(
+                ),
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
@@ -147,25 +151,26 @@ class _addressDeliveryState extends State<AddressDelivery> {
                       direction: Axis.vertical,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 6,
                         ),
                         Container(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text("Tỉnh/Thành phố",
+                            padding: const EdgeInsets.only(left: 15),
+                            child: const Text("Tỉnh/Thành phố",
                                 style: TextStyle(fontSize: 16))),
                         Form(
                           child: Center(
                             child: Container(
                               //color: Colors.grey[300],
-                              margin:
-                                  EdgeInsets.only(left: 15, top: 6, right: 15),
+                              margin: const EdgeInsets.only(
+                                  left: 15, top: 6, right: 15),
                               child: FormField<String>(
                                 builder: (FormFieldState<String> state) {
                                   return InputDecorator(
                                     decoration: InputDecoration(
                                         contentPadding:
-                                            EdgeInsets.fromLTRB(12, 10, 20, 20),
+                                            const EdgeInsets.fromLTRB(
+                                                12, 10, 20, 20),
                                         // labelText: "hi",
                                         // labelStyle: textStyle,
                                         // labelText: _dropdownValue == null
@@ -184,7 +189,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                       child: DropdownButton<City>(
                                         //iconDisabledColor: Colors.grey[200],
 
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.grey,
                                           fontFamily: "verdana_regular",
@@ -197,7 +202,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                         //     fontFamily: "verdana_regular",
                                         //   ),
                                         // ),
-                                        disabledHint: Text(
+                                        disabledHint: const Text(
                                           "Thành phố Hồ Chí Minh",
                                           style: TextStyle(
                                             color: Colors.black,
@@ -218,7 +223,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                                 //       value.bank_logo),
                                                 // ),
                                                 // Icon(valueItem.bank_logo),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 15,
                                                 ),
                                                 Text(value.name),
@@ -242,24 +247,25 @@ class _addressDeliveryState extends State<AddressDelivery> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 6,
                         ),
                         Container(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text("Quận/Huyện",
+                            padding: const EdgeInsets.only(left: 15),
+                            child: const Text("Quận/Huyện",
                                 style: TextStyle(fontSize: 16))),
                         Form(
                           child: Center(
                             child: Container(
-                              margin:
-                                  EdgeInsets.only(left: 15, top: 6, right: 15),
+                              margin: const EdgeInsets.only(
+                                  left: 15, top: 6, right: 15),
                               child: FormField<String>(
                                 builder: (FormFieldState<String> state) {
                                   return InputDecorator(
                                     decoration: InputDecoration(
                                         contentPadding:
-                                            EdgeInsets.fromLTRB(12, 10, 20, 20),
+                                            const EdgeInsets.fromLTRB(
+                                                12, 10, 20, 20),
                                         // labelText: "hi",
                                         // labelStyle: textStyle,
                                         // labelText: _dropdownValue == null
@@ -276,12 +282,12 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                                 BorderRadius.circular(10.0))),
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<District>(
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.grey,
                                           fontFamily: "verdana_regular",
                                         ),
-                                        hint: Text(
+                                        hint: const Text(
                                           "Chọn quận/huyện",
                                           style: TextStyle(
                                             color: Colors.grey,
@@ -302,7 +308,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                                 //       value.bank_logo),
                                                 // ),
                                                 // Icon(valueItem.bank_logo),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 15,
                                                 ),
                                                 Text(value.name),
@@ -325,28 +331,30 @@ class _addressDeliveryState extends State<AddressDelivery> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 6,
                         ),
                         Container(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text("Phường/Xã",
+                            padding: const EdgeInsets.only(left: 15),
+                            child: const Text("Phường/Xã",
                                 style: TextStyle(fontSize: 16))),
                         Obx(() {
-                          if (addressController.isLoading.value)
-                            return Center(child: CircularProgressIndicator());
-                          else {
+                          if (addressController.isLoading.value) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else {
                             return Form(
                               child: Center(
                                 child: Container(
-                                  margin: EdgeInsets.only(
+                                  margin: const EdgeInsets.only(
                                       left: 15, top: 6, right: 15),
                                   child: FormField<String>(
                                     builder: (FormFieldState<String> state) {
                                       return InputDecorator(
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.fromLTRB(
-                                                12, 10, 20, 20),
+                                            contentPadding:
+                                                const EdgeInsets.fromLTRB(
+                                                    12, 10, 20, 20),
                                             // labelText: "hi",
                                             // labelStyle: textStyle,
                                             // labelText: _dropdownValue == null
@@ -364,12 +372,12 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                                         10.0))),
                                         child: DropdownButtonHideUnderline(
                                           child: DropdownButton<Ward>(
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.grey,
                                               fontFamily: "verdana_regular",
                                             ),
-                                            hint: Text(
+                                            hint: const Text(
                                               "Chọn phường/xã",
                                               style: TextStyle(
                                                 color: Colors.grey,
@@ -390,7 +398,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                                     //       value.bank_logo),
                                                     // ),
                                                     // Icon(valueItem.bank_logo),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 15,
                                                     ),
                                                     Text(value.name),
@@ -415,17 +423,18 @@ class _addressDeliveryState extends State<AddressDelivery> {
                             );
                           }
                         }),
-                        SizedBox(
+                        const SizedBox(
                           height: 6,
                         ),
                         Container(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text("Số nhà, Tên đường",
+                            padding: const EdgeInsets.only(left: 15),
+                            child: const Text("Số nhà, Tên đường",
                                 style: TextStyle(fontSize: 16))),
                         Container(
                           height: 58,
                           width: double.infinity,
-                          margin: EdgeInsets.only(left: 15, right: 15, top: 6),
+                          margin: const EdgeInsets.only(
+                              left: 15, right: 15, top: 6),
                           decoration: BoxDecoration(
                               //color: bgTextField,
                               border: Border.all(color: lightGray2),
@@ -438,13 +447,13 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                   Icons.house,
                                   color: black.withOpacity(0.5),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
                                 Flexible(
                                   child: TextField(
                                     cursorColor: black.withOpacity(0.5),
-                                    style: TextStyle(fontSize: 15),
+                                    style: const TextStyle(fontSize: 15),
                                     cursorHeight: 20,
                                     controller: _noStreet,
                                     keyboardType: TextInputType.streetAddress,
@@ -475,7 +484,7 @@ class _addressDeliveryState extends State<AddressDelivery> {
                                 borderRadius: BorderRadius.circular(12)),
                             child: GestureDetector(
                                 onTap: saveAddress,
-                                child: Text("Xong",
+                                child: const Text("Xong",
                                     style: TextStyle(fontSize: 18))))
                       ]),
                 ),

@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_user.dart';
 
 class UserController extends GetxController {
   var isLoading = true.obs;
-  var user = new User().obs;
+  var user = User().obs;
 
   @override
   void onInit() {

@@ -11,7 +11,7 @@ class RemoteServices {
     var response = await ApiService.instance().get(url);
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      print(jsonString);
+      //print(jsonString);
       return rewardFromJson(jsonString);
     } else {
       //show error message

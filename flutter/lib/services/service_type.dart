@@ -1,4 +1,3 @@
-import 'package:http/http.dart' as http;
 import 'package:at_coffee/models/type.dart';
 import 'package:at_coffee/constant/api_constants.dart';
 import 'package:at_coffee/common/utils_common/api_service.dart';

@@ -10,7 +10,7 @@ class RemoteServices {
         Uri.parse(ApiConstants.HOST + ApiConstants.GET_RATE_BY_PRODUCT(id)));
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      print(response.body);
+      //(response.body);
       return rateFromJson(jsonString);
     } else {
       //show error message

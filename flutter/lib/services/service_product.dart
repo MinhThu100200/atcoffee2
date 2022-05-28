@@ -41,7 +41,7 @@ class RemoteServices {
     if (response.statusCode == 200) {
       var jsonString = response.body;
 
-      print(response.body);
+      //print(response.body);
       return storeFromJsonNotPage(jsonString);
     } else {
       //show error message

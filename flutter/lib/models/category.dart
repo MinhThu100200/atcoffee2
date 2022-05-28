@@ -3,8 +3,6 @@
 //     final product = productFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 List<Category> categoryFromJson(String str) =>
     List<Category>.from(json.decode(str).map((x) => Category.fromJson(x)));

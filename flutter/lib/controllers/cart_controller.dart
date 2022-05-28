@@ -1,6 +1,5 @@
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
-import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/cart.dart';
 import 'package:at_coffee/services/service_cart.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
@@ -9,9 +8,9 @@ import 'package:get/get.dart';
 
 class CartController extends GetxController {
   var isLoading = true.obs;
-  var cartsList = new List<Cart>().obs;
-  var promotion = new Promotion().obs;
-  var reward = new Reward().obs;
+  var cartsList = <Cart>[].obs;
+  var promotion = Promotion().obs;
+  var reward = Reward().obs;
   // khi nhấn "Thêm" tại giỏ hàng
   var isAdd = false.obs;
   // 0 - Mang đi; 1 - Giao tận nơi
@@ -131,7 +130,7 @@ class CartController extends GetxController {
   Future<bool> deleteCartPayment() async {
     try {
       isLoading.value = true;
-      List<int> ids = new List<int>();
+      List<int> ids = <int>[];
       for (var cart in cartsList) {
         if (cart.state == true) {
           ids.add(cart.id);

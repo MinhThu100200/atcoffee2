@@ -1,11 +1,8 @@
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/models/bill_detail.dart';
-import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:at_coffee/models/product.dart';
-import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 
 class ItemOrderDetail extends StatefulWidget {
@@ -60,46 +57,41 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                       child: Column(
                         children: [
                           Container(
-                            //flex: 1,
-                            child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    "${_billDetail.quantity} x ${productController.allProducts.where((item) => item.id == _billDetail.productId).toList()[0].name}",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white))),
-                          ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                  "${_billDetail.quantity} x ${productController.allProducts.where((item) => item.id == _billDetail.productId).toList()[0].name}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white))),
                           const SizedBox(
                             height: 6,
                           ),
-                          Container(
-                            child: Row(children: [
-                              _billDetail.discount > 0
-                                  ? Text(
-                                      oCcy
-                                          .format(_billDetail.price *
-                                              _billDetail.quantity)
-                                          .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: black,
-                                          decoration:
-                                              TextDecoration.lineThrough))
-                                  : Container(child: Text("")),
-                              Text(
-                                  " " +
-                                      oCcy
-                                          .format(_billDetail.amount)
-                                          .toString(),
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: lightYellow)),
-                            ]),
-                          ),
-                          SizedBox(
+                          Row(children: [
+                            _billDetail.discount > 0
+                                ? Text(
+                                    oCcy
+                                        .format(_billDetail.price *
+                                            _billDetail.quantity)
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: black,
+                                        decoration:
+                                            TextDecoration.lineThrough))
+                                : Text(""),
+                            Text(
+                                " " +
+                                    oCcy
+                                        .format(_billDetail.amount)
+                                        .toString(),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: lightYellow)),
+                          ]),
+                          const SizedBox(
                             height: 6,
                           ),
                           Container(
@@ -109,7 +101,7 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                                 "Chú thích: ${_billDetail.description == null || _billDetail.description == "" ? "Không có" : _billDetail.description}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
                                     color: white1)),
@@ -125,36 +117,35 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                       color: lightYellow,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Container(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                              productController.allProducts
-                                  .where((item) =>
-                                      item.id == _billDetail.productId)
-                                  .toList()[0]
-                                  .image,
-                              fit: BoxFit.contain, errorBuilder:
-                                  (BuildContext context, Object exception,
-                                      StackTrace stackTrace) {
-                            return const Text('😢');
-                          }, loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
-                                ),
-                              );
-                          })),
-                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                            productController.allProducts
+                                .where((item) =>
+                                    item.id == _billDetail.productId)
+                                .toList()[0]
+                                .image,
+                            fit: BoxFit.contain, errorBuilder:
+                                (BuildContext context, Object exception,
+                                    StackTrace stackTrace) {
+                          return const Text('😢');
+                        }, loadingBuilder: (BuildContext context,
+                                Widget child,
+                                ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          }
+                        })),
                   ),
                 ],
               )),

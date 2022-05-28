@@ -17,7 +17,7 @@ class FireBaseService {
       final data = event.snapshot.value;
       Map<Object, Object> mydata = data;
       mydata.forEach((key, values) {
-        print(values);
+        //print(values);
         bills.add(Bill.fromDocumentSnapshot(values));
       });
       //print("my data");

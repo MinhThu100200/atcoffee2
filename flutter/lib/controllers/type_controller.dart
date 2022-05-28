@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_type.dart';
 
 class TypeController extends GetxController {
   var isLoading = true.obs;
-  var typesList = List<Type>().obs;
+  var typesList = <Type>[].obs;
 
   @override
   void onInit() {

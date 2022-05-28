@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_promotion.dart';
 
 class PromotionController extends GetxController {
   var isLoading = true.obs;
-  var promotionsList = List<Promotion>().obs;
+  var promotionsList = <Promotion>[].obs;
 
   @override
   void onInit() {

@@ -11,8 +11,8 @@ class RemoteServices {
     var response = await client.get(Uri.parse(ApiConstants.GET_ADRRESS(3)));
     if (response.statusCode == 200) {
       var jsonString = response.bodyBytes;
-      print("my address in here");
-      print(response.body);
+      //print("my address in here");
+      //print(response.body);
       return cityFromJson(jsonString);
     } else {
       //show error message
@@ -24,8 +24,8 @@ class RemoteServices {
     var response = await client.get(Uri.parse(ApiConstants.GET_ADRRESS(1)));
     if (response.statusCode == 200) {
       var jsonString = response.bodyBytes;
-      print("my city in here");
-      print(response.body);
+      //print("my city in here");
+      //print(response.body);
       return cityFromJson(jsonString);
     } else {
       //show error message
@@ -37,8 +37,8 @@ class RemoteServices {
     var response = await client.get(Uri.parse(ApiConstants.GET_ADRRESS(2)));
     if (response.statusCode == 200) {
       var jsonString = response.bodyBytes;
-      print("my distrcit in here");
-      print(response.body);
+      //print("my distrcit in here");
+      //print(response.body);
       return districtFromJson(jsonString);
     } else {
       //show error message
@@ -50,8 +50,8 @@ class RemoteServices {
     var response = await client.get(Uri.parse(ApiConstants.GET_ADRRESS(3)));
     if (response.statusCode == 200) {
       var jsonString = response.bodyBytes;
-      print("my ward in here");
-      print(response.body);
+      //print("my ward in here");
+      //print(response.body);
       return wardFromJson(jsonString);
     } else {
       //show error message

@@ -6,7 +6,7 @@ import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgetPassword extends StatefulWidget {
-  ForgetPassword({Key key}) : super(key: key);
+  const ForgetPassword({Key key}) : super(key: key);
 
   _ForgetPassword createState() => _ForgetPassword();
 }
@@ -14,7 +14,7 @@ class ForgetPassword extends StatefulWidget {
 class _ForgetPassword extends State<ForgetPassword> {
   final UserController userController = Get.put(UserController());
 
-  final _email = new TextEditingController();
+  final _email = TextEditingController();
   bool _validateEmail = false;
   String _msgValidateEmail = '';
   bool _isSending = false;
@@ -44,69 +44,66 @@ class _ForgetPassword extends State<ForgetPassword> {
                   padding: const EdgeInsets.all(30),
                   child: Column(
                     children: [
-                      Container(
-                        // height: (size.height - 30) * 0.5,
-                        child: Column(
-                          children: [
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    height: 150,
-                                    child: Image.asset(
-                                      "assets/images/logo.png",
-                                      fit: BoxFit.cover,
-                                    ),
+                      Column(
+                        children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 150,
+                                  height: 150,
+                                  child: Image.asset(
+                                    "assets/images/logo.png",
+                                    fit: BoxFit.cover,
                                   ),
-                                ]),
-                            Container(
-                              height: 70,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: bgTextField,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.email,
-                                      color: black.withOpacity(0.5),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Flexible(
-                                      child: TextField(
-                                        cursorColor: black.withOpacity(0.5),
-                                        style: const TextStyle(fontSize: 15),
-                                        cursorHeight: 20,
-                                        controller: _email,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          labelText: 'Nhập email',
-                                          labelStyle: const TextStyle(
-                                              color: Colors.black),
-                                          hintText: "Email",
-                                          border: InputBorder.none,
-                                          errorText: _validateEmail
-                                              ? _msgValidateEmail
-                                              : null,
-                                        ),
-                                      ),
-                                    )
-                                  ],
                                 ),
+                              ]),
+                          Container(
+                            height: 70,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: bgTextField,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.email,
+                                    color: black.withOpacity(0.5),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Flexible(
+                                    child: TextField(
+                                      cursorColor: black.withOpacity(0.5),
+                                      style: const TextStyle(fontSize: 15),
+                                      cursorHeight: 20,
+                                      controller: _email,
+                                      keyboardType:
+                                          TextInputType.emailAddress,
+                                      decoration: InputDecoration(
+                                        labelText: 'Nhập email',
+                                        labelStyle: const TextStyle(
+                                            color: Colors.black),
+                                        hintText: "Email",
+                                        border: InputBorder.none,
+                                        errorText: _validateEmail
+                                            ? _msgValidateEmail
+                                            : null,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -121,8 +118,8 @@ class _ForgetPassword extends State<ForgetPassword> {
                                   borderRadius: BorderRadius.circular(30)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
+                                children: const [
+                                  Text(
                                     "Reset mật khẩu",
                                     style: TextStyle(
                                         fontSize: 16,
@@ -144,7 +141,7 @@ class _ForgetPassword extends State<ForgetPassword> {
                   width: size.width,
                   height: size.height - 86.0,
                   color: Colors.grey.withOpacity(0.3),
-                  child: Center(child: CircularProgressIndicator()),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
               ),
             ]
@@ -180,7 +177,7 @@ class _ForgetPassword extends State<ForgetPassword> {
             backgroundColor: primary,
             textColor: Colors.white,
             fontSize: 16.0);
-        Get.off(() => LoginPage());
+        Get.off(() => const LoginPage());
       } else {
         setState(() {
           _validateEmail = true;

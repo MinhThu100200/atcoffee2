@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:at_coffee/models/product.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 List<Cart> cartFromJson(String str) =>
     List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));

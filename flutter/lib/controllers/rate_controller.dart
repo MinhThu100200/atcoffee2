@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_rate.dart';
 
 class RateController extends GetxController {
   var isLoading = true.obs;
-  var ratesList = List<Rate>().obs;
+  var ratesList = <Rate>[].obs;
 
   @override
   void onInit() {

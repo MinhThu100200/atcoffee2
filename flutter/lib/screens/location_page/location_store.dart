@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart'
-    show Placemark, placemarkFromCoordinates;
-import 'package:location/location.dart';
 import 'package:at_coffee/common/utils_common/utils_common.dart';
 
 class LocationStore extends StatefulWidget {
+  const LocationStore({Key key}) : super(key: key);
+
   @override
-  _locationStoreState createState() => _locationStoreState();
+  _LocationStoreState createState() => _LocationStoreState();
 }
 
-class _locationStoreState extends State<LocationStore> {
+class _LocationStoreState extends State<LocationStore> {
   List<String> listTab = ["Gần đây", "Tất cả"];
 
   int selectedTab = 0;
@@ -25,17 +22,6 @@ class _locationStoreState extends State<LocationStore> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // storeController.getStoreListNearYou();
-    // storeController.getAddress();
-    //WidgetsBinding.instance?.addPostFrameCallback((_) {
-    // _getLocationData().then((value) => setState(() {
-    //       currentLocation = value;
-    //     }));
-    //storeController.getStoreListNearYou();
-    //storeController.getAddress();
-    // productController.fetchProductsByCategory(codeCategory[0]);
-    print("Build Completed");
-    //});
   }
 
   void setStateValue(value) {
@@ -60,36 +46,35 @@ class _locationStoreState extends State<LocationStore> {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                Container(
-                    child: SizedBox(
+                SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                    Positioned(
-                      child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text("Cửa hàng",
-                              style: TextStyle(
-                                  color: white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                        ),
+                Positioned(
+                  child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
-                    )
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                ),
+                Positioned(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: const Text("Cửa hàng",
+                          style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                )
                   ]),
-                )),
-                SizedBox(
+                ),
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
@@ -127,7 +112,7 @@ class _locationStoreState extends State<LocationStore> {
                                                 ? primary
                                                 : gray,
                                             fontWeight: FontWeight.w600)),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Container(
                                         height: 3,
                                         width: 80,
@@ -142,9 +127,9 @@ class _locationStoreState extends State<LocationStore> {
                           var data = selectedTab != 0
                               ? storeController.storesList.value
                               : storeController.storeListNearYou.value;
-                          if (storeController.isLoading.value)
-                            return Center(child: CircularProgressIndicator());
-                          else
+                          if (storeController.isLoading.value) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else {
                             return Container(
                               //color: Colors.white,
                               margin:
@@ -197,22 +182,20 @@ class _locationStoreState extends State<LocationStore> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Container(
-                                                      child: Text(
-                                                          storeController
-                                                              .storesList[index]
-                                                              .name,
-                                                          style: TextStyle(
-                                                              fontSize: 11,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: gray)),
-                                                    ),
-                                                    SizedBox(
+                                                    Text(
+                                                        storeController
+                                                            .storesList[index]
+                                                            .name,
+                                                        style: const TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700,
+                                                            color: gray)),
+                                                    const SizedBox(
                                                       height: 3,
                                                     ),
-                                                    Container(
+                                                    SizedBox(
                                                         width:
                                                             size.width - 130.0,
                                                         child: Row(
@@ -221,42 +204,41 @@ class _locationStoreState extends State<LocationStore> {
                                                               child: Text(
                                                                   data[index]
                                                                       .address,
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontSize:
                                                                           12)),
                                                             )
                                                           ],
                                                         )),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 12,
                                                     ),
-                                                    Container(
-                                                      child: Text(
-                                                          "Cách khoảng đây " +
-                                                              UtilsCommon.getAddress(
-                                                                      data[index]
-                                                                          .latitude,
-                                                                      data[index]
-                                                                          .longitude,
-                                                                      storeController
-                                                                          .latitude
-                                                                          .value,
-                                                                      storeController
-                                                                          .longitude
-                                                                          .value)
-                                                                  .round()
-                                                                  .toString() +
-                                                              "km",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: gray)),
-                                                    )
+                                                    Text(
+                                                        "Cách khoảng đây " +
+                                                            UtilsCommon.getAddress(
+                                                                    data[index]
+                                                                        .latitude,
+                                                                    data[index]
+                                                                        .longitude,
+                                                                    storeController
+                                                                        .latitude
+                                                                        .value,
+                                                                    storeController
+                                                                        .longitude
+                                                                        .value)
+                                                                .round()
+                                                                .toString() +
+                                                            "km",
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            color: gray))
                                                   ]))
                                         ]),
                                       ),
                                     );
                                   }),
                             );
+                          }
                         })
                       ]),
                 ),

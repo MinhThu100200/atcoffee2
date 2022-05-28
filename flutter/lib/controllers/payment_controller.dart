@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_payment.dart';
 
 class PaymentController extends GetxController {
   var isLoading = true.obs;
-  var paymentsList = new List<Payment>().obs;
+  var paymentsList = <Payment>[].obs;
 
   @override
   void onInit() {

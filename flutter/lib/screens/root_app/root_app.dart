@@ -35,7 +35,6 @@ class _RootAppState extends State<RootApp> {
   final PaymentController paymentController = Get.put(PaymentController());
 
   int pageIndex = 0;
-  String _nameRoute;
 
   void getIndex(nameRoute) {
     switch (widget.nameRoute) {
@@ -84,14 +83,14 @@ class _RootAppState extends State<RootApp> {
       children: [
         //ProductsPage(),
         HomePage(),
-        RewardPage(),
+        const RewardPage(),
         LocationPage(),
         // CartPage(),
         // Center(
         //   child: Text("Notification Page"),
         // ),
-        NotificationPage(),
-        ProfilePage(),
+        const NotificationPage(),
+        const ProfilePage(),
         // Center(
         //   child: Text("Personal Page"),
         // ),

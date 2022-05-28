@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/constant/api_constants.dart';
-import 'package:at_coffee/constant/variable_constants.dart';
 import 'dart:convert';
 import 'package:at_coffee/common/utils_common/api_service.dart';
 
@@ -34,7 +33,7 @@ class RemoteServices {
       await setToken(json.decode(jsonString)["jwt"]);
       return User.fromJson(json.decode(jsonString)["user"]);
     } else {
-      print('authUser: error');
+      //print('authUser: error');
       return null;
     }
   }
@@ -46,13 +45,13 @@ class RemoteServices {
       var jsonString = response.body;
       return User.fromJson(json.decode(jsonString));
     } else {
-      print('authUserByToken: error');
+      //print('authUserByToken: error');
       return null;
     }
   }
 
   static Future<User> updateUser(User user) async {
-    var map = new Map<String, dynamic>();
+    var map = <String, dynamic>{};
     map["user"] = jsonEncode(user.toJson());
     String url = ApiConstants.HOST + ApiConstants.UPDATE_USER;
     var response = await ApiService.instance().putForm(url, map);
@@ -61,7 +60,7 @@ class RemoteServices {
       var jsonString = response.body;
       return User.fromJson(json.decode(jsonString));
     } else {
-      print('updateUser: error');
+      //print('updateUser: error');
       return null;
     }
   }
@@ -75,11 +74,11 @@ class RemoteServices {
       if (response.statusCode == 200) {
         return response.body;
       } else {
-        print(response.statusCode);
+        //print(response.statusCode);
         validateMsg = 'Đã có lỗi xảy ra';
       }
     } catch (e) {
-      print('validateSignUp: error');
+      //print('validateSignUp: error');
       validateMsg = 'Đã có lỗi xảy ra';
     }
     return validateMsg;
@@ -90,7 +89,7 @@ class RemoteServices {
       user.image =
           'https://res.cloudinary.com/tranan2509/image/upload/v1638879521/c5dblrhvi0yewfzs6blj.jpg';
       String url = ApiConstants.HOST + ApiConstants.SIGN_UP;
-      var map = new Map<String, dynamic>();
+      var map = <String, dynamic>{};
       map["user"] = jsonEncode(user.toJson());
       var response = await ApiService.instance().postForm(url, map);
 
@@ -132,12 +131,13 @@ class RemoteServices {
       });
       var response = await ApiService.instance().put(url, body);
       if (response.statusCode == 200) {
-        print(response.body);
+        //print(response.body);
         if (json.decode(response.body) != null) {
           return true;
         }
         return false;
       }
+      return false;
     } catch (e) {
       return false;
     }

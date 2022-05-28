@@ -2,17 +2,10 @@ import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
-import 'package:at_coffee/screens/location_page/address_delivery.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
-import 'package:at_coffee/screens/reward_page/reward_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:location/location.dart';
-import 'package:geocoding/geocoding.dart'
-    show Placemark, placemarkFromCoordinates;
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
@@ -23,11 +16,13 @@ import '../products_page/products_page.dart';
 import '../root_app/root_app.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
+
   @override
-  _homePageState createState() => _homePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _homePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
   final ProductController productController = Get.put(ProductController());
@@ -47,7 +42,7 @@ class _homePageState extends State<HomePage> {
       addressController.fetchDistrictByCity();
       cartController.fetchCartsByCustomerId(
           userController.user.value.id); //addressController.fetchAddress();
-      print("Build Completed:" + userController.user.value.id.toString());
+      //print("Build Completed:" + userController.user.value.id.toString());
     });
   }
 
@@ -66,8 +61,7 @@ class _homePageState extends State<HomePage> {
                 color: primary,
                 child: Column(
                   children: [
-                    Container(
-                        child: SizedBox(
+                    SizedBox(
                       width: size.width,
                       child: Stack(alignment: Alignment.centerLeft, children: [
                         Positioned(
@@ -89,7 +83,7 @@ class _homePageState extends State<HomePage> {
                           ),
                         )
                       ]),
-                    )),
+                    ),
                     Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.only(top: 12),
@@ -127,7 +121,7 @@ class _homePageState extends State<HomePage> {
                                             BorderRadius.circular(20)),
                                     child: Row(
                                       children: [
-                                        Container(
+                                        SizedBox(
                                             height: 90,
                                             child: Stack(
                                               children: [
@@ -168,7 +162,7 @@ class _homePageState extends State<HomePage> {
                                             )),
                                         GestureDetector(
                                           onTap: () => Get.to(() =>
-                                              new RootApp(nameRoute: 'reward')),
+                                              RootApp(nameRoute: 'reward')),
                                           child: Container(
                                             width: size.width - 130,
                                             decoration: BoxDecoration(
@@ -229,8 +223,8 @@ class _homePageState extends State<HomePage> {
                             Row(
                               children: [
                                 Container(
-                                    padding: EdgeInsets.all(20),
-                                    child: Text("Đặt hàng online",
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text("Đặt hàng online",
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w800))),
@@ -248,7 +242,7 @@ class _homePageState extends State<HomePage> {
                                           color: lightGreen2,
                                           borderRadius:
                                               BorderRadius.circular(20)),
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                         left: 20,
                                       ),
                                       //padding: const EdgeInsets.only(bottom: 5),
@@ -267,9 +261,11 @@ class _homePageState extends State<HomePage> {
                                             Row(
                                               children: [
                                                 Container(
-                                                    padding: EdgeInsets.only(
-                                                        top: 6, left: 8),
-                                                    child: Text("Delivery",
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 6, left: 8),
+                                                    child: const Text(
+                                                        "Delivery",
                                                         style: TextStyle(
                                                             color: primary,
                                                             fontSize: 16,
@@ -279,9 +275,9 @@ class _homePageState extends State<HomePage> {
                                               ],
                                             ),
                                             Container(
-                                              padding: EdgeInsets.only(
+                                              padding: const EdgeInsets.only(
                                                   top: 5, left: 8, right: 5),
-                                              child: Text(
+                                              child: const Text(
                                                   "Giao hàng tận nơi đến địa chỉ của bạn",
                                                   maxLines: 2,
                                                   style: TextStyle(
@@ -303,7 +299,7 @@ class _homePageState extends State<HomePage> {
                                           color: lightGreen2,
                                           borderRadius:
                                               BorderRadius.circular(20)),
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                         left: 20,
                                       ),
                                       child: Padding(
@@ -311,7 +307,7 @@ class _homePageState extends State<HomePage> {
                                             const EdgeInsets.only(bottom: 8.0),
                                         child: Column(
                                           children: [
-                                            Container(
+                                            SizedBox(
                                               height: 80,
                                               child: Image.asset(
                                                   'assets/images/strawberry-background.png'),
@@ -319,9 +315,11 @@ class _homePageState extends State<HomePage> {
                                             Row(
                                               children: [
                                                 Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8),
-                                                    child: Text("Take away ",
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8),
+                                                    child: const Text(
+                                                        "Take away ",
                                                         style: TextStyle(
                                                             color: primary,
                                                             fontSize: 16,
@@ -331,9 +329,9 @@ class _homePageState extends State<HomePage> {
                                               ],
                                             ),
                                             Container(
-                                              padding: EdgeInsets.only(
+                                              padding: const EdgeInsets.only(
                                                   top: 5, left: 8, right: 5),
-                                              child: Text(
+                                              child: const Text(
                                                   "Đặt trước và nhận đồ tại cửa hàng bạn chọn",
                                                   maxLines: 2,
                                                   overflow:
@@ -352,31 +350,31 @@ class _homePageState extends State<HomePage> {
                             Row(
                               children: [
                                 Container(
-                                    padding: EdgeInsets.all(20),
-                                    child: Text("Gợi ý riêng của bạn",
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text("Gợi ý riêng của bạn",
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w800))),
                               ],
                             ),
                             Obx(() {
-                              if (productController.isLoading.value)
-                                return Center(
+                              if (productController.isLoading.value) {
+                                return const Center(
                                     child: CircularProgressIndicator());
-                              else
-                                return Container(
-                                  child: ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: productController
-                                          .productsSuggestion.length,
-                                      shrinkWrap: true,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return ProductItem(
-                                            product: productController
-                                                .productsSuggestion[index]);
-                                      }),
-                                );
+                              } else {
+                                return ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: productController
+                                        .productsSuggestion.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ProductItem(
+                                          product: productController
+                                              .productsSuggestion[index]);
+                                    });
+                              }
                             })
                           ]),
                     ),
@@ -387,7 +385,7 @@ class _homePageState extends State<HomePage> {
           ),
           //popup
 
-          PopUpAddress(),
+          const PopUpAddress(),
         ],
       ),
     );
@@ -405,15 +403,15 @@ class _homePageState extends State<HomePage> {
     return flg == true ? result : null;
   }
 
-  Future<void> _delivery() {
+  void _delivery() {
     storeController.setSeleted(0);
 
-    Get.to(() => ProductsPage());
+    Get.to(() => const ProductsPage());
   }
 
-  Future<void> _takeAway() {
+  void _takeAway() {
     storeController.setSeleted(1);
 
-    Get.to(() => ProductsPage());
+    Get.to(() => const ProductsPage());
   }
 }

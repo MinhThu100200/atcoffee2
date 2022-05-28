@@ -35,7 +35,7 @@ void main() async {
   //   sound: true,
   // );
 
-  runApp(MyApp());
+  runApp(const MyApp());
   configLoading();
 }
 
@@ -96,6 +96,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key key}) : super(key: key);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -155,12 +157,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void authUserByToken() async {
     User user = await userController.authUserByToken();
-    print(user);
+    //print(user);
     if (user != null) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => new RootApp(
+              builder: (context) => RootApp(
                     nameRoute: "home",
                   )));
       // Get.off(() => RootApp());
@@ -186,6 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void openOnBoard() {
-    Get.off(() => Onboarding());
+    Get.off(() => const Onboarding());
   }
 }

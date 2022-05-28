@@ -25,7 +25,7 @@ class _GetUserLocationState extends State<GetUserLocation> {
       appBar: AppBar(),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -35,8 +35,8 @@ class _GetUserLocationState extends State<GetUserLocation> {
               if (currentLocation != null) Text("Address: $address"),
               MaterialButton(
                 onPressed: _getLocation,
-                color: Color.fromARGB(255, 123, 2, 5),
-                child: Text(
+                color: const Color.fromARGB(255, 123, 2, 5),
+                child: const Text(
                   "Get Location",
                   style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                 ),
@@ -62,7 +62,7 @@ class _GetUserLocationState extends State<GetUserLocation> {
 }
 
 Future<LocationData> _getLocationData() async {
-  Location location = new Location();
+  Location location = Location();
   LocationData _locationData;
 
   bool _serviceEnabled;

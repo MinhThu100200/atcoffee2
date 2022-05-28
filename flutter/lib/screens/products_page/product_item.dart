@@ -2,7 +2,6 @@ import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/models/product.dart';
-import 'package:at_coffee/screens/order_page/order_page.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 
 class ProductItem extends StatefulWidget {
@@ -57,95 +56,86 @@ class _ProductItem extends State<ProductItem> {
                       child: Column(
                         children: [
                           Container(
-                            //flex: 1,
-                            child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(_product.name,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white))),
-                          ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(_product.name,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white))),
                           const SizedBox(
                             height: 3,
                           ),
-                          Container(
-                            //flex: 1,
-                            child: Row(
-                              children: [
-                                Text("Size: ",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: white1)),
-                                Text("S, M, L",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: lightYellow)),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Container(
-                            child: Row(children: [
-                              Text("Giá: ",
+                          Row(
+                            children: const [
+                              Text("Size: ",
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                       color: white1)),
-                              Text(
-                                  oCcy
-                                          .format(_product.sizes[0].price)
-                                          .toString() +
-                                      " - " +
-                                      oCcy
-                                          .format(_product.sizes[2].price)
-                                          .toString(),
-                                  style: const TextStyle(
+                              Text("S, M, L",
+                                  style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      color: lightYellow))
-                            ]),
+                                      color: lightYellow)),
+                            ],
                           ),
-                          SizedBox(
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          Row(children: [
+                            const Text("Giá: ",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: white1)),
+                            Text(
+                                oCcy
+                                        .format(_product.sizes[0].price)
+                                        .toString() +
+                                    " - " +
+                                    oCcy
+                                        .format(_product.sizes[2].price)
+                                        .toString(),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: lightYellow))
+                          ]),
+                          const SizedBox(
                             height: 4,
                           ),
-                          Container(
-                              child: Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(_product.rate.round().toString() + " ",
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.yellow)),
-                              Container(
-                                padding: const EdgeInsets.only(bottom: 5.0),
-                                child: Text(
-                                    "★★★★★".substring(
-                                          0,
-                                          _product.rate.round(),
-                                        ) +
-                                        "☆☆☆☆☆".substring(
-                                            _product.rate.round(), 5),
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.yellow)),
-                              ),
-                              Text(
-                                  "/ " +
-                                      _product.numberReviewers.toString() +
-                                      " đánh giá",
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.yellow)),
+                          Text(_product.rate.round().toString() + " ",
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.yellow)),
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 5.0),
+                            child: Text(
+                                "★★★★★".substring(
+                                      0,
+                                      _product.rate.round(),
+                                    ) +
+                                    "☆☆☆☆☆".substring(
+                                        _product.rate.round(), 5),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.yellow)),
+                          ),
+                          Text(
+                              "/ " +
+                                  _product.numberReviewers.toString() +
+                                  " đánh giá",
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.yellow)),
                             ],
-                          )),
+                          ),
                         ],
                       ),
                     ),
@@ -157,31 +147,30 @@ class _ProductItem extends State<ProductItem> {
                       color: lightYellow,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Container(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child:
-                              Image.network(_product.image, fit: BoxFit.contain,
-                                  errorBuilder: (BuildContext context,
-                                      Object exception, StackTrace stackTrace) {
-                            return const Text('😢');
-                          }, loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
-                                ),
-                              );
-                          })),
-                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child:
+                            Image.network(_product.image, fit: BoxFit.contain,
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace stackTrace) {
+                          return const Text('😢');
+                        }, loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          }
+                        })),
                   ),
                   Positioned(
                       right: 10,

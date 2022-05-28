@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:at_coffee/models/product.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 List<Payment> paymentFromJson(String str) =>
     List<Payment>.from(json.decode(str).map((x) => Payment.fromJson(x)));

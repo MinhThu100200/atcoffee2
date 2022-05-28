@@ -4,7 +4,7 @@ import 'package:at_coffee/services/service_category.dart';
 
 class CategoryController extends GetxController {
   var isLoading = true.obs;
-  var categoriesList = List<Category>().obs;
+  var categoriesList = <Category>[].obs;
 
   @override
   void onInit() {

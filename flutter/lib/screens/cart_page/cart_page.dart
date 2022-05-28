@@ -2,7 +2,6 @@ import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
-import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
@@ -25,12 +24,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart'
-    show Placemark, placemarkFromCoordinates;
-import 'package:location/location.dart';
 
 class CartPage extends StatefulWidget {
-  CartPage({Key key}) : super(key: key);
+  const CartPage({Key key}) : super(key: key);
 
   @override
   _CartPage createState() => _CartPage();
@@ -57,7 +53,6 @@ class _CartPage extends State<CartPage> {
 
   bool _isSaving = false;
   bool _isValidPromotion = true;
-  Store _store = new Store();
 
   @override
   void initState() {
@@ -164,473 +159,469 @@ class _CartPage extends State<CartPage> {
         if (cartController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return Container(
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            child: Column(
-                              children: [
-                                Card(
-                                  child: Container(
-                                    padding: const EdgeInsets.only(
-                                      left: 24.0,
-                                      right: 22.0,
-                                      top: 8.0,
-                                      bottom: 8.0,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 0.0, vertical: 8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Obx(() {
-                                                  return Text(
-                                                      wayTitle[storeController
-                                                          .selected.value],
-                                                      style: const TextStyle(
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.w600));
-                                                }),
-                                                GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10.0,
-                                                        vertical: 4.0),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                      color: primary
-                                                          .withOpacity(0.3),
-                                                    ),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        _showModelButtonSheet(
-                                                            context);
-                                                      },
-                                                      child: const Text(
-                                                          "Thay đổi",
-                                                          style: TextStyle(
-                                                              fontSize: 16.0,
-                                                              color: primary)),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                        Container(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
-                                            child: Row(
-                                              children: [
-                                                Flexible(
-                                                    child: Text(storeController
-                                                                .selected
-                                                                .value ==
-                                                            1
-                                                        ? storeController
-                                                            .storeNearYou
-                                                            .value
-                                                            .address
-                                                        : storeController
-                                                            .myAddress.value))
-                                              ],
-                                            )),
-                                      ],
-                                    ),
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          child: Column(
+                            children: [
+                              Card(
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                    left: 24.0,
+                                    right: 22.0,
+                                    top: 8.0,
+                                    bottom: 8.0,
                                   ),
-                                ),
-                                Card(
-                                  child: Column(children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 24.0,
-                                          right: 22.0,
-                                          top: 16.0,
-                                          bottom: 0.0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text("Các sản phẩm đã chọn",
-                                                style: TextStyle(
-                                                    fontSize: 20.0,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            // GestureDetector(
-                                            //   onTap: () {},
-                                            //   child: Container(
-                                            //     padding:
-                                            //         const EdgeInsets.symmetric(
-                                            //             horizontal: 10.0,
-                                            //             vertical: 4.0),
-                                            //     decoration: BoxDecoration(
-                                            //       borderRadius:
-                                            //           BorderRadius.circular(
-                                            //               10.0),
-                                            //       color:
-                                            //           primary.withOpacity(0.3),
-                                            //     ),
-                                            //     child: GestureDetector(
-                                            //       onTap: () {
-                                            //         Get.to(
-                                            //             () => ProductsPage());
-                                            //       },
-                                            //       child: const Text("+ Thêm",
-                                            //           style: TextStyle(
-                                            //               fontSize: 16.0,
-                                            //               color: primary)),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                          ]),
-                                    ),
-                                    if (cartController.cartsList.isEmpty ==
-                                        false) ...[
+                                  child: Column(
+                                    children: [
                                       Container(
-                                        child: ListView.builder(
-                                            primary: false,
-                                            itemCount:
-                                                cartController.cartsList.length,
-                                            shrinkWrap: true,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return CartItem(
-                                                  cart: cartController
-                                                      .cartsList[index]);
-                                            }),
-                                      ),
-                                    ] else ...[
-                                      Container(
-                                          alignment: Alignment.centerLeft,
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 24.0, vertical: 8.0),
-                                          child: const Text(
-                                              'Chưa có sản phẩm nào được chọn!',
-                                              style:
-                                                  TextStyle(fontSize: 16.0))),
-                                    ]
-                                  ]),
-                                ),
-                                Card(
-                                    child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 24.0, vertical: 8.0),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 0.0,
-                                                      vertical: 8.0),
-                                              alignment: Alignment.centerLeft,
-                                              child: const Text("Tổng cộng",
-                                                  style: TextStyle(
-                                                      fontSize: 20.0,
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                            ),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text('Thành tiền',
-                                                        style: TextStyle(
-                                                            fontSize: 16.0)),
-                                                    Text(
-                                                        oCcy.format(_calAmount(
-                                                                cartController
-                                                                    .cartsList)
-                                                            .toInt()),
-                                                        style: const TextStyle(
-                                                            fontSize: 16.0))
-                                                  ],
-                                                )),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 0.0),
-                                                child: const Divider()),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text('Giảm giá',
-                                                        style: TextStyle(
-                                                            fontSize: 16.0)),
-                                                    Text(
-                                                        oCcy.format(_calPromotion(
-                                                                cartController
-                                                                    .cartsList)
-                                                            .toInt()),
-                                                        style: const TextStyle(
-                                                            fontSize: 16.0))
-                                                  ],
-                                                )),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 0.0),
-                                                child: const Divider()),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(
-                                                    () => PromotionCartPage());
-                                              },
-                                              child: Container(
+                                              horizontal: 0.0, vertical: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                            children: [
+                                              Obx(() {
+                                                return Text(
+                                                    wayTitle[storeController
+                                                        .selected.value],
+                                                    style: const TextStyle(
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600));
+                                              }),
+                                              GestureDetector(
+                                                onTap: () {},
+                                                child: Container(
                                                   padding: const EdgeInsets
                                                           .symmetric(
-                                                      horizontal: 0.0,
-                                                      vertical: 8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                            _textSelectedPromotion(),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                                fontSize: 16.0,
-                                                                color: _isValidPromotion
-                                                                    ? lightBlue
-                                                                    : red)),
-                                                      ),
-                                                      const Icon(
-                                                        Icons
-                                                            .arrow_right_outlined,
-                                                        color: lightBlue,
-                                                      ),
-                                                    ],
-                                                  )),
-                                            ),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 0.0),
-                                                child: const Divider()),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text('Tổng tiền',
+                                                      horizontal: 10.0,
+                                                      vertical: 4.0),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    color: primary
+                                                        .withOpacity(0.3),
+                                                  ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      _showModelButtonSheet(
+                                                          context);
+                                                    },
+                                                    child: const Text(
+                                                        "Thay đổi",
                                                         style: TextStyle(
-                                                            fontSize: 16.0)),
-                                                    Text(
-                                                        oCcy.format(_calTotalAmount(
-                                                                cartController
-                                                                    .cartsList)
-                                                            .toInt()),
-                                                        style: const TextStyle(
-                                                            fontSize: 16.0))
-                                                  ],
-                                                )),
-                                            Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 0.0,
-                                                        vertical: 0.0),
-                                                child: const Divider()),
-                                          ],
-                                        ))),
-                                Card(
+                                                            fontSize: 16.0,
+                                                            color: primary)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                      Container(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                  child: Text(storeController
+                                                              .selected
+                                                              .value ==
+                                                          1
+                                                      ? storeController
+                                                          .storeNearYou
+                                                          .value
+                                                          .address
+                                                      : storeController
+                                                          .myAddress.value))
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Card(
+                                child: Column(children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 24.0,
+                                        right: 22.0,
+                                        top: 16.0,
+                                        bottom: 0.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: const [
+                                          Text("Các sản phẩm đã chọn",
+                                              style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight:
+                                                      FontWeight.w600)),
+                                          // GestureDetector(
+                                          //   onTap: () {},
+                                          //   child: Container(
+                                          //     padding:
+                                          //         const EdgeInsets.symmetric(
+                                          //             horizontal: 10.0,
+                                          //             vertical: 4.0),
+                                          //     decoration: BoxDecoration(
+                                          //       borderRadius:
+                                          //           BorderRadius.circular(
+                                          //               10.0),
+                                          //       color:
+                                          //           primary.withOpacity(0.3),
+                                          //     ),
+                                          //     child: GestureDetector(
+                                          //       onTap: () {
+                                          //         Get.to(
+                                          //             () => ProductsPage());
+                                          //       },
+                                          //       child: const Text("+ Thêm",
+                                          //           style: TextStyle(
+                                          //               fontSize: 16.0,
+                                          //               color: primary)),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ]),
+                                  ),
+                                  if (cartController.cartsList.isEmpty ==
+                                      false) ...[
+                                    ListView.builder(
+                                        primary: false,
+                                        itemCount:
+                                            cartController.cartsList.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          return CartItem(
+                                              cart: cartController
+                                                  .cartsList[index]);
+                                        }),
+                                  ] else ...[
+                                    Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24.0, vertical: 8.0),
+                                        child: const Text(
+                                            'Chưa có sản phẩm nào được chọn!',
+                                            style:
+                                                TextStyle(fontSize: 16.0))),
+                                  ]
+                                ]),
+                              ),
+                              Card(
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 24.0, vertical: 8.0),
                                       child: Column(
                                         children: [
                                           Container(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 0.0,
+                                                    vertical: 8.0),
+                                            alignment: Alignment.centerLeft,
+                                            child: const Text("Tổng cộng",
+                                                style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                          ),
+                                          Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 0.0,
-                                                      vertical: 4.0),
-                                              alignment: Alignment.centerLeft,
-                                              child: const Text("Thanh toán",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w600))),
+                                                      vertical: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text('Thành tiền',
+                                                      style: TextStyle(
+                                                          fontSize: 16.0)),
+                                                  Text(
+                                                      oCcy.format(_calAmount(
+                                                              cartController
+                                                                  .cartsList)
+                                                          .toInt()),
+                                                      style: const TextStyle(
+                                                          fontSize: 16.0))
+                                                ],
+                                              )),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 0.0, vertical: 2.0),
-                                            alignment: Alignment.centerLeft,
-                                            child: DropdownButton<String>(
-                                              value: _selectedPayment ?? '',
-                                              iconSize: 30.0,
-                                              onChanged: (newValue) {
-                                                WidgetsBinding.instance
-                                                    .addPostFrameCallback(
-                                                        (_) => setState(() {
-                                                              _selectedPayment =
-                                                                  newValue;
-                                                            }));
-                                              },
-                                              items: paymentController
-                                                  .paymentsList
-                                                  .map((Payment payment) {
-                                                return DropdownMenuItem<String>(
-                                                  value: payment.id.toString(),
-                                                  child: Container(
-                                                      width: size.width - 96,
-                                                      child: Text(payment.name,
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize:
-                                                                      16.0))),
-                                                );
-                                              }).toList(),
-                                            ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 0.0),
+                                              child: const Divider()),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text('Giảm giá',
+                                                      style: TextStyle(
+                                                          fontSize: 16.0)),
+                                                  Text(
+                                                      oCcy.format(_calPromotion(
+                                                              cartController
+                                                                  .cartsList)
+                                                          .toInt()),
+                                                      style: const TextStyle(
+                                                          fontSize: 16.0))
+                                                ],
+                                              )),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 0.0),
+                                              child: const Divider()),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(
+                                                  () => const PromotionCartPage());
+                                            },
+                                            child: Container(
+                                                padding: const EdgeInsets
+                                                        .symmetric(
+                                                    horizontal: 0.0,
+                                                    vertical: 8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                          _textSelectedPromotion(),
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              color: _isValidPromotion
+                                                                  ? lightBlue
+                                                                  : red)),
+                                                    ),
+                                                    const Icon(
+                                                      Icons
+                                                          .arrow_right_outlined,
+                                                      color: lightBlue,
+                                                    ),
+                                                  ],
+                                                )),
                                           ),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 0.0),
+                                              child: const Divider()),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text('Tổng tiền',
+                                                      style: TextStyle(
+                                                          fontSize: 16.0)),
+                                                  Text(
+                                                      oCcy.format(_calTotalAmount(
+                                                              cartController
+                                                                  .cartsList)
+                                                          .toInt()),
+                                                      style: const TextStyle(
+                                                          fontSize: 16.0))
+                                                ],
+                                              )),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 0.0),
+                                              child: const Divider()),
                                         ],
-                                      )),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    //cartController.isLoading.value = true;
-                                    deleteCartByUserId(
-                                        userController.user.value.id);
-                                    //cartController.isLoading.value = false;
-                                  },
-                                  child: Card(
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 24.0, vertical: 12.0),
-                                      child: Row(children: [
+                                      ))),
+                              Card(
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 8.0),
+                                    child: Column(
+                                      children: [
                                         Container(
-                                            padding: const EdgeInsets.only(
-                                                right: 12.0),
-                                            child: const Icon(
-                                                Icons.delete_outline,
-                                                color: red,
-                                                size: 18.0)),
-                                        const Text("Xóa giỏ hàng",
-                                            style: TextStyle(
-                                                color: red, fontSize: 16.0))
-                                      ]),
-                                    ),
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 0.0,
+                                                    vertical: 4.0),
+                                            alignment: Alignment.centerLeft,
+                                            child: const Text("Thanh toán",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.w600))),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 0.0, vertical: 2.0),
+                                          alignment: Alignment.centerLeft,
+                                          child: DropdownButton<String>(
+                                            value: _selectedPayment ?? '',
+                                            iconSize: 30.0,
+                                            onChanged: (newValue) {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback(
+                                                      (_) => setState(() {
+                                                            _selectedPayment =
+                                                                newValue;
+                                                          }));
+                                            },
+                                            items: paymentController
+                                                .paymentsList
+                                                .map((Payment payment) {
+                                              return DropdownMenuItem<String>(
+                                                value: payment.id.toString(),
+                                                child: SizedBox(
+                                                    width: size.width - 96,
+                                                    child: Text(payment.name,
+                                                        style:
+                                                            const TextStyle(
+                                                                fontSize:
+                                                                    16.0))),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  //cartController.isLoading.value = true;
+                                  deleteCartByUserId(
+                                      userController.user.value.id);
+                                  //cartController.isLoading.value = false;
+                                },
+                                child: Card(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
+                                    child: Row(children: [
+                                      Container(
+                                          padding: const EdgeInsets.only(
+                                              right: 12.0),
+                                          child: const Icon(
+                                              Icons.delete_outline,
+                                              color: red,
+                                              size: 18.0)),
+                                      const Text("Xóa giỏ hàng",
+                                          style: TextStyle(
+                                              color: red, fontSize: 16.0))
+                                    ]),
                                   ),
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (_isSaving == true) ...[
+                          Positioned(
+                            child: Container(
+                              width: size.width,
+                              height: size.height - 86.0,
+                              color: Colors.grey.withOpacity(0.3),
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
                             ),
                           ),
-                          if (_isSaving == true) ...[
-                            Positioned(
-                              child: Container(
-                                width: size.width,
-                                height: size.height - 86.0,
-                                color: Colors.grey.withOpacity(0.3),
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
-                              ),
-                            ),
-                          ]
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    color: primary,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0, vertical: 12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
-                              child: Text(
-                                  wayTitle[storeController.selected.value] +
-                                      ' - ' +
-                                      _calTotalQuantity(
-                                              cartController.cartsList)
-                                          .toString() +
-                                      ' sản phẩm',
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
-                              child: Text(
-                                  oCcy.format(
-                                      _calTotalAmount(cartController.cartsList)
-                                          .toInt()),
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                          ]),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              _paymentOrder();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 12.0),
-                              child: const Text('Đặt hàng',
-                                  style: TextStyle(
-                                      color: white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(purple),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side:
-                                            const BorderSide(color: purple)))))
+                        ]
                       ],
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+                Container(
+                  color: primary,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                                wayTitle[storeController.selected.value] +
+                                    ' - ' +
+                                    _calTotalQuantity(
+                                            cartController.cartsList)
+                                        .toString() +
+                                    ' sản phẩm',
+                                style: const TextStyle(
+                                    color: white,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                                oCcy.format(
+                                    _calTotalAmount(cartController.cartsList)
+                                        .toInt()),
+                                style: const TextStyle(
+                                    color: white,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ]),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            _paymentOrder();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 12.0),
+                            child: const Text('Đặt hàng',
+                                style: TextStyle(
+                                    color: white,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(purple),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(18.0),
+                                      side:
+                                          const BorderSide(color: purple)))))
+                    ],
+                  ),
+                )
+              ],
             ),
           );
         }
@@ -687,7 +678,7 @@ class _CartPage extends State<CartPage> {
     bill.customerName = userController.user.value.name;
 
     int count = 1;
-    bill.billDetails = List<BillDetail>();
+    bill.billDetails = <BillDetail>[];
     cartController.cartsList.where((c) => c.state == true).forEach((c) {
       double priceItem =
           c.product.sizes.firstWhere((element) => element.size == c.size).price;
@@ -728,8 +719,8 @@ class _CartPage extends State<CartPage> {
 
   void deleteCartByUserId(int userId) async {
     cartController.deleteCartByUserId(userId);
-    cartController.promotion.value = new Promotion();
-    cartController.reward.value = new Reward();
+    cartController.promotion.value = Promotion();
+    cartController.reward.value = Reward();
     cartController.type.value = 0;
   }
 
@@ -774,136 +765,130 @@ class _CartPage extends State<CartPage> {
                   width: size.width,
                   child: const SizedBox(height: 0.5),
                 ),
-                Container(
-                  //padding: const EdgeInsets.only(left: 10),
-                  child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: wayTitle.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          child: GestureDetector(
-                            onTap: () => storeController.setSeleted(index),
-                            child: Obx(
-                              () => Container(
-                                  color: storeController.selected.value == index
-                                      ? greenTransparent
-                                      : white,
-                                  padding: const EdgeInsets.only(
-                                      top: 10, left: 16, bottom: 10),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                          height: 50,
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                              color: lightGreen3,
-                                              borderRadius:
-                                                  BorderRadius.circular(25)),
+                ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: wayTitle.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () => storeController.setSeleted(index),
+                        child: Obx(
+                          () => Container(
+                              color: storeController.selected.value == index
+                                  ? greenTransparent
+                                  : white,
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 16, bottom: 10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          color: lightGreen3,
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: SizedBox(
+                                          height: 26,
+                                          width: 26,
+                                          child: Image.asset(
+                                              wayImage[index]))),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(wayTitle[index],
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight:
+                                                    FontWeight.w500)),
+                                        FittedBox(
                                           child: Container(
-                                              height: 26,
-                                              width: 26,
-                                              child: Image.asset(
-                                                  wayImage[index]))),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                                child: Text(wayTitle[index],
-                                                    style: const TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500))),
-                                            FittedBox(
-                                              child: Container(
-                                                width: size.width - 140,
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                // height: 50,
-                                                child: Text(
-                                                    wayTitle[index] ==
-                                                            "Giao tận nơi"
-                                                        ? storeController
-                                                            .myAddress.value
-                                                        : "A&T Coffee, " +
-                                                            storeController
-                                                                .storeNearYou
-                                                                .value
-                                                                .address,
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                            ),
-                                            FittedBox(
-                                              child: Container(
-                                                width: size.width - 150,
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                // height: 50,
-                                                child: Text(
-                                                    wayTitle[index] ==
-                                                            "Giao tận nơi"
-                                                        ? userController.user
-                                                                .value.name +
-                                                            " " +
-                                                            userController.user
-                                                                .value.phone
-                                                        : "Cách đây khoảng " +
-                                                            storeController
-                                                                .storeMinDistance
-                                                                .toString() +
-                                                            "km",
-                                                    style: const TextStyle(
-                                                      // color: Colors.lightBlueAccent,
-                                                      fontSize: 13,
-
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                            ),
-                                          ],
+                                            width: size.width - 140,
+                                            padding: const EdgeInsets.only(
+                                                top: 5),
+                                            // height: 50,
+                                            child: Text(
+                                                wayTitle[index] ==
+                                                        "Giao tận nơi"
+                                                    ? storeController
+                                                        .myAddress.value
+                                                    : "A&T Coffee, " +
+                                                        storeController
+                                                            .storeNearYou
+                                                            .value
+                                                            .address,
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 13,
+                                                  fontWeight:
+                                                      FontWeight.w400,
+                                                ),
+                                                maxLines: 1,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                              color: primary,
-                                              borderRadius:
-                                                  BorderRadius.circular(14)),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                if (index == 1) {
-                                                  Get.to(() => LocationStore());
-                                                } else {
-                                                  Get.to(
-                                                      () => AddressDelivery());
-                                                }
-                                              },
-                                              child: const Text("Sửa"))),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                                        FittedBox(
+                                          child: Container(
+                                            width: size.width - 150,
+                                            padding: const EdgeInsets.only(
+                                                top: 5),
+                                            // height: 50,
+                                            child: Text(
+                                                wayTitle[index] ==
+                                                        "Giao tận nơi"
+                                                    ? userController.user
+                                                            .value.name +
+                                                        " " +
+                                                        userController.user
+                                                            .value.phone
+                                                    : "Cách đây khoảng " +
+                                                        storeController
+                                                            .storeMinDistance
+                                                            .toString() +
+                                                        "km",
+                                                style: const TextStyle(
+                                                  // color: Colors.lightBlueAccent,
+                                                  fontSize: 13,
+
+                                                  fontWeight:
+                                                      FontWeight.w400,
+                                                ),
+                                                maxLines: 1,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: primary,
+                                          borderRadius:
+                                              BorderRadius.circular(14)),
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            if (index == 1) {
+                                              Get.to(() => LocationStore());
+                                            } else {
+                                              Get.to(
+                                                  () => const AddressDelivery());
+                                            }
+                                          },
+                                          child: const Text("Sửa"))),
+                                ],
+                              )),
+                        ),
+                      );
+                    }),
               ],
             ));
       },
@@ -968,7 +953,7 @@ class _CartPage extends State<CartPage> {
 }
 
 class PromotionCartPage extends StatefulWidget {
-  PromotionCartPage({Key key}) : super(key: key);
+  const PromotionCartPage({Key key}) : super(key: key);
 
   @override
   _PromotionCartPage createState() => _PromotionCartPage();
@@ -1008,345 +993,324 @@ class _PromotionCartPage extends State<PromotionCartPage> {
           bottomOpacity: 0,
         ),
         body: SafeArea(
-            child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  child: Obx(() {
-                    if (promotionController.isLoading.value)
-                      return Center(child: CircularProgressIndicator());
-                    else
-                      return Container(
-                        child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount:
-                                promotionController.promotionsList.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return checkExpired(
-                                      promotionController.promotionsList[index])
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        if (_validPromotion(promotionController
-                                            .promotionsList[index])) {
-                                          _applyPromotion(promotionController
-                                              .promotionsList[index]);
-                                        }
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 15.0, vertical: 5.0),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Card(
-                                                  margin: const EdgeInsets.only(
-                                                      right: 1.0),
-                                                  child: Container(
-                                                    height: 90,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        15,
-                                                                    vertical:
-                                                                        15),
-                                                            child: Text(
-                                                                promotionController
-                                                                    .promotionsList[
-                                                                        index]
-                                                                    .description,
-                                                                maxLines: 4,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: _validPromotion(promotionController.promotionsList[
-                                                                            index])
-                                                                        ? black
-                                                                        : Colors
-                                                                            .grey[500]))),
-                                                        Expanded(
-                                                            child: Container(
-                                                                alignment: Alignment
-                                                                    .bottomLeft,
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            15,
-                                                                        right:
-                                                                            15.0,
-                                                                        bottom:
-                                                                            15),
-                                                                child: Text(
-                                                                    'Hết hạn ' +
-                                                                        new DateFormat('dd/MM/yyyy')
-                                                                            .format(DateTime.fromMillisecondsSinceEpoch((promotionController.promotionsList[index].endDate)
-                                                                                .toInt()))
-                                                                            .toString(),
-                                                                    style: TextStyle(
-                                                                        color: _validPromotion(promotionController.promotionsList[index])
-                                                                            ? black
-                                                                            : Colors.grey[500])))),
-                                                      ],
-                                                    ),
-                                                  )),
-                                            ),
-                                            Card(
-                                              margin: const EdgeInsets.only(
-                                                  left: 1.0),
-                                              child: Container(
-                                                  margin: const EdgeInsets.only(
-                                                      top: 10.0,
-                                                      bottom: 10.0,
-                                                      left: 10.0,
-                                                      right: 10.0),
-                                                  height: 70,
-                                                  width: 70,
-                                                  color: _validPromotion(
-                                                          promotionController
-                                                                  .promotionsList[
-                                                              index])
-                                                      ? lightYellow
-                                                      : Colors.grey[400],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Obx(() {
+                    if (promotionController.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              promotionController.promotionsList.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return checkExpired(
+                                    promotionController.promotionsList[index])
+                                ? GestureDetector(
+                                    onTap: () {
+                                      if (_validPromotion(promotionController
+                                          .promotionsList[index])) {
+                                        _applyPromotion(promotionController
+                                            .promotionsList[index]);
+                                      }
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 15.0, vertical: 5.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Card(
+                                                margin: const EdgeInsets.only(
+                                                    right: 1.0),
+                                                child: SizedBox(
+                                                  height: 90,
                                                   child: Column(
-                                                    children: [
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 4.0,
-                                                            vertical: 4.0),
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 2.0,
-                                                                vertical: 4.0),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      2.0),
-                                                          color: _validPromotion(
-                                                                  promotionController
-                                                                          .promotionsList[
-                                                                      index])
-                                                              ? Color(
-                                                                  0xffe5b06c)
-                                                              : Colors
-                                                                  .grey[500],
-                                                        ),
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .coffee_sharp,
-                                                                size: 10,
-                                                                color: black),
-                                                            Container(
-                                                              child: Text(
-                                                                  "A&T Coffee",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          9,
-                                                                      color:
-                                                                          white)),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        // padding:
-                                                        //     EdgeInsets.only(
-                                                        //         top: 5),
-                                                        child: Text(
-                                                            promotionController
-                                                                    .promotionsList[
-                                                                        index]
-                                                                    .discount
-                                                                    .toString() +
-                                                                "%",
-                                                            style: TextStyle(
-                                                                fontSize: 33,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                color: white)),
-                                                      )
-                                                    ],
-                                                  )),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Container();
-                            }),
-                      );
-                  }),
-                ),
-                Container(
-                  child: Obx(() {
-                    if (rewardController.isLoading.value)
-                      return Center(child: CircularProgressIndicator());
-                    else
-                      return Container(
-                        child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: rewardController.rewardsList.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (_validReward(
-                                      rewardController.rewardsList[index])) {
-                                    _applyReward(
-                                        rewardController.rewardsList[index]);
-                                  }
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 5.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Card(
-                                            margin: const EdgeInsets.only(
-                                                right: 1.0),
-                                            child: Container(
-                                              height: 90,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15,
-                                                              vertical: 15),
-                                                      child: Text(
-                                                          rewardController
-                                                              .rewardsList[
-                                                                  index]
-                                                              .name,
-                                                          maxLines: 4,
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              color: _validReward(
-                                                                      rewardController
-                                                                              .rewardsList[
-                                                                          index])
-                                                                  ? black
-                                                                  : Colors.grey[
-                                                                      500]))),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      Card(
-                                        margin:
-                                            const EdgeInsets.only(left: 1.0),
-                                        child: Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 10.0,
-                                                bottom: 10.0,
-                                                left: 10.0,
-                                                right: 10.0),
-                                            height: 70,
-                                            width: 70,
-                                            color: _validReward(rewardController
-                                                    .rewardsList[index])
-                                                ? lightYellow
-                                                : Colors.grey[400],
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 4.0,
-                                                      vertical: 4.0),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 2.0,
-                                                      vertical: 4.0),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2.0),
-                                                    color: _validReward(
-                                                            rewardController
-                                                                    .rewardsList[
-                                                                index])
-                                                        ? Color(0xffe5b06c)
-                                                        : Colors.grey[500],
-                                                  ),
-                                                  child: Row(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
-                                                            .center,
+                                                            .start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .start,
                                                     children: [
-                                                      Icon(Icons.coffee_sharp,
-                                                          size: 10,
-                                                          color: black),
                                                       Container(
-                                                        child: Text(
-                                                            "A&T Coffee",
-                                                            style: TextStyle(
-                                                                fontSize: 9,
-                                                                color: white)),
-                                                      ),
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      15,
+                                                                  vertical:
+                                                                      15),
+                                                          child: Text(
+                                                              promotionController
+                                                                  .promotionsList[
+                                                                      index]
+                                                                  .description,
+                                                              maxLines: 4,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      14,
+                                                                  color: _validPromotion(promotionController.promotionsList[
+                                                                          index])
+                                                                      ? black
+                                                                      : Colors
+                                                                          .grey[500]))),
+                                                      Expanded(
+                                                          child: Container(
+                                                              alignment: Alignment
+                                                                  .bottomLeft,
+                                                              padding: const EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          15,
+                                                                      right:
+                                                                          15.0,
+                                                                      bottom:
+                                                                          15),
+                                                              child: Text(
+                                                                  'Hết hạn ' +
+                                                                      DateFormat('dd/MM/yyyy')
+                                                                          .format(DateTime.fromMillisecondsSinceEpoch((promotionController.promotionsList[index].endDate)
+                                                                              .toInt()))
+                                                                          .toString(),
+                                                                  style: TextStyle(
+                                                                      color: _validPromotion(promotionController.promotionsList[index])
+                                                                          ? black
+                                                                          : Colors.grey[500])))),
                                                     ],
                                                   ),
-                                                ),
-                                                Container(
-                                                  // padding:
-                                                  //     EdgeInsets.only(top: 5),
-                                                  child: Text(
-                                                      (rewardController
-                                                                      .rewardsList[
-                                                                          index]
-                                                                      .redution ~/
-                                                                  1000)
-                                                              .toString() +
-                                                          'K',
-                                                      style: TextStyle(
-                                                          fontSize: 33,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: white)),
-                                                )
-                                              ],
-                                            )),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
+                                                )),
+                                          ),
+                                          Card(
+                                            margin: const EdgeInsets.only(
+                                                left: 1.0),
+                                            child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 10.0,
+                                                    bottom: 10.0,
+                                                    left: 10.0,
+                                                    right: 10.0),
+                                                height: 70,
+                                                width: 70,
+                                                color: _validPromotion(
+                                                        promotionController
+                                                                .promotionsList[
+                                                            index])
+                                                    ? lightYellow
+                                                    : Colors.grey[400],
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 4.0,
+                                                          vertical: 4.0),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                              horizontal: 2.0,
+                                                              vertical: 4.0),
+                                                      decoration:
+                                                          BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    2.0),
+                                                        color: _validPromotion(
+                                                                promotionController
+                                                                        .promotionsList[
+                                                                    index])
+                                                            ? const Color(
+                                                                0xffe5b06c)
+                                                            : Colors
+                                                                .grey[500],
+                                                      ),
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: const [
+                                                          Icon(
+                                                              Icons
+                                                                  .coffee_sharp,
+                                                              size: 10,
+                                                              color: black),
+                                                          Text(
+                                                              "A&T Coffee",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      9,
+                                                                  color:
+                                                                      white)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                        promotionController
+                                                                .promotionsList[
+                                                                    index]
+                                                                .discount
+                                                                .toString() +
+                                                            "%",
+                                                        style: const TextStyle(
+                                                            fontSize: 33,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700,
+                                                            color: white))
+                                                  ],
+                                                )),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container();
+                          });
+                    }
                   }),
-                )
-              ],
-            ),
-          ),
-        )));
+                  Obx(() {
+                    if (rewardController.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: rewardController.rewardsList.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (_validReward(
+                                    rewardController.rewardsList[index])) {
+                                  _applyReward(
+                                      rewardController.rewardsList[index]);
+                                }
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Card(
+                                          margin: const EdgeInsets.only(
+                                              right: 1.0),
+                                          child: SizedBox(
+                                            height: 90,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                            horizontal: 15,
+                                                            vertical: 15),
+                                                    child: Text(
+                                                        rewardController
+                                                            .rewardsList[
+                                                                index]
+                                                            .name,
+                                                        maxLines: 4,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: _validReward(
+                                                                    rewardController
+                                                                            .rewardsList[
+                                                                        index])
+                                                                ? black
+                                                                : Colors.grey[
+                                                                    500]))),
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                    Card(
+                                      margin:
+                                          const EdgeInsets.only(left: 1.0),
+                                      child: Container(
+                                          margin: const EdgeInsets.only(
+                                              top: 10.0,
+                                              bottom: 10.0,
+                                              left: 10.0,
+                                              right: 10.0),
+                                          height: 70,
+                                          width: 70,
+                                          color: _validReward(rewardController
+                                                  .rewardsList[index])
+                                              ? lightYellow
+                                              : Colors.grey[400],
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets
+                                                        .symmetric(
+                                                    horizontal: 4.0,
+                                                    vertical: 4.0),
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 2.0,
+                                                    vertical: 4.0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.0),
+                                                  color: _validReward(
+                                                          rewardController
+                                                                  .rewardsList[
+                                                              index])
+                                                      ? const Color(0xffe5b06c)
+                                                      : Colors.grey[500],
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center,
+                                                  children: const [
+                                                    Icon(Icons.coffee_sharp,
+                                                        size: 10,
+                                                        color: black),
+                                                    Text(
+                                                        "A&T Coffee",
+                                                        style: TextStyle(
+                                                            fontSize: 9,
+                                                            color: white)),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text(
+                                                  (rewardController
+                                                                  .rewardsList[
+                                                                      index]
+                                                                  .redution ~/
+                                                              1000)
+                                                          .toString() +
+                                                      'K',
+                                                  style: const TextStyle(
+                                                      fontSize: 33,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: white))
+                                            ],
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    }
+                  })
+                ],
+              ),
+            )));
   }
 
   bool checkExpired(item) {
@@ -1393,8 +1357,8 @@ class _PromotionCartPage extends State<PromotionCartPage> {
   }
 
   void _cancelApply() {
-    cartController.promotion.value = new Promotion();
-    cartController.reward.value = new Reward();
+    cartController.promotion.value = Promotion();
+    cartController.reward.value = Reward();
     cartController.type.value = 0;
     Navigator.pop(context);
   }

@@ -3,7 +3,6 @@
 //     final product = productFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:get/get.dart';
 
 List<Reward> rewardFromJson(String str) {
   return List<Reward>.from(json.decode(str).map((x) => Reward.fromJson(x)));

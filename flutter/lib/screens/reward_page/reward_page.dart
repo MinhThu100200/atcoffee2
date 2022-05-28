@@ -1,8 +1,6 @@
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:ticketview/ticketview.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -12,15 +10,15 @@ import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 
 class RewardPage extends StatefulWidget {
-  RewardPage({Key key}) : super(key: key);
+  const RewardPage({Key key}) : super(key: key);
 
   @override
   _RewardPage createState() => _RewardPage();
 }
 
 class _RewardPage extends State<RewardPage> {
-  RewardController rewardController = Get.put(new RewardController());
-  PromotionController promotionController = Get.put(new PromotionController());
+  RewardController rewardController = Get.put(RewardController());
+  PromotionController promotionController = Get.put(PromotionController());
   final UserController userController = Get.put(UserController());
   final TypeController typeController = Get.put(TypeController());
 
@@ -33,10 +31,9 @@ class _RewardPage extends State<RewardPage> {
           color: primary,
           child: SafeArea(
               child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             child: Column(children: [
-              Container(
-                  child: SizedBox(
+              SizedBox(
                 width: size.width,
                 child: Stack(alignment: Alignment.centerLeft, children: [
                   // Positioned(
@@ -64,7 +61,7 @@ class _RewardPage extends State<RewardPage> {
                     ),
                   )
                 ]),
-              )),
+              ),
               const SizedBox(
                 height: 30,
               ),
@@ -107,189 +104,176 @@ class _RewardPage extends State<RewardPage> {
                       ],
                     ),
                     Obx(() {
-                      if (promotionController.isLoading.value)
-                        return Center(child: CircularProgressIndicator());
-                      else
-                        return Container(
-                          child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  promotionController.promotionsList.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return checkExpired(promotionController
-                                        .promotionsList[index])
-                                    ? GestureDetector(
-                                        onTap: () {},
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 15.0, vertical: 5.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Card(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            right: 1.0),
-                                                    child: Container(
-                                                      height: 90,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          15,
-                                                                      vertical:
-                                                                          15),
-                                                              child: Text(
-                                                                  promotionController
-                                                                      .promotionsList[
-                                                                          index]
-                                                                      .description,
-                                                                  maxLines: 4,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          14,
-                                                                      color: _validPromotion(promotionController.promotionsList[
-                                                                              index])
-                                                                          ? black
-                                                                          : Colors
-                                                                              .grey[500]))),
-                                                          Expanded(
-                                                              child: Container(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .bottomLeft,
-                                                                  padding: EdgeInsets.only(
-                                                                      left: 15,
-                                                                      right:
-                                                                          15.0,
-                                                                      bottom:
-                                                                          15),
-                                                                  child: Text(
-                                                                      'Hết hạn ' +
-                                                                          new DateFormat('dd/MM/yyyy')
-                                                                              .format(DateTime.fromMillisecondsSinceEpoch((promotionController.promotionsList[index].endDate)
-                                                                                  .toInt()))
-                                                                              .toString(),
-                                                                      style: TextStyle(
-                                                                          color: _validPromotion(promotionController.promotionsList[index])
-                                                                              ? black
-                                                                              : Colors.grey[500])))),
-                                                        ],
-                                                      ),
-                                                    )),
-                                              ),
-                                              Card(
-                                                margin: const EdgeInsets.only(
-                                                    left: 1.0),
-                                                child: Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            top: 10.0,
-                                                            bottom: 10.0,
-                                                            left: 10.0,
-                                                            right: 10.0),
-                                                    height: 70,
-                                                    width: 70,
-                                                    color: _validPromotion(
-                                                            promotionController
-                                                                    .promotionsList[
-                                                                index])
-                                                        ? lightYellow
-                                                        : Colors.grey[400],
+                      if (promotionController.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                promotionController.promotionsList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return checkExpired(
+                                      promotionController.promotionsList[index])
+                                  ? GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 15.0, vertical: 5.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Card(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 1.0),
+                                                  child: SizedBox(
+                                                    height: 90,
                                                     child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      4.0,
-                                                                  vertical:
-                                                                      4.0),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      2.0,
-                                                                  vertical:
-                                                                      4.0),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        2.0),
-                                                            color: _validPromotion(
-                                                                    promotionController
-                                                                            .promotionsList[
-                                                                        index])
-                                                                ? Color(
-                                                                    0xffe5b06c)
-                                                                : Colors
-                                                                    .grey[500],
-                                                          ),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Icon(
-                                                                  Icons
-                                                                      .coffee_sharp,
-                                                                  size: 10,
-                                                                  color: black),
-                                                              Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15,
+                                                                    vertical:
+                                                                        15),
+                                                            child: Text(
+                                                                promotionController
+                                                                    .promotionsList[
+                                                                        index]
+                                                                    .description,
+                                                                maxLines: 4,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: _validPromotion(promotionController.promotionsList[
+                                                                            index])
+                                                                        ? black
+                                                                        : Colors
+                                                                            .grey[500]))),
+                                                        Expanded(
+                                                            child: Container(
+                                                                alignment: Alignment
+                                                                    .bottomLeft,
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    left: 15,
+                                                                    right: 15.0,
+                                                                    bottom: 15),
                                                                 child: Text(
-                                                                    "A&T Coffee",
+                                                                    'Hết hạn ' +
+                                                                        DateFormat('dd/MM/yyyy')
+                                                                            .format(DateTime.fromMillisecondsSinceEpoch((promotionController.promotionsList[index].endDate)
+                                                                                .toInt()))
+                                                                            .toString(),
                                                                     style: TextStyle(
-                                                                        fontSize:
-                                                                            8,
-                                                                        color:
-                                                                            white)),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  top: 2),
-                                                          child: Text(
-                                                              promotionController
-                                                                      .promotionsList[
-                                                                          index]
-                                                                      .discount
-                                                                      .toString() +
-                                                                  "%",
-                                                              style: TextStyle(
-                                                                  fontSize: 33,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      white)),
-                                                        )
+                                                                        color: _validPromotion(promotionController.promotionsList[index])
+                                                                            ? black
+                                                                            : Colors.grey[500])))),
                                                       ],
-                                                    )),
-                                              )
-                                            ],
-                                          ),
+                                                    ),
+                                                  )),
+                                            ),
+                                            Card(
+                                              margin: const EdgeInsets.only(
+                                                  left: 1.0),
+                                              child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 10.0,
+                                                      bottom: 10.0,
+                                                      left: 10.0,
+                                                      right: 10.0),
+                                                  height: 70,
+                                                  width: 70,
+                                                  color: _validPromotion(
+                                                          promotionController
+                                                                  .promotionsList[
+                                                              index])
+                                                      ? lightYellow
+                                                      : Colors.grey[400],
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 4.0,
+                                                            vertical: 4.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 2.0,
+                                                                vertical: 4.0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      2.0),
+                                                          color: _validPromotion(
+                                                                  promotionController
+                                                                          .promotionsList[
+                                                                      index])
+                                                              ? const Color(
+                                                                  0xffe5b06c)
+                                                              : Colors
+                                                                  .grey[500],
+                                                        ),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: const [
+                                                            Icon(
+                                                                Icons
+                                                                    .coffee_sharp,
+                                                                size: 10,
+                                                                color: black),
+                                                            Text("A&T Coffee",
+                                                                style: TextStyle(
+                                                                    fontSize: 8,
+                                                                    color:
+                                                                        white)),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 2),
+                                                        child: Text(
+                                                            promotionController
+                                                                    .promotionsList[
+                                                                        index]
+                                                                    .discount
+                                                                    .toString() +
+                                                                "%",
+                                                            style: const TextStyle(
+                                                                fontSize: 33,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: white)),
+                                                      )
+                                                    ],
+                                                  )),
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    : Container();
-                              }),
-                        );
+                                      ),
+                                    )
+                                  : Container();
+                            });
+                      }
                     }),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,143 +305,140 @@ class _RewardPage extends State<RewardPage> {
                       ],
                     ),
                     Obx(() {
-                      if (rewardController.isLoading.value)
-                        return Center(child: CircularProgressIndicator());
-                      else
-                        return Container(
-                          child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: rewardController.rewardsList.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 15.0, vertical: 5.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Card(
-                                              margin: const EdgeInsets.only(
-                                                  right: 1.0),
-                                              child: Container(
-                                                height: 90,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 15,
-                                                                vertical: 15),
-                                                        child: Text(
-                                                            rewardController
-                                                                .rewardsList[
-                                                                    index]
-                                                                .name,
-                                                            maxLines: 4,
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: _validReward(
-                                                                        rewardController.rewardsList[
-                                                                            index])
-                                                                    ? black
-                                                                    : Colors.grey[
-                                                                        500]))),
-                                                  ],
-                                                ),
-                                              )),
-                                        ),
-                                        Card(
-                                          margin:
-                                              const EdgeInsets.only(left: 1.0),
-                                          child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10.0,
-                                                  bottom: 10.0,
-                                                  left: 10.0,
-                                                  right: 10.0),
-                                              height: 70,
-                                              width: 70,
-                                              color: _validReward(
-                                                      rewardController
-                                                          .rewardsList[index])
-                                                  ? lightYellow
-                                                  : Colors.grey[400],
+                      if (rewardController.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: rewardController.rewardsList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 5.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Card(
+                                            margin: const EdgeInsets.only(
+                                                right: 1.0),
+                                            child: SizedBox(
+                                              height: 90,
                                               child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    margin: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 4.0,
-                                                        vertical: 4.0),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 2.0,
-                                                            vertical: 4.0),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              2.0),
-                                                      color: _validReward(
-                                                              rewardController
-                                                                      .rewardsList[
-                                                                  index])
-                                                          ? Color(0xffe5b06c)
-                                                          : Colors.grey[500],
-                                                    ),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Icon(Icons.coffee_sharp,
-                                                            size: 10,
-                                                            color: black),
-                                                        Container(
-                                                          child: Text(
-                                                              "A&T Coffee",
-                                                              style: TextStyle(
-                                                                  fontSize: 8,
-                                                                  color:
-                                                                      white)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.only(top: 2),
-                                                    child: Text(
-                                                        (rewardController
-                                                                        .rewardsList[
-                                                                            index]
-                                                                        .redution ~/
-                                                                    1000)
-                                                                .toString() +
-                                                            'K',
-                                                        style: TextStyle(
-                                                            fontSize: 33,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            color: white)),
-                                                  )
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 15,
+                                                          vertical: 15),
+                                                      child: Text(
+                                                          rewardController
+                                                              .rewardsList[
+                                                                  index]
+                                                              .name,
+                                                          maxLines: 4,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: _validReward(
+                                                                      rewardController
+                                                                              .rewardsList[
+                                                                          index])
+                                                                  ? black
+                                                                  : Colors.grey[
+                                                                      500]))),
                                                 ],
-                                              )),
-                                        )
-                                      ],
-                                    ),
+                                              ),
+                                            )),
+                                      ),
+                                      Card(
+                                        margin:
+                                            const EdgeInsets.only(left: 1.0),
+                                        child: Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 10.0,
+                                                bottom: 10.0,
+                                                left: 10.0,
+                                                right: 10.0),
+                                            height: 70,
+                                            width: 70,
+                                            color: _validReward(rewardController
+                                                    .rewardsList[index])
+                                                ? lightYellow
+                                                : Colors.grey[400],
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 4.0,
+                                                      vertical: 4.0),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 2.0,
+                                                      vertical: 4.0),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2.0),
+                                                    color: _validReward(
+                                                            rewardController
+                                                                    .rewardsList[
+                                                                index])
+                                                        ? const Color(
+                                                            0xffe5b06c)
+                                                        : Colors.grey[500],
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: const [
+                                                      Icon(Icons.coffee_sharp,
+                                                          size: 10,
+                                                          color: black),
+                                                      Text("A&T Coffee",
+                                                          style: TextStyle(
+                                                              fontSize: 8,
+                                                              color: white)),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2),
+                                                  child: Text(
+                                                      (rewardController
+                                                                      .rewardsList[
+                                                                          index]
+                                                                      .redution ~/
+                                                                  1000)
+                                                              .toString() +
+                                                          'K',
+                                                      style: const TextStyle(
+                                                          fontSize: 33,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: white)),
+                                                )
+                                              ],
+                                            )),
+                                      )
+                                    ],
                                   ),
-                                );
-                              }),
-                        );
+                                ),
+                              );
+                            });
+                      }
                     }),
                   ]))
             ]),
@@ -467,7 +448,7 @@ class _RewardPage extends State<RewardPage> {
 
   bool checkExpired(item) {
     int milis = DateTime.now().millisecondsSinceEpoch;
-    print(item.endDate.toString() + ' ' + milis.toString());
+    //print(item.endDate.toString() + ' ' + milis.toString());
     if (item.endDate > milis) {
       return true;
     }
@@ -475,11 +456,18 @@ class _RewardPage extends State<RewardPage> {
   }
 
   bool _validPromotion(Promotion promotion) {
-    if (userController.user.value.typeId == null ||
-        userController.user.value.typeId <
-            typeController.typesList
-                .firstWhere((type) => type.code == promotion.object)
-                .id) {
+    bool isValid = false;
+
+    try {
+      isValid = userController.user.value.typeId <
+          typeController.typesList
+              .firstWhere((type) => type.code == promotion.object)
+              .id;
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (userController.user.value.typeId == null || isValid) {
       return false;
     }
     return true;
