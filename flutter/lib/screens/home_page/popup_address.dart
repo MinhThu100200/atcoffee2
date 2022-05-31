@@ -37,10 +37,10 @@ class _PopUpAddress extends State<PopUpAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      cartController.calTotalAmounts();
-      print("Build Completed:" + userController.user.value.id.toString());
-    });
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   cartController.calTotalAmounts();
+    //   print("Build Completed:" + userController.user.value.id.toString());
+    // });
   }
 
   @override
@@ -313,7 +313,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                 ),
               ),
               Obx(() {
-                if (cartController.isLoading.value ||
+                if (cartController.isLoading.value == true ||
                     cartController.cartsList.isEmpty) {
                   return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
@@ -348,8 +348,10 @@ class _PopUpAddress extends State<PopUpAddress> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Text(
-                                  MethodConstants.oCcy.format(
-                                      calTotalAmount(cartController.cartsList)),
+                                  // MethodConstants.oCcy.format(
+                                  //     calTotalAmount(cartController.cartsList)),
+                                  MethodConstants.oCcy.format(cartController
+                                      .totalCart.value.totalAmount),
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 14.0,
@@ -373,87 +375,87 @@ class _PopUpAddress extends State<PopUpAddress> {
     );
   }
 
-  bool _validPromotion(Promotion promotion) {
-    if (promotion.proviso > cartController.total["amount"]) {
-      return false;
-    }
+  // bool _validPromotion(Promotion promotion) {
+  //   if (promotion.proviso > cartController.totalCart.value.amount) {
+  //     return false;
+  //   }
 
-    if (userController.user.value.typeId == null ||
-        userController.user.value.typeId <
-            typeController.typesList
-                .firstWhere((type) => type.code == promotion.object)
-                .id) {
-      return false;
-    }
-    return true;
-  }
+  //   if (userController.user.value.typeId == null ||
+  //       userController.user.value.typeId <
+  //           typeController.typesList
+  //               .firstWhere((type) => type.code == promotion.object)
+  //               .id) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
-  double _calAmount(carts) {
-    if (carts == null || carts.length == 0) {
-      return 0;
-    }
+  // double _calAmount(carts) {
+  //   if (carts == null || carts.length == 0) {
+  //     return 0;
+  //   }
 
-    double amount = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        amount += (carts[i]
-                        .product
-                        .sizes[carts[i].size == 'S'
-                            ? 0
-                            : carts[i].size == 'M'
-                                ? 1
-                                : 2]
-                        .price *
-                    (1 - carts[i].product.discount / 100))
-                .toInt() *
-            carts[i].quantity;
-      }
-    }
-    //total["amount"] = amount.toInt();
-    return amount;
-  }
+  //   double amount = 0;
+  //   for (int i = 0; i < carts.length; i++) {
+  //     if (carts[i].state == true) {
+  //       amount += (carts[i]
+  //                       .product
+  //                       .sizes[carts[i].size == 'S'
+  //                           ? 0
+  //                           : carts[i].size == 'M'
+  //                               ? 1
+  //                               : 2]
+  //                       .price *
+  //                   (1 - carts[i].product.discount / 100))
+  //               .toInt() *
+  //           carts[i].quantity;
+  //     }
+  //   }
+  //   //total["amount"] = amount.toInt();
+  //   return amount;
+  // }
 
-  double _calPromotion(carts) {
-    if (carts == null || carts.length == 0) {
-      //total["promotion"] = 0.toInt();
-      return 0;
-    }
-    double promotionValue = 0;
+  // double _calPromotion(carts) {
+  //   if (carts == null || carts.length == 0) {
+  //     //total["promotion"] = 0.toInt();
+  //     return 0;
+  //   }
+  //   double promotionValue = 0;
 
-    switch (cartController.type.value) {
-      case 0:
-        break;
-      case 1:
-        if (_validPromotion(cartController.promotion.value)) {
-          promotionValue = cartController.total["amount"] *
-              cartController.promotion.value.discount /
-              100;
-        }
-        break;
-      case 2:
-        if (_validReward(cartController.reward.value)) {
-          promotionValue = cartController.reward.value.redution.toDouble();
-        }
-        break;
-    }
-    //total["promotion"] = promotionValue.toInt();
-    return promotionValue;
-  }
+  //   switch (cartController.type.value) {
+  //     case 0:
+  //       break;
+  //     case 1:
+  //       if (_validPromotion(cartController.promotion.value)) {
+  //         promotionValue = cartController.totalCart.value.amount *
+  //             cartController.promotion.value.discount /
+  //             100;
+  //       }
+  //       break;
+  //     case 2:
+  //       if (_validReward(cartController.reward.value)) {
+  //         promotionValue = cartController.reward.value.redution.toDouble();
+  //       }
+  //       break;
+  //   }
+  //   //total["promotion"] = promotionValue.toInt();
+  //   return promotionValue;
+  // }
 
-  bool _validReward(Reward reward) {
-    if (userController.user.value.currentPoints < reward.proviso) {
-      return false;
-    }
-    return true;
-  }
+  // bool _validReward(Reward reward) {
+  //   if (userController.user.value.currentPoints < reward.proviso) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
-  double calTotalAmount(carts) {
-    //isLoading.value = true;
-    double amounts = _calAmount(carts) - _calPromotion(carts);
-    amounts = amounts < 0 ? 0 : amounts;
-    //total["totalAmount"] = amounts.toInt();
-    //isLoading.value = false;
-    //amount.value = amounts;
-    return amounts;
-  }
+  // double calTotalAmount(carts) {
+  //   //isLoading.value = true;
+  //   double amounts = _calAmount(carts) - _calPromotion(carts);
+  //   amounts = amounts < 0 ? 0 : amounts;
+  //   //total["totalAmount"] = amounts.toInt();
+  //   //isLoading.value = false;
+  //   //amount.value = amounts;
+  //   return amounts;
+  // }
 }

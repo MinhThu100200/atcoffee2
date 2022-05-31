@@ -5,7 +5,7 @@ import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/store.dart';
-import 'package:at_coffee/models/Bill.dart';
+import 'package:at_coffee/models/bill.dart';
 import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/models/payment.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
@@ -20,6 +20,7 @@ import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
 import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,9 +52,6 @@ class _CartPage extends State<CartPage> {
 
   String _selectedPayment = '';
 
-  bool _isSaving = false;
-  bool _isValidPromotion = true;
-
   @override
   void initState() {
     super.initState();
@@ -62,99 +60,99 @@ class _CartPage extends State<CartPage> {
         ? paymentController.paymentsList[0].id.toString()
         : '';
   }
-//check here
-  double _calPromotion(carts) {
-    if (carts == null || carts.length == 0) {
-      cartController.total["promotion"] = 0.toInt();
-      return 0;
-    }
-    _isValidPromotion = true;
+// //check here
+//   double _calPromotion(carts) {
+//     if (carts == null || carts.length == 0) {
+//       cartController.total["promotion"] = 0.toInt();
+//       return 0;
+//     }
+//     _isValidPromotion = true;
 
-    double promotionValue = 0;
+//     double promotionValue = 0;
 
-    switch (cartController.type.value) {
-      case 0:
-        break;
-      case 1:
-        Promotion promotion = cartController.promotion.value;
-        if (_validPromotion(promotion)) {
-          
-          promotionValue =
-              cartController.total["amount"] * promotion.discount / 100;
-        } else {
-          _isValidPromotion = false;
-        }
-        break;
-      case 2:
-        Reward reward = cartController.reward.value;
-        if (_validReward(reward)) {
-          promotionValue = reward.redution.toDouble();
-        } else {
-          _isValidPromotion = false;
-        }
-        break;
-    }
-    //check here
-    cartController.total["promotion"] = promotionValue.toInt();
-    return promotionValue;
-  }
+//     switch (cartController.type.value) {
+//       case 0:
+//         break;
+//       case 1:
+//         Promotion promotion = cartController.promotion.value;
+//         if (_validPromotion(promotion)) {
 
-  double _calAmount(carts) {
-    if (carts == null || carts.length == 0) {
-      return 0;
-    }
+//           promotionValue =
+//               cartController.total["amount"] * promotion.discount / 100;
+//         } else {
+//           _isValidPromotion = false;
+//         }
+//         break;
+//       case 2:
+//         Reward reward = cartController.reward.value;
+//         if (_validReward(reward)) {
+//           promotionValue = reward.redution.toDouble();
+//         } else {
+//           _isValidPromotion = false;
+//         }
+//         break;
+//     }
+//     //check here
+//     cartController.total["promotion"] = promotionValue.toInt();
+//     return promotionValue;
+//   }
 
-    double amount = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        amount += (carts[i]
-                        .product
-                        .sizes[carts[i].size == 'S'
-                            ? 0
-                            : carts[i].size == 'M'
-                                ? 1
-                                : 2]
-                        .price *
-                    (1 - carts[i].product.discount / 100))
-                .toInt() *
-            carts[i].quantity;
-      }
-    }
-    //check here
-    cartController.total["amount"] = amount.toInt();
-    print("_calAmount" +
-        cartController.total["amount"].toString() +
-        amount.toInt().toString());
-    return amount;
-  }
+//   double _calAmount(carts) {
+//     if (carts == null || carts.length == 0) {
+//       return 0;
+//     }
 
-  double _calTotalAmount(carts) {
-    double amount = _calAmount(carts) - _calPromotion(carts);
-    amount = amount < 0 ? 0 : amount;
-    //check here
-    cartController.total["totalAmount"] = amount.toInt();
-    print("_calTotalAmount" +
-        cartController.total["totalAmount"].toString() +
-        amount.toInt().toString());
-    return amount;
-  }
+//     double amount = 0;
+//     for (int i = 0; i < carts.length; i++) {
+//       if (carts[i].state == true) {
+//         amount += (carts[i]
+//                         .product
+//                         .sizes[carts[i].size == 'S'
+//                             ? 0
+//                             : carts[i].size == 'M'
+//                                 ? 1
+//                                 : 2]
+//                         .price *
+//                     (1 - carts[i].product.discount / 100))
+//                 .toInt() *
+//             carts[i].quantity;
+//       }
+//     }
+//     //check here
+//     cartController.total["amount"] = amount.toInt();
+//     print("_calAmount" +
+//         cartController.total["amount"].toString() +
+//         amount.toInt().toString());
+//     return amount;
+//   }
 
-  int _calTotalQuantity(carts) {
-    if (carts == null || carts.length == 0) {
-      return 0;
-    }
+//   double _calTotalAmount(carts) {
+//     double amount = _calAmount(carts) - _calPromotion(carts);
+//     amount = amount < 0 ? 0 : amount;
+//     //check here
+//     cartController.total["totalAmount"] = amount.toInt();
+//     print("_calTotalAmount" +
+//         cartController.total["totalAmount"].toString() +
+//         amount.toInt().toString());
+//     return amount;
+//   }
 
-    int quantity = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        quantity += carts[i].quantity;
-      }
-    }
-    //check here
-    cartController.total["quantity"] = quantity.toInt();
+//   int _calTotalQuantity(carts) {
+//     if (carts == null || carts.length == 0) {
+//       return 0;
+//     }
 
-    return quantity;
-  }
+//     int quantity = 0;
+//     for (int i = 0; i < carts.length; i++) {
+//       if (carts[i].state == true) {
+//         quantity += carts[i].quantity;
+//       }
+//     }
+//     //check here
+//     cartController.total["quantity"] = quantity.toInt();
+
+//     return quantity;
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -354,10 +352,14 @@ class _CartPage extends State<CartPage> {
                                                       style: TextStyle(
                                                           fontSize: 16.0)),
                                                   Text(
-                                                      oCcy.format(_calAmount(
-                                                              cartController
-                                                                  .cartsList)
-                                                          .toInt()),
+                                                      // oCcy.format(_calAmount(
+                                                      //         cartController
+                                                      //             .cartsList)
+                                                      //     .toInt()),
+                                                      oCcy.format(cartController
+                                                          .totalCart
+                                                          .value
+                                                          .amount),
                                                       style: const TextStyle(
                                                           fontSize: 16.0))
                                                 ],
@@ -382,10 +384,14 @@ class _CartPage extends State<CartPage> {
                                                       style: TextStyle(
                                                           fontSize: 16.0)),
                                                   Text(
-                                                      oCcy.format(_calPromotion(
-                                                              cartController
-                                                                  .cartsList)
-                                                          .toInt()),
+                                                      // oCcy.format(_calPromotion(
+                                                      //         cartController
+                                                      //             .cartsList)
+                                                      //     .toInt()),
+                                                      oCcy.format(cartController
+                                                          .totalCart
+                                                          .value
+                                                          .promotion),
                                                       style: const TextStyle(
                                                           fontSize: 16.0))
                                                 ],
@@ -415,10 +421,12 @@ class _CartPage extends State<CartPage> {
                                                               .ellipsis,
                                                           style: TextStyle(
                                                               fontSize: 16.0,
-                                                              color:
-                                                                  _isValidPromotion
-                                                                      ? lightBlue
-                                                                      : red)),
+                                                              color: cartController
+                                                                      .totalCart
+                                                                      .value
+                                                                      .isValidPromotion
+                                                                  ? lightBlue
+                                                                  : red)),
                                                     ),
                                                     const Icon(
                                                       Icons
@@ -448,11 +456,15 @@ class _CartPage extends State<CartPage> {
                                                       style: TextStyle(
                                                           fontSize: 16.0)),
                                                   Text(
-                                                      oCcy.format(
-                                                          _calTotalAmount(
-                                                                  cartController
-                                                                      .cartsList)
-                                                              .toInt()),
+                                                      // oCcy.format(
+                                                      //     _calTotalAmount(
+                                                      //             cartController
+                                                      //                 .cartsList)
+                                                      //         .toInt()),
+                                                      oCcy.format(cartController
+                                                          .totalCart
+                                                          .value
+                                                          .totalAmount),
                                                       style: const TextStyle(
                                                           fontSize: 16.0))
                                                 ],
@@ -542,17 +554,6 @@ class _CartPage extends State<CartPage> {
                             ],
                           ),
                         ),
-                        if (_isSaving == true) ...[
-                          Positioned(
-                            child: Container(
-                              width: size.width,
-                              height: size.height - 86.0,
-                              color: Colors.grey.withOpacity(0.3),
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
-                            ),
-                          ),
-                        ]
                       ],
                     ),
                   ),
@@ -572,7 +573,9 @@ class _CartPage extends State<CartPage> {
                             child: Text(
                                 wayTitle[storeController.selected.value] +
                                     ' - ' +
-                                    _calTotalQuantity(cartController.cartsList)
+                                    // _calTotalQuantity(cartController.cartsList)
+                                    //     .toString() +
+                                    cartController.totalCart.value.quantity
                                         .toString() +
                                     ' sản phẩm',
                                 style: const TextStyle(
@@ -584,9 +587,11 @@ class _CartPage extends State<CartPage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
                             child: Text(
+                                // oCcy.format(
+                                //     _calTotalAmount(cartController.cartsList)
+                                //         .toInt()),
                                 oCcy.format(
-                                    _calTotalAmount(cartController.cartsList)
-                                        .toInt()),
+                                    cartController.totalCart.value.totalAmount),
                                 style: const TextStyle(
                                     color: white,
                                     fontSize: 16.0,
@@ -627,6 +632,11 @@ class _CartPage extends State<CartPage> {
   }
 
   void _paymentOrder() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+
     if (cartController.cartsList.where((c) => c.state).isEmpty == true) {
       Fluttertoast.showToast(
           msg: "Chưa có sản phẩm được chọn",
@@ -636,6 +646,8 @@ class _CartPage extends State<CartPage> {
           backgroundColor: googleColor,
           textColor: Colors.white,
           fontSize: 16.0);
+
+      await EasyLoading.dismiss();
       return;
     }
 
@@ -648,9 +660,9 @@ class _CartPage extends State<CartPage> {
 
     Bill bill = Bill();
     bill.code = code;
-    bill.amount = cartController.total["totalAmount"].toDouble();
-    bill.price = cartController.total["amount"].toDouble();
-    bill.discount = cartController.total["promotion"];
+    bill.amount = cartController.totalCart.value.totalAmount.toDouble();
+    bill.price = cartController.totalCart.value.amount.toDouble();
+    bill.discount = cartController.totalCart.value.promotion;
     bill.point = (bill.amount * StatusBillConstants.POINTS_REFUND).toInt();
     bill.address = storeController.selected.value == 1
         ? storeController.storeNearYou.value.address
@@ -658,10 +670,12 @@ class _CartPage extends State<CartPage> {
     bill.status = StatusBillConstants.REQUESTED;
     bill.rewardId =
         cartController.type.value == 2 ? cartController.reward.value.id : 0;
-    bill.promotionId = cartController.type.value == 1 && _isValidPromotion
+    bill.promotionId = cartController.type.value == 1 &&
+            cartController.totalCart.value.isValidPromotion
         ? cartController.promotion.value.id
         : 0;
-    bill.promotionCode = cartController.type.value == 1 && _isValidPromotion
+    bill.promotionCode = cartController.type.value == 1 &&
+            cartController.totalCart.value.isValidPromotion
         ? cartController.promotion.value.code
         : '';
     bill.paymentId = _selectedPayment != '' ? int.parse(_selectedPayment) : 0;
@@ -711,6 +725,8 @@ class _CartPage extends State<CartPage> {
         textColor: Colors.white,
         fontSize: 16.0);
 
+    await EasyLoading.dismiss();
+
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const ManageOrderPage()));
     //Get.to(() => ManageOrderPage());
@@ -718,12 +734,12 @@ class _CartPage extends State<CartPage> {
 
   void deleteCartByUserId(int userId) async {
     cartController.deleteCartByUserId(userId);
-    //check here
-    cartController.promotion.value = Promotion();
-    //check here
-    cartController.reward.value = Reward();
-    //check here
-    cartController.type.value = 0;
+    // //check here
+    // cartController.promotion.value = Promotion();
+    // //check here
+    // cartController.reward.value = Reward();
+    // //check here
+    // cartController.type.value = 0;
   }
 
   void _showModelButtonSheet(BuildContext context) {
@@ -893,7 +909,7 @@ class _CartPage extends State<CartPage> {
   }
 
   bool _validPromotion(Promotion promotion) {
-    if (promotion.proviso > cartController.total["amount"]) {
+    if (promotion.proviso > cartController.totalCart.value.amount) {
       return false;
     }
 
@@ -1292,7 +1308,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
   }
 
   bool _validPromotion(Promotion promotion) {
-    if (promotion.proviso > cartController.total["amount"]) {
+    if (promotion.proviso > cartController.totalCart.value.amount) {
       return false;
     }
 
@@ -1314,28 +1330,31 @@ class _PromotionCartPage extends State<PromotionCartPage> {
   }
 
   void _applyPromotion(Promotion promotion) {
-    //check here
-    cartController.promotion.value = promotion;
-    //check here
-    cartController.type.value = 1;
+    cartController.applyPromotion(promotion);
+    // //check here
+    // cartController.promotion.value = promotion;
+    // //check here
+    // cartController.type.value = 1;
     Navigator.pop(context);
   }
 
   void _applyReward(Reward reward) {
-    //check here
-    cartController.reward.value = reward;
-    //check here
-    cartController.type.value = 2;
+    // //check here
+    // cartController.reward.value = reward;
+    // //check here
+    // cartController.type.value = 2;
+    cartController.applyReward(reward);
     Navigator.pop(context);
   }
 
   void _cancelApply() {
-    //check here
-    cartController.promotion.value = Promotion();
-    //check here
-    cartController.reward.value = Reward();
-    //check here
-    cartController.type.value = 0;
+    // //check here
+    // cartController.promotion.value = Promotion();
+    // //check here
+    // cartController.reward.value = Reward();
+    // //check here
+    // cartController.type.value = 0;
+    cartController.cancelApply();
     Navigator.pop(context);
   }
 }

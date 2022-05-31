@@ -1,7 +1,8 @@
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:at_coffee/models/Bill.dart';
+import 'package:get/state_manager.dart';
+import 'package:at_coffee/models/bill.dart';
 
 class BillController extends GetxController {
   var isLoading = false.obs;

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:at_coffee/models/Bill.dart';
+import 'package:at_coffee/models/bill.dart';
 import 'package:http/http.dart' as http;
 import 'package:at_coffee/constant/api_constants.dart';
 import 'package:at_coffee/constant/variable_constants.dart';

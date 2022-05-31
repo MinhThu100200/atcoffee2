@@ -1,6 +1,6 @@
 import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
-import 'package:at_coffee/models/Bill.dart';
+import 'package:at_coffee/models/bill.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
