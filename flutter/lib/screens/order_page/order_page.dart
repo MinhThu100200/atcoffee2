@@ -1,7 +1,9 @@
 import 'package:at_coffee/models/cart.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +26,6 @@ enum SizeEnum { S, M, L }
 
 class _OrderPage extends State<OrderPage> {
   Product _product;
-  bool _isSaving = false;
 
   RateController rateController = Get.put(RateController());
   CartController cartController = Get.put(CartController());
@@ -150,6 +151,36 @@ class _OrderPage extends State<OrderPage> {
                                   }),
                             ),
                           ),
+                          Obx(() {
+                            return Positioned(
+                              right: 12.0,
+                              top: 0.0,
+                              child: Container(
+                                padding: const EdgeInsets.all(0.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  color: Colors.transparent,
+                                ),
+                                child: IconButton(
+                                    icon: Icon(
+                                      EvaIcons.heart,
+                                      size: 32,
+                                      color: userController
+                                              .checkFavourite(_product)
+                                          ? Colors.red
+                                          : Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      if (userController
+                                          .checkFavourite(_product)) {
+                                        _removeFavourite(_product);
+                                      } else {
+                                        _addFavourite(_product);
+                                      }
+                                    }),
+                              ),
+                            );
+                          }),
                           Positioned.fill(
                             bottom: 20.0,
                             // left: 50,
@@ -211,6 +242,7 @@ class _OrderPage extends State<OrderPage> {
                       Container(
                           padding:
                               const EdgeInsets.only(left: 15.0, right: 15.0),
+                          width: size.width,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -1105,16 +1137,6 @@ class _OrderPage extends State<OrderPage> {
                       )
                     ])),
                   ),
-                  if (_isSaving == true) ...[
-                    Positioned(
-                      child: Container(
-                        width: size.width,
-                        height: size.height + 85,
-                        color: Colors.grey.withOpacity(0.3),
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                    ),
-                  ]
                 ],
               )),
             ),
@@ -1192,10 +1214,20 @@ class _OrderPage extends State<OrderPage> {
         ));
   }
 
+  void _addFavourite(Product product) async {
+    await userController.addFavourites(product);
+  }
+
+  void _removeFavourite(Product product) async {
+    await userController.removeFavourites(product);
+  }
+
   void addToCart() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          _isSaving = true;
-        }));
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+
     Cart cart = Cart();
     cart.code = 'CART' +
         ((DateTime.now().millisecondsSinceEpoch ~/ 1000).toInt()).toString();
@@ -1239,9 +1271,6 @@ class _OrderPage extends State<OrderPage> {
       Cart cartDB = await cartController.addCart(cart);
     }
 
-    cartController.calcTotal();
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-          _isSaving = false;
-        }));
+    await EasyLoading.dismiss();
   }
 }

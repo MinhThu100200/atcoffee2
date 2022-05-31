@@ -1,7 +1,8 @@
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:at_coffee/models/Bill.dart';
+import 'package:at_coffee/models/bill.dart';
+import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/manage_order_page/item_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -86,31 +87,31 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                 SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                Positioned(
-                  child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
+                    Positioned(
+                      child: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ),
+                    Positioned(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Text("Chi tiết đơn hàng",
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
                     ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Text("Chi tiết đơn hàng",
-                          style: TextStyle(
-                              color: white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
                   ]),
                 ),
                 const SizedBox(
@@ -178,7 +179,10 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                 Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                        _bill?.address == "" || _bill?.address == null ? "Nhận tại cửa hàng" : _bill?.address,
+                                        _bill?.address == "" ||
+                                                _bill?.address == null
+                                            ? "Nhận tại cửa hàng"
+                                            : _bill?.address,
                                         style: const TextStyle(
                                           color: lightBlue,
                                           fontSize: 14,
@@ -267,7 +271,8 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
-                                        child: const Text("Khuyến mãi/Phần thưởng:",
+                                        child: const Text(
+                                            "Khuyến mãi/Phần thưởng:",
                                             style: TextStyle(
                                               color: gray1,
                                               fontSize: 14,

@@ -82,8 +82,7 @@ class _ForgetPassword extends State<ForgetPassword> {
                                       style: const TextStyle(fontSize: 15),
                                       cursorHeight: 20,
                                       controller: _email,
-                                      keyboardType:
-                                          TextInputType.emailAddress,
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                         labelText: 'Nhập email',
                                         labelStyle: const TextStyle(

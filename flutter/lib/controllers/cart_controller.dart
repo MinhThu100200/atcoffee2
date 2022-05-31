@@ -6,6 +6,20 @@ import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:get/get.dart';
 
+class _TotalCart {
+  int amount;
+  int promotion;
+  bool isValidPromotion = true;
+  int totalAmount;
+  int quantity;
+  _TotalCart(
+      {this.amount,
+      this.promotion,
+      this.isValidPromotion,
+      this.totalAmount,
+      this.quantity});
+}
+
 class CartController extends GetxController {
   var isLoading = true.obs;
   var cartsList = <Cart>[].obs;
@@ -19,20 +33,14 @@ class CartController extends GetxController {
   var type = 0.obs;
   var amount = 0.0.obs;
 
-  var total =
-      {"amount": 0, "promotion": 0, "totalAmount": 0, "quantity": 0}.obs;
-
-  void calcTotal() {
-    total["quantity"] = cartsList
-        .where((c) => c.state == true)
-        .fold(0, (sum, item) => sum + item.quantity);
-  }
+  var totalCart = _TotalCart().obs;
 
   final userController = Get.put(UserController());
   final typeController = Get.put(TypeController());
 
   @override
   void onInit() {
+    totalCart.value.isValidPromotion = true;
     super.onInit();
   }
 
@@ -42,7 +50,7 @@ class CartController extends GetxController {
       var carts = await RemoteServices.fetchCartsByCustomerId(id);
       if (carts != null) {
         cartsList.value = carts;
-        //calTotalAmounts(carts);
+        calcTotalCart();
       }
     } finally {
       isLoading.value = false;
@@ -55,6 +63,7 @@ class CartController extends GetxController {
       cart = await RemoteServices.addCart(cart);
       if (cart != null) {
         cartsList.add(cart);
+        calcTotalCart();
         return cart;
       }
       return null;
@@ -65,11 +74,12 @@ class CartController extends GetxController {
 
   Future<Cart> updateCart(Cart cart) async {
     try {
-      isLoading.value = true;
+      // isLoading.value = true;
       // update in list
       Cart prevCart = Cart.fromJson(cart.toJson());
       var index = cartsList.indexWhere((c) => c.id == cart.id);
       cartsList[index] = cart;
+      calcTotalCart();
       // update in database
       cart = await RemoteServices.updateCart(cart);
       if (cart != null) {
@@ -78,6 +88,7 @@ class CartController extends GetxController {
         // rollback in list
         var prevIndex = cartsList.indexWhere((c) => c.id == prevCart.id);
         cartsList[prevIndex] = prevCart;
+        calcTotalCart();
       }
       return null;
     } finally {
@@ -86,13 +97,15 @@ class CartController extends GetxController {
   }
 
   Future<bool> deleteCart(int cartId) async {
+    print(cartId);
     try {
-      isLoading.value = true;
+      // isLoading.value = true;
       // remove in list
       Cart prevCart =
-          Cart.fromJson(cartsList.firstWhere((c) => c.id != cartId).toJson());
+          Cart.fromJson(cartsList.firstWhere((c) => c.id == cartId).toJson());
       var index = cartsList.indexWhere((c) => c.id == cartId);
       cartsList.value = cartsList.where((c) => c.id != cartId).toList();
+      calcTotalCart();
       // remove in database
       bool isDeleted = await RemoteServices.deleteCart(cartId);
       if (isDeleted) {
@@ -100,6 +113,7 @@ class CartController extends GetxController {
       } else {
         // rollback list
         cartsList.insert(index, prevCart);
+        calcTotalCart();
       }
       return isDeleted;
     } finally {
@@ -109,10 +123,12 @@ class CartController extends GetxController {
 
   Future<bool> deleteCartByUserId(int userId) async {
     try {
-      isLoading.value = true;
+      // isLoading.value = true;
       // remove list
       var prevCarts = cartFromJson(cartToJson(cartsList));
       cartsList.removeRange(0, cartsList.length);
+      calcTotalCart();
+      cancelApply();
       // remove in database
       bool isDeleted = await RemoteServices.deleteCartByUserId(userId);
       if (isDeleted) {
@@ -129,7 +145,7 @@ class CartController extends GetxController {
 
   Future<bool> deleteCartPayment() async {
     try {
-      isLoading.value = true;
+      // isLoading.value = true;
       List<int> ids = <int>[];
       for (var cart in cartsList) {
         if (cart.state == true) {
@@ -137,15 +153,17 @@ class CartController extends GetxController {
         }
       }
       // remove list
-      //var prevCarts = cartFromJson(cartToJson(cartsList));
-      //cartsList.value = cartsList.where((c) => c.state == false).toList();
+      var prevCarts = cartFromJson(cartToJson(cartsList));
+      cartsList.value = cartsList.where((c) => c.state == false).toList();
+      calcTotalCart();
       bool isDeleted = await RemoteServices.deleteCartPayment(ids);
       if (isDeleted) {
         cartsList.removeWhere((c) => ids.contains(c.id));
         return true;
       } else {
-        //rollback list
-        //cartsList.value = prevCarts;
+        // rollback list
+        cartsList.value = prevCarts;
+        calcTotalCart();
       }
       return isDeleted;
     } finally {
@@ -153,10 +171,45 @@ class CartController extends GetxController {
     }
   }
 
-  double _calPromotion(carts) {
-    if (carts == null || carts.length == 0) {
-      total["promotion"] = 0.toInt();
-      return 0;
+  void applyPromotion(Promotion p) {
+    promotion.value = p;
+    reward.value = Reward();
+    type.value = 1;
+    calcTotalCart();
+  }
+
+  void applyReward(Reward r) {
+    reward.value = r;
+    promotion.value = Promotion();
+    type.value = 2;
+    calcTotalCart();
+  }
+
+  void cancelApply() {
+    promotion.value = Promotion();
+    reward.value = Reward();
+    type.value = 0;
+    calcTotalCart();
+  }
+
+  void calcTotalCart() {
+    calcQuantity();
+    calcAmount();
+    calcPromotion();
+    calcTotalAmount();
+  }
+
+  void calcQuantity() {
+    totalCart.value.quantity = cartsList
+        .where((c) => c.state == true)
+        .fold(0, (sum, item) => sum + item.quantity);
+  }
+
+  void calcPromotion() {
+    totalCart.value.isValidPromotion = true;
+    if (cartsList.isEmpty) {
+      totalCart.value.promotion = 0;
+      return;
     }
     double promotionValue = 0;
 
@@ -165,66 +218,56 @@ class CartController extends GetxController {
         break;
       case 1:
         if (_validPromotion(promotion.value)) {
-          promotionValue = total["amount"] * promotion.value.discount / 100;
+          promotionValue =
+              totalCart.value.amount * promotion.value.discount / 100;
+        } else {
+          totalCart.value.isValidPromotion = false;
         }
         break;
       case 2:
         if (_validReward(reward.value)) {
           promotionValue = reward.value.redution.toDouble();
+        } else {
+          totalCart.value.isValidPromotion = false;
         }
         break;
     }
-    total["promotion"] = promotionValue.toInt();
-    return promotionValue;
+    totalCart.value.promotion = promotionValue.toInt();
   }
 
-  double _calAmount(carts) {
-    if (carts == null || carts.length == 0) {
-      return 0;
+  void calcAmount() {
+    if (cartsList.isEmpty) {
+      totalCart.value.amount = 0;
+      return;
     }
 
     double amount = 0;
-    for (int i = 0; i < carts.length; i++) {
-      if (carts[i].state == true) {
-        amount += (carts[i]
+    for (int i = 0; i < cartsList.length; i++) {
+      if (cartsList[i].state == true) {
+        amount += (cartsList[i]
                         .product
-                        .sizes[carts[i].size == 'S'
+                        .sizes[cartsList[i].size == 'S'
                             ? 0
-                            : carts[i].size == 'M'
+                            : cartsList[i].size == 'M'
                                 ? 1
                                 : 2]
                         .price *
-                    (1 - carts[i].product.discount / 100))
+                    (1 - cartsList[i].product.discount / 100))
                 .toInt() *
-            carts[i].quantity;
+            cartsList[i].quantity;
       }
     }
-    total["amount"] = amount.toInt();
-    return amount;
+    totalCart.value.amount = amount.toInt();
   }
 
-  double calTotalAmount(carts) {
-    isLoading.value = true;
-    double amounts = _calAmount(carts) - _calPromotion(carts);
+  void calcTotalAmount() {
+    int amounts = totalCart.value.amount - totalCart.value.promotion;
     amounts = amounts < 0 ? 0 : amounts;
-    total["totalAmount"] = amounts.toInt();
-    isLoading.value = false;
-    //amount.value = amounts;
-    return amounts;
-  }
-
-  void calTotalAmounts() {
-    isLoading.value = true;
-    double amounts = _calAmount(cartsList) - _calPromotion(cartsList);
-    amounts = amounts < 0 ? 0 : amounts;
-    total["totalAmount"] = amounts.toInt();
-    //amount.value = amounts;
-    isLoading.value = false;
-    //return amount;
+    totalCart.value.totalAmount = amounts.toInt();
   }
 
   bool _validPromotion(Promotion promotion) {
-    if (promotion.proviso > total["amount"]) {
+    if (promotion.proviso > totalCart.value.amount) {
       return false;
     }
 

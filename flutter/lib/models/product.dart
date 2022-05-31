@@ -12,7 +12,7 @@ List<Product> productFromJson(String str) {
   return List<Product>.from(data.map((x) => Product.fromJson(x)));
 }
 
-List<Product> storeFromJsonNotPage(String str) =>
+List<Product> productFromJsonNotPage(String str) =>
     List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
 String productToJson(List<Product> data) =>

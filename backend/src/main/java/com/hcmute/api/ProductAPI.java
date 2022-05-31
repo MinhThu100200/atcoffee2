@@ -23,6 +23,7 @@ import com.hcmute.api.request.FavouriteRequest;
 import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.ProductDTO;
 import com.hcmute.service.ProductService;
+import com.hcmute.util.ConstantsUtil;
 
 @RestController
 public class ProductAPI {
@@ -102,8 +103,8 @@ public class ProductAPI {
 	}
 	
 	@GetMapping("/api/user/favourite")
-	public ResponseEntity<List<ProductDTO>> findFavourites(@RequestParam(name="customerId", required = true) long customerId) {
-		List<ProductDTO> productDTOs = productService.findFavouritesByCustomerId(customerId);
+	public ResponseEntity<List<ProductDTO>> findFavourites() {
+		List<ProductDTO> productDTOs = productService.findFavouritesByCustomerId(ConstantsUtil.userDTO.getId());
 		productDTOs.forEach((productDTO) -> {
 			productDTO.calRateAndNumberReviewers();
 		});
@@ -112,11 +113,15 @@ public class ProductAPI {
 	
 	@PostMapping("/api/user/favourite")
 	public ResponseEntity<Boolean> addFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+		favouriteRequest.setCustomerId(ConstantsUtil.userDTO.getId());
 		return ResponseEntity.ok(productService.saveFavourite(favouriteRequest));
 	}
 	
 	@DeleteMapping("/api/user/favourite")
-	public ResponseEntity<Boolean> removeFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+	public ResponseEntity<Boolean> removeFavourites(@RequestParam(name = "productId") int productId) {
+		FavouriteRequest favouriteRequest = new FavouriteRequest();
+		favouriteRequest.setCustomerId(ConstantsUtil.userDTO.getId());
+		favouriteRequest.setProductId(productId);
 		return ResponseEntity.ok(productService.deleteFavourite(favouriteRequest));
 	}
 	

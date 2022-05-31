@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
@@ -11,8 +12,7 @@ class ProfileUpdatePage extends StatefulWidget {
 }
 
 class _ProfileUpdatePage extends State<ProfileUpdatePage> {
-  final userController = Get.put(new UserController());
-  bool isSaving = false;
+  final userController = Get.put(UserController());
   var _name = TextEditingController();
   bool _validateName = false;
   var _dob = TextEditingController();
@@ -65,7 +65,8 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                   onTap: () {
                     _updateUser();
                   },
-                  child: const Text("Lưu", style: const TextStyle(color: Colors.white)),
+                  child: const Text("Lưu",
+                      style: const TextStyle(color: Colors.white)),
                 )
               ])),
           elevation: 0,
@@ -120,8 +121,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                                   keyboardType: TextInputType.datetime,
                                   decoration: const InputDecoration(
                                     labelText: 'Nhập ngày sinh',
-                                    labelStyle:
-                                        TextStyle(color: Colors.black),
+                                    labelStyle: TextStyle(color: Colors.black),
                                     hintText: "Ngày sinh",
                                     border: UnderlineInputBorder(),
                                   ),
@@ -253,7 +253,8 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                                   },
                                   activeColor: Colors.green,
                                 ),
-                                const Text('Nữ', style: TextStyle(fontSize: 18.0))
+                                const Text('Nữ',
+                                    style: TextStyle(fontSize: 18.0))
                               ],
                             ),
                             Row(
@@ -277,16 +278,6 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                   ],
                 ),
               ),
-              if (isSaving == true) ...[
-                Positioned(
-                  child: Container(
-                    width: size.width,
-                    height: size.height - 86.0,
-                    color: Colors.grey.withOpacity(0.3),
-                    child: const Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-              ]
             ],
           ),
         )));
@@ -294,7 +285,10 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
 
   void _updateUser() async {
     // start loading
-    setState(() => isSaving = true);
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
     // validate name not empty
     setState(() {
       _validateName = _name.text.trim().isEmpty;
@@ -323,8 +317,9 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
       user.dob = _selectedDate.millisecondsSinceEpoch;
       // save User
       bool isUpdated = await userController.updateUser(user);
-      // close loading
-      setState(() => isSaving = false);
+
+      await EasyLoading.dismiss();
+
       var message = 'Cập nhật thông tin thất bại';
       // success
       if (isUpdated) {
@@ -352,7 +347,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
       }
     } else {
       // close loading
-      setState(() => isSaving = false);
+      await EasyLoading.dismiss();
     }
   }
 
@@ -367,8 +362,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
       setState(() {
         _selectedDate = selected;
         _dob = TextEditingController(
-            text:
-                DateFormat('dd/MM/yyyy').format(_selectedDate).toString());
+            text: DateFormat('dd/MM/yyyy').format(_selectedDate).toString());
       });
     }
   }

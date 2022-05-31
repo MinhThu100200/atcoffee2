@@ -42,78 +42,96 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    _cart = Cart.fromJson(widget.cart.toJson());
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
       child: Row(children: [
-    Center(
-        child: Checkbox(
-      fillColor: MaterialStateProperty.all(Colors.transparent),
-      side: MaterialStateBorderSide.resolveWith((states) {
-        if (states.contains(MaterialState.pressed)) {
-          return const BorderSide(color: gray);
-        } else {
-          return const BorderSide(color: gray);
-        }
-      }),
-      checkColor: lightGreen,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      value: _cart.state,
-      onChanged: (val) {
-        // cartController.isLoading.value = true;
-        _cart.state = val;
-        _updateCart(_cart);
-        // cartController.isLoading.value = false;
-      },
-    )),
-    Expanded(
-      child: GestureDetector(
-        onTap: () {
-          _showModelButtonSheet(context);
-        },
-        child: Column(children: [
-          Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                _cart.quantity.toString() +
-                    " x " +
-                    _cart.product.name +
-                    " x " +
-                    oCcy.format((_cart
-                                .product
-                                .sizes[_cart.size == 'S'
-                                    ? 0
-                                    : _cart.size == 'M'
-                                        ? 1
-                                        : 2]
-                                .price *
-                            (1 - _cart.product.discount / 100))
-                        .toInt()),
-                style: const TextStyle(
-                    fontSize: 16.0, fontWeight: FontWeight.w600),
-              )),
-          Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
-              alignment: Alignment.centerLeft,
-              child:
-                  Text('Size: ' + _cart.size + ', ' + _cart.description)),
-        ]),
-      ),
-    ),
-    Center(
-      child: IconButton(
-          icon: const Icon(
-            Icons.delete_outline,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            // cartController.isLoading.value = true;
-            _deleteCart(_cart.id);
-            //  cartController.isLoading.value = false;
+        Center(
+            child: Checkbox(
+          fillColor: MaterialStateProperty.all(Colors.transparent),
+          side: MaterialStateBorderSide.resolveWith((states) {
+            if (states.contains(MaterialState.pressed)) {
+              return const BorderSide(color: gray);
+            } else {
+              return const BorderSide(color: gray);
+            }
           }),
-    )
+          checkColor: lightGreen,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          value: _cart.state,
+          onChanged: (val) {
+            // cartController.isLoading.value = true;
+            _cart.state = val;
+            _updateCart(_cart);
+            // cartController.isLoading.value = false;
+          },
+        )),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _showModelButtonSheet(context);
+            },
+            child: Column(children: [
+              Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
+                  alignment: Alignment.centerLeft,
+                  child: Obx(() {
+                    return Text(
+                      // _cart.quantity.toString() +
+                      cartController.cartsList
+                              .firstWhere((c) => c.id == _cart.id)
+                              .quantity
+                              .toString() +
+                          " x " +
+                          // _cart.product.name +
+                          cartController.cartsList
+                              .firstWhere((c) => c.id == _cart.id)
+                              .product
+                              .name +
+                          " x " +
+                          oCcy.format((cartController.cartsList
+                                      .firstWhere((c) => c.id == _cart.id)
+                                      .product
+                                      .sizes[_cart.size == 'S'
+                                          ? 0
+                                          : _cart.size == 'M'
+                                              ? 1
+                                              : 2]
+                                      .price *
+                                  (1 -
+                                      cartController.cartsList
+                                              .firstWhere(
+                                                  (c) => c.id == _cart.id)
+                                              .product
+                                              .discount /
+                                          100))
+                              .toInt()),
+                      style: const TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w600),
+                    );
+                  })),
+              Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 2.0),
+                  alignment: Alignment.centerLeft,
+                  child:
+                      Text('Size: ' + _cart.size + ', ' + _cart.description)),
+            ]),
+          ),
+        ),
+        Center(
+          child: IconButton(
+              icon: const Icon(
+                Icons.delete_outline,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                // cartController.isLoading.value = true;
+                _deleteCart(_cart.id);
+                //  cartController.isLoading.value = false;
+              }),
+        )
       ]),
     );
   }
@@ -217,8 +235,7 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
                                         padding:
@@ -242,8 +259,7 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                                         alignment: Alignment.center,
                                         child: Container(
                                           padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                              _cart.quantity.toString(),
+                                          child: Text(_cart.quantity.toString(),
                                               style: const TextStyle(
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.bold,
@@ -262,8 +278,7 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                                               WidgetsBinding.instance
                                                   .addPostFrameCallback(
                                                       (_) => myState(() {
-                                                            _cart.quantity +=
-                                                                1;
+                                                            _cart.quantity += 1;
                                                           }));
                                             }),
                                       ),
@@ -359,266 +374,257 @@ class _CartItem extends State<CartItem> with TickerProviderStateMixin {
                             ),
                             Row(
                               children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_cart.size.toUpperCase() != 'S') {
-                                      myState(() {
-                                        _cart.size = 'S';
-                                      });
-                                    }
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        child: Container(
-                                          height: 100,
-                                          alignment: Alignment.bottomCenter,
-                                          width: 60,
-                                          margin:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 15.0),
-                                          padding: const EdgeInsets.only(
-                                              top: 0.0),
-                                          child: Image.asset(
-                                              'assets/icons/coffee-cup.png',
-                                              height: 75,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_cart.size.toUpperCase() != 'S') {
+                                          myState(() {
+                                            _cart.size = 'S';
+                                          });
+                                        }
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            child: Container(
+                                              height: 100,
+                                              alignment: Alignment.bottomCenter,
                                               width: 60,
-                                              color: _cart.size == 'S'
-                                                  ? primary
-                                                  : black,
-                                              fit: BoxFit.fitHeight),
-                                        ),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 0.0),
+                                              child: Image.asset(
+                                                  'assets/icons/coffee-cup.png',
+                                                  height: 75,
+                                                  width: 60,
+                                                  color: _cart.size == 'S'
+                                                      ? primary
+                                                      : black,
+                                                  fit: BoxFit.fitHeight),
+                                            ),
+                                          ),
+                                          const Positioned(
+                                            top: 60,
+                                            left: 40,
+                                            child: Text('S',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: white,
+                                                )),
+                                          ),
+                                        ],
                                       ),
-                                      const Positioned(
-                                        top: 60,
-                                        left: 40,
-                                        child: Text('S',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: white,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            child: ((() {
+                                          if (_cart.product.discount > 0) {
+                                            return Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0, right: 0),
+                                              child: Text(
+                                                  oCcy.format(_cart
+                                                      .product.sizes[0].price),
+                                                  style: const TextStyle(
+                                                      color: yellow,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      decoration: TextDecoration
+                                                          .lineThrough)),
+                                            );
+                                          }
+                                        })())),
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0, right: 0),
+                                            child: Text(
+                                                oCcy.format(_cart.product
+                                                        .sizes[0].price *
+                                                    (1 -
+                                                        _cart.product.discount /
+                                                            100)),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                ))),
+                                      ],
+                                    )
+                                  ],
                                 ),
                                 Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                        child: ((() {
-                                      if (_cart.product.discount > 0) {
-                                        return Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, right: 0),
-                                          child: Text(
-                                              oCcy.format(_cart.product
-                                                  .sizes[0].price),
-                                              style: const TextStyle(
-                                                  color: yellow,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration
-                                                          .lineThrough)),
-                                        );
-                                      }
-                                    })())),
-                                    Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 8.0, right: 0),
-                                        child: Text(
-                                            oCcy.format(_cart.product
-                                                    .sizes[0].price *
-                                                (1 -
-                                                    _cart.product
-                                                            .discount /
-                                                        100)),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  FontWeight.normal,
-                                            ))),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_cart.size.toUpperCase() != 'M') {
-                                      myState(() {
-                                        _cart.size = 'M';
-                                      });
-                                    }
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        child: Container(
-                                          height: 100,
-                                          alignment: Alignment.bottomCenter,
-                                          width: 65,
-                                          margin:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 15.0),
-                                          padding: const EdgeInsets.only(
-                                              top: 0.0),
-                                          child: Image.asset(
-                                              'assets/icons/coffee-cup.png',
-                                              height: 85,
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_cart.size.toUpperCase() != 'M') {
+                                          myState(() {
+                                            _cart.size = 'M';
+                                          });
+                                        }
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            child: Container(
+                                              height: 100,
+                                              alignment: Alignment.bottomCenter,
                                               width: 65,
-                                              color: _cart.size == 'M'
-                                                  ? primary
-                                                  : black,
-                                              fit: BoxFit.fitHeight),
-                                        ),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 0.0),
+                                              child: Image.asset(
+                                                  'assets/icons/coffee-cup.png',
+                                                  height: 85,
+                                                  width: 65,
+                                                  color: _cart.size == 'M'
+                                                      ? primary
+                                                      : black,
+                                                  fit: BoxFit.fitHeight),
+                                            ),
+                                          ),
+                                          const Positioned(
+                                            top: 57,
+                                            left: 41,
+                                            child: Text('M',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: white)),
+                                          ),
+                                        ],
                                       ),
-                                      const Positioned(
-                                        top: 57,
-                                        left: 41,
-                                        child: Text('M',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: white)),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            child: ((() {
+                                          if (_cart.product.discount > 0) {
+                                            return Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0, right: 0),
+                                              child: Text(
+                                                  oCcy.format(_cart
+                                                      .product.sizes[1].price),
+                                                  style: const TextStyle(
+                                                      color: yellow,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      decoration: TextDecoration
+                                                          .lineThrough)),
+                                            );
+                                          }
+                                        })())),
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0, right: 0),
+                                            child: Text(
+                                                oCcy.format(_cart.product
+                                                        .sizes[1].price *
+                                                    (1 -
+                                                        _cart.product.discount /
+                                                            100)),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                ))),
+                                      ],
+                                    )
+                                  ],
                                 ),
                                 Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                        child: ((() {
-                                      if (_cart.product.discount > 0) {
-                                        return Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, right: 0),
-                                          child: Text(
-                                              oCcy.format(_cart.product
-                                                  .sizes[1].price),
-                                              style: const TextStyle(
-                                                  color: yellow,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration
-                                                          .lineThrough)),
-                                        );
-                                      }
-                                    })())),
-                                    Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 8.0, right: 0),
-                                        child: Text(
-                                            oCcy.format(_cart.product
-                                                    .sizes[1].price *
-                                                (1 -
-                                                    _cart.product
-                                                            .discount /
-                                                        100)),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  FontWeight.normal,
-                                            ))),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_cart.size.toUpperCase() != 'L') {
-                                      myState(() {
-                                        _cart.size = 'L';
-                                      });
-                                    }
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        child: Container(
-                                          height: 100,
-                                          alignment: Alignment.bottomCenter,
-                                          width: 70,
-                                          margin:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 15.0),
-                                          padding: const EdgeInsets.only(
-                                              top: 0.0),
-                                          child: Image.asset(
-                                              'assets/icons/coffee-cup.png',
-                                              height: 95,
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_cart.size.toUpperCase() != 'L') {
+                                          myState(() {
+                                            _cart.size = 'L';
+                                          });
+                                        }
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            child: Container(
+                                              height: 100,
+                                              alignment: Alignment.bottomCenter,
                                               width: 70,
-                                              color: _cart.size == 'L'
-                                                  ? primary
-                                                  : black,
-                                              fit: BoxFit.fitHeight),
-                                        ),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 0.0),
+                                              child: Image.asset(
+                                                  'assets/icons/coffee-cup.png',
+                                                  height: 95,
+                                                  width: 70,
+                                                  color: _cart.size == 'L'
+                                                      ? primary
+                                                      : black,
+                                                  fit: BoxFit.fitHeight),
+                                            ),
+                                          ),
+                                          const Positioned(
+                                            top: 55,
+                                            left: 46,
+                                            child: Text('L',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: white)),
+                                          ),
+                                        ],
                                       ),
-                                      const Positioned(
-                                        top: 55,
-                                        left: 46,
-                                        child: Text('L',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: white)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                        child: ((() {
-                                      if (_cart.product.discount > 0) {
-                                        return Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, right: 0),
-                                          child: Text(
-                                              oCcy.format(_cart.product
-                                                  .sizes[2].price),
-                                              style: const TextStyle(
-                                                  color: yellow,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  decoration:
-                                                      TextDecoration
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            child: ((() {
+                                          if (_cart.product.discount > 0) {
+                                            return Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0, right: 0),
+                                              child: Text(
+                                                  oCcy.format(_cart
+                                                      .product.sizes[2].price),
+                                                  style: const TextStyle(
+                                                      color: yellow,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      decoration: TextDecoration
                                                           .lineThrough)),
-                                        );
-                                      }
-                                    })())),
-                                    Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 8.0, right: 0),
-                                        child: Text(
-                                            oCcy.format(_cart.product
-                                                    .sizes[2].price *
-                                                (1 -
-                                                    _cart.product
-                                                            .discount /
-                                                        100)),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  FontWeight.normal,
-                                            ))),
+                                            );
+                                          }
+                                        })())),
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0, right: 0),
+                                            child: Text(
+                                                oCcy.format(_cart.product
+                                                        .sizes[2].price *
+                                                    (1 -
+                                                        _cart.product.discount /
+                                                            100)),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                ))),
+                                      ],
+                                    )
                                   ],
                                 )
-                              ],
-                            )
                               ],
                             )
                           ],

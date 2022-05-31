@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
       productController.fetchProductSuggest(userController.user.value.id, 3);
       storeController.getStoreListNearYou();
       addressController.fetchDistrictByCity();
+      userController.fetchFavourites();
       cartController.fetchCartsByCustomerId(
           userController.user.value.id); //addressController.fetchAddress();
       //print("Build Completed:" + userController.user.value.id.toString());

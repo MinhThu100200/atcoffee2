@@ -42,7 +42,7 @@ class RemoteServices {
       var jsonString = response.body;
 
       //print(response.body);
-      return storeFromJsonNotPage(jsonString);
+      return productFromJsonNotPage(jsonString);
     } else {
       //show error message
       return null;
