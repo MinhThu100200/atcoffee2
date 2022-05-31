@@ -113,11 +113,15 @@ public class ProductAPI {
 	
 	@PostMapping("/api/user/favourite")
 	public ResponseEntity<Boolean> addFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+		favouriteRequest.setCustomerId(ConstantsUtil.userDTO.getId());
 		return ResponseEntity.ok(productService.saveFavourite(favouriteRequest));
 	}
 	
 	@DeleteMapping("/api/user/favourite")
-	public ResponseEntity<Boolean> removeFavourites(@RequestBody FavouriteRequest favouriteRequest) {
+	public ResponseEntity<Boolean> removeFavourites(@RequestParam(name = "productId") int productId) {
+		FavouriteRequest favouriteRequest = new FavouriteRequest();
+		favouriteRequest.setCustomerId(ConstantsUtil.userDTO.getId());
+		favouriteRequest.setProductId(productId);
 		return ResponseEntity.ok(productService.deleteFavourite(favouriteRequest));
 	}
 	
