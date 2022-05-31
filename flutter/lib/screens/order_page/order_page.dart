@@ -1144,7 +1144,7 @@ class _OrderPage extends State<OrderPage> {
                             onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CartPage())),
+                                    builder: (context) => const CartPage())),
                             child: Text(
                                 'Giỏ hàng (' +
                                     cartController.cartsList.length.toString() +

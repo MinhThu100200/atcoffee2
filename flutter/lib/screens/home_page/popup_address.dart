@@ -1,7 +1,10 @@
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:at_coffee/models/promotion.dart';
+import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
@@ -23,6 +26,7 @@ class _PopUpAddress extends State<PopUpAddress> {
   final StoreController storeController = Get.put(StoreController());
   final UserController userController = Get.put(UserController());
   final CartController cartController = Get.put(CartController());
+  final typeController = Get.put(TypeController());
   var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
   var wayImage = [
     'assets/icons/delivery-man.png',
@@ -30,15 +34,14 @@ class _PopUpAddress extends State<PopUpAddress> {
   ];
   var total = 0.0;
   @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
-  //     total = cartController.calTotalAmount(cartController.cartsList);
-  //     //addressController.fetchAddress();
-  //     print("Build Completed:" + userController.user.value.id.toString());
-  //   });
-  // }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      cartController.calTotalAmounts();
+      print("Build Completed:" + userController.user.value.id.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,13 +136,11 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                      wayTitle[index],
+                                                  Text(wayTitle[index],
                                                       style: const TextStyle(
                                                           fontSize: 15,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w500)),
+                                                              FontWeight.w500)),
                                                   FittedBox(
                                                     child: Container(
                                                       width: size.width - 140,
@@ -231,7 +232,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        LocationStore()));
+                                                                        const LocationStore()));
                                                       }
                                                     },
                                                     child: const Text("Sửa"))),
@@ -315,6 +316,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: const Text(""));
                 } else {
+                  //cartController.calTotalAmounts();
                   return GestureDetector(
                     onTap: () => Get.to(() => const CartPage()),
                     child: Container(
@@ -344,8 +346,8 @@ class _PopUpAddress extends State<PopUpAddress> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Text(
-                                  MethodConstants.oCcy
-                                      .format(cartController.amount.value),
+                                  MethodConstants.oCcy.format(
+                                      calTotalAmount(cartController.cartsList)),
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 14.0,
@@ -367,5 +369,89 @@ class _PopUpAddress extends State<PopUpAddress> {
             ],
           )),
     );
+  }
+
+  bool _validPromotion(Promotion promotion) {
+    if (promotion.proviso > cartController.total["amount"]) {
+      return false;
+    }
+
+    if (userController.user.value.typeId == null ||
+        userController.user.value.typeId <
+            typeController.typesList
+                .firstWhere((type) => type.code == promotion.object)
+                .id) {
+      return false;
+    }
+    return true;
+  }
+
+  double _calAmount(carts) {
+    if (carts == null || carts.length == 0) {
+      return 0;
+    }
+
+    double amount = 0;
+    for (int i = 0; i < carts.length; i++) {
+      if (carts[i].state == true) {
+        amount += (carts[i]
+                        .product
+                        .sizes[carts[i].size == 'S'
+                            ? 0
+                            : carts[i].size == 'M'
+                                ? 1
+                                : 2]
+                        .price *
+                    (1 - carts[i].product.discount / 100))
+                .toInt() *
+            carts[i].quantity;
+      }
+    }
+    //total["amount"] = amount.toInt();
+    return amount;
+  }
+
+  double _calPromotion(carts) {
+    if (carts == null || carts.length == 0) {
+      //total["promotion"] = 0.toInt();
+      return 0;
+    }
+    double promotionValue = 0;
+
+    switch (cartController.type.value) {
+      case 0:
+        break;
+      case 1:
+        if (_validPromotion(cartController.promotion.value)) {
+          promotionValue = cartController.total["amount"] *
+              cartController.promotion.value.discount /
+              100;
+        }
+        break;
+      case 2:
+        if (_validReward(cartController.reward.value)) {
+          promotionValue = cartController.reward.value.redution.toDouble();
+        }
+        break;
+    }
+    //total["promotion"] = promotionValue.toInt();
+    return promotionValue;
+  }
+
+  bool _validReward(Reward reward) {
+    if (userController.user.value.currentPoints < reward.proviso) {
+      return false;
+    }
+    return true;
+  }
+
+  double calTotalAmount(carts) {
+    //isLoading.value = true;
+    double amounts = _calAmount(carts) - _calPromotion(carts);
+    amounts = amounts < 0 ? 0 : amounts;
+    //total["totalAmount"] = amounts.toInt();
+    //isLoading.value = false;
+    //amount.value = amounts;
+    return amounts;
   }
 }

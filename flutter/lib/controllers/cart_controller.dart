@@ -42,7 +42,7 @@ class CartController extends GetxController {
       var carts = await RemoteServices.fetchCartsByCustomerId(id);
       if (carts != null) {
         cartsList.value = carts;
-        calTotalAmounts(carts);
+        //calTotalAmounts(carts);
       }
     } finally {
       isLoading.value = false;
@@ -213,13 +213,13 @@ class CartController extends GetxController {
     return amounts;
   }
 
-  void calTotalAmounts(carts) {
+  void calTotalAmounts() {
     isLoading.value = true;
-    double amounts = _calAmount(carts) - _calPromotion(carts);
+    double amounts = _calAmount(cartsList) - _calPromotion(cartsList);
     amounts = amounts < 0 ? 0 : amounts;
     total["totalAmount"] = amounts.toInt();
+    //amount.value = amounts;
     isLoading.value = false;
-    amount.value = amounts;
     //return amount;
   }
 

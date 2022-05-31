@@ -92,28 +92,26 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                 SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                Positioned(
-                    child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () =>
-                      Get.to(() => RootApp(nameRoute: 'profile')),
-                )),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Text("Đơn hàng",
-                          style: TextStyle(
-                              color: white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                )
+                    Positioned(
+                        child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            onPressed: () => Navigator.pop(context))),
+                    Positioned(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Text("Đơn hàng",
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    )
                   ]),
                 ),
                 const SizedBox(
@@ -182,7 +180,8 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                         // ),
 
                                         Text(cateData[index]['name'],
-                                            style: const TextStyle(fontSize: 16)),
+                                            style:
+                                                const TextStyle(fontSize: 16)),
                                       ],
                                     ),
                                   ),
@@ -194,7 +193,8 @@ class _ManageOrderPage extends State<ManageOrderPage> {
 
                         Obx(() {
                           if (billController.isLoading.value) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else {
                             var data = billController.billsList
                                 .where((element) =>
@@ -205,8 +205,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: data.length,
                                 shrinkWrap: true,
-                                itemBuilder:
-                                    (BuildContext context, int index) {
+                                itemBuilder: (BuildContext context, int index) {
                                   return GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -214,8 +213,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     DetailOrderPage(
-                                                        bill:
-                                                            data[index])));
+                                                        bill: data[index])));
                                       },
                                       child: Container(
                                         height: 140.0,
@@ -231,57 +229,94 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                   left: 70.0,
                                                   child: Container(
                                                     padding:
-                                                        const EdgeInsets
-                                                                .only(
+                                                        const EdgeInsets.only(
                                                             left: 50.0,
                                                             right: 10.0,
                                                             top: 5.0,
                                                             bottom: 5.0),
-                                                    decoration:
-                                                        BoxDecoration(
+                                                    decoration: BoxDecoration(
                                                       color: primary,
                                                       borderRadius:
-                                                          BorderRadius
-                                                              .circular(20),
+                                                          BorderRadius.circular(
+                                                              20),
                                                     ),
                                                     height: 100.0,
-                                                    width:
-                                                        size.width - 110.0,
+                                                    width: size.width - 110.0,
                                                     child: Column(
                                                       children: [
                                                         Container(
-                                                            alignment:
-                                                                Alignment
-                                                                    .centerLeft,
+                                                            alignment: Alignment
+                                                                .centerLeft,
                                                             child: Text(
                                                                 "${data[index].billDetails[0].quantity} x " +
-                                                                    productController.allProducts.where((item) => item.id == data[index].billDetails[0].productId).toList()[0].name,
+                                                                    productController
+                                                                        .allProducts
+                                                                        .where((item) =>
+                                                                            item.id ==
+                                                                            data[index]
+                                                                                .billDetails[
+                                                                                    0]
+                                                                                .productId)
+                                                                        .toList()[
+                                                                            0]
+                                                                        .name,
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         16,
-                                                                    fontWeight: FontWeight
-                                                                        .bold,
-                                                                    color:
-                                                                        Colors.white))),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .white))),
                                                         const SizedBox(
                                                           height: 6,
                                                         ),
-                                                        Row(
-                                                            children: [
-                                                              data[index].billDetails[0].discount >
-                                                                      0
-                                                                  ? Text(
-                                                                      oCcy.format(data[index].billDetails[0].price * data[index].billDetails[0].quantity).toString(),
-                                                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: black, decoration: TextDecoration.lineThrough))
-                                                                  : const Text(""),
-                                                              Text(" " + oCcy.format(data[index].billDetails[0].amount).toString(),
+                                                        Row(children: [
+                                                          data[index]
+                                                                      .billDetails[
+                                                                          0]
+                                                                      .discount >
+                                                                  0
+                                                              ? Text(
+                                                                  oCcy
+                                                                      .format(data[index]
+                                                                              .billDetails[
+                                                                                  0]
+                                                                              .price *
+                                                                          data[index]
+                                                                              .billDetails[
+                                                                                  0]
+                                                                              .quantity)
+                                                                      .toString(),
                                                                   style: const TextStyle(
                                                                       fontSize:
                                                                           14,
                                                                       fontWeight:
-                                                                          FontWeight.bold,
-                                                                      color: lightYellow)),
-                                                            ]),
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          black,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .lineThrough))
+                                                              : const Text(""),
+                                                          Text(
+                                                              " " +
+                                                                  oCcy
+                                                                      .format(data[
+                                                                              index]
+                                                                          .billDetails[
+                                                                              0]
+                                                                          .amount)
+                                                                      .toString(),
+                                                              style: const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color:
+                                                                      lightYellow)),
+                                                        ]),
                                                         const SizedBox(
                                                           height: 6,
                                                         ),
@@ -304,8 +339,10 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                                       fontSize:
                                                                           14,
                                                                       fontWeight:
-                                                                          FontWeight.bold,
-                                                                      color: lightYellow))
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          lightYellow))
                                                             ]),
                                                         const SizedBox(
                                                           height: 8,
@@ -314,20 +351,22 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                           onTap: () {},
                                                           child: Row(
                                                             mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
+                                                                MainAxisAlignment
+                                                                    .end,
                                                             children: [
-                                                          Text(
-                                                              ">>>>> Xem chi tiết",
-                                                              style: TextStyle(
-                                                                  color: Colors.grey[
-                                                                      800],
-                                                                  fontSize:
-                                                                      12,
-                                                                  fontWeight: FontWeight
-                                                                      .bold,
-                                                                  fontStyle:
-                                                                      FontStyle.italic)),
+                                                              Text(">>>>> Xem chi tiết",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          800],
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontStyle:
+                                                                          FontStyle
+                                                                              .italic)),
                                                             ],
                                                           ),
                                                         ),
@@ -341,16 +380,14 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                   decoration: BoxDecoration(
                                                     color: lightYellow,
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                   child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                                      borderRadius: BorderRadius.circular(
+                                                          10),
                                                       child: Image.network(
-                                                          productController
-                                                              .allProducts
+                                                          productController.allProducts
                                                               .where((item) =>
                                                                   item.id ==
                                                                   data[index]
@@ -363,8 +400,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                           errorBuilder: (BuildContext context,
                                                               Object exception,
                                                               StackTrace stackTrace) {
-                                                        return const Text(
-                                                            '😢');
+                                                        return const Text('😢');
                                                       }, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                                                         if (loadingProgress ==
                                                             null) {
@@ -373,10 +409,13 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                           return Center(
                                                             child:
                                                                 CircularProgressIndicator(
-                                                              value: loadingProgress.expectedTotalBytes !=
+                                                              value: loadingProgress
+                                                                          .expectedTotalBytes !=
                                                                       null
-                                                                  ? loadingProgress.cumulativeBytesLoaded /
-                                                                      loadingProgress.expectedTotalBytes
+                                                                  ? loadingProgress
+                                                                          .cumulativeBytesLoaded /
+                                                                      loadingProgress
+                                                                          .expectedTotalBytes
                                                                   : null,
                                                             ),
                                                           );
