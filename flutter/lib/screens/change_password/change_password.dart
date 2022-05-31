@@ -1,6 +1,7 @@
 import 'package:at_coffee/screens/profile_page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,6 @@ class _ChangePassword extends State<ChangePassword> {
   bool _isHideOldPassword = true;
   bool _isHidePassword = true;
   bool _isHidePasswordConfirm = true;
-  bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -259,16 +259,6 @@ class _ChangePassword extends State<ChangePassword> {
                 ],
               ),
             )),
-            if (_isSaving) ...[
-              Positioned(
-                child: Container(
-                  width: size.width,
-                  height: size.height - 86.0,
-                  color: Colors.grey.withOpacity(0.3),
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-              ),
-            ],
           ]),
         ),
       ),
@@ -324,9 +314,10 @@ class _ChangePassword extends State<ChangePassword> {
     });
 
     if (_flag) {
-      setState(() {
-        _isSaving = true;
-      });
+      await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
 
       bool _isSaved = await userController.changePassword(
           _oldPassword.text, _password.text);
@@ -350,9 +341,7 @@ class _ChangePassword extends State<ChangePassword> {
             backgroundColor: red2,
             textColor: Colors.white,
             fontSize: 16.0);
-        setState(() {
-          _isSaving = false;
-        });
+        await EasyLoading.dismiss();
       }
     }
   }
