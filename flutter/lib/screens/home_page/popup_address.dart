@@ -57,6 +57,7 @@ class _PopUpAddress extends State<PopUpAddress> {
             builder: (BuildContext context) {
               return Container(
                   height: 200,
+                  width: size.width,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -72,7 +73,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                           children: [
                             const SizedBox(width: 5),
                             Container(
-                              padding: const EdgeInsets.only(left: 16, top: 5),
+                              padding: const EdgeInsets.only(left: 10, top: 5),
                               child: const Text("Chọn phương thức giao hàng",
                                   style: TextStyle(
                                       fontSize: 16,
@@ -88,7 +89,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                           ]),
                       Container(
                         color: Colors.grey[200],
-                        width: size.width,
+                        //width: size.width,
                         child: const SizedBox(height: 0.5),
                       ),
                       Obx(() {
@@ -272,11 +273,13 @@ class _PopUpAddress extends State<PopUpAddress> {
                             child:
                                 Image.asset('assets/icons/delivery-man.png')),
                         const SizedBox(width: 5),
-                        const Text("Giao đến",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: gray3))
+                        Obx(
+                          () => Text(wayTitle[storeController.selected.value],
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: gray3)),
+                        )
                       ],
                     ),
                     const SizedBox(height: 6),
@@ -316,7 +319,6 @@ class _PopUpAddress extends State<PopUpAddress> {
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: const Text(""));
                 } else {
-                  //cartController.calTotalAmounts();
                   return GestureDetector(
                     onTap: () => Get.to(() => const CartPage()),
                     child: Container(

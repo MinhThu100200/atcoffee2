@@ -1,7 +1,5 @@
 import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
-import 'package:at_coffee/controllers/promotion_controller.dart';
-import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
@@ -31,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   final AddressController addressController = Get.put(AddressController());
   final CartController cartController = Get.put(CartController());
   final RewardController rewardController = Get.put(RewardController());
-  
+
   //var selected = 0.obs;
 
   @override
@@ -268,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                                         const EdgeInsets.only(
                                                             top: 6, left: 8),
                                                     child: const Text(
-                                                        "Delivery",
+                                                        "Giao hàng",
                                                         style: TextStyle(
                                                             color: primary,
                                                             fontSize: 16,
@@ -322,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                                                         const EdgeInsets.only(
                                                             left: 8),
                                                     child: const Text(
-                                                        "Take away ",
+                                                        "Tự đến lấy ",
                                                         style: TextStyle(
                                                             color: primary,
                                                             fontSize: 16,

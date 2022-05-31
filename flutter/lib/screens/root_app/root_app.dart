@@ -6,13 +6,11 @@ import 'package:get/get.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 // screens
 import 'package:at_coffee/screens/location_page/location_page.dart';
-import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:at_coffee/screens/reward_page/reward_page.dart';
 import 'package:at_coffee/screens/profile_page/profile_page.dart';
 import 'package:at_coffee/screens/home_page/home_page.dart';
 // controllers
 import 'package:at_coffee/controllers/cart_controller.dart';
-import 'package:at_coffee/screens/test_location.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/reward_controller.dart';
@@ -80,20 +78,12 @@ class _RootAppState extends State<RootApp> {
   Widget getBody(BuildContext context) {
     return IndexedStack(
       index: pageIndex,
-      children: [
-        //ProductsPage(),
+      children: const [
         HomePage(),
-        const RewardPage(),
+        RewardPage(),
         LocationPage(),
-        // CartPage(),
-        // Center(
-        //   child: Text("Notification Page"),
-        // ),
-        const NotificationPage(),
-        const ProfilePage(),
-        // Center(
-        //   child: Text("Personal Page"),
-        // ),
+        NotificationPage(),
+        ProfilePage(),
       ],
     );
   }
@@ -102,7 +92,7 @@ class _RootAppState extends State<RootApp> {
     List items = [
       Icons.home_filled,
       CupertinoIcons.gift,
-      Icons.add,
+      Icons.storefront_sharp,
       Icons.notifications,
       Icons.account_circle
     ];

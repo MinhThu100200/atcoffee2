@@ -5,6 +5,7 @@ import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/models/Bill.dart';
 import 'package:at_coffee/screens/manage_order_page/detail_order.dart';
+import 'package:at_coffee/screens/rate_page/rate_page.dart';
 import 'package:at_coffee/screens/root_app/root_app.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -132,7 +133,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                         Container(
                           padding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10),
-                          height: 70,
+                          height: 100,
                           child: Center(
                             child: ListView.builder(
                               itemCount: cateData.length,
@@ -142,48 +143,83 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                 return InkWell(
                                   onTap: () {
                                     setStateValue(cateData[index]['status']);
+                                    if (cateData[index]['status'] == "RATE") {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const RatePage()));
+                                    }
                                   },
-                                  child: Container(
-                                    //width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: indexCategory ==
-                                              cateData[index]['status']
-                                          ? primary
-                                          : Colors.grey[300],
-                                    ),
-                                    margin: const EdgeInsets.only(
-                                        right: 15, bottom: 10),
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      children: [
-                                        // Container(
-                                        //   height: 50,
-                                        //   width: 32,
-                                        //   padding: EdgeInsets.only(
-                                        //     top: index == 0 ? 8 : 5,
-                                        //     bottom: 5,
-                                        //   ),
-                                        //   decoration: BoxDecoration(
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(
-                                        //               25),
-                                        //       color:
-                                        //           indexCategory == index
-                                        //               ? lightGreen
-                                        //               : lightGreen2),
-                                        //   child: Image.asset(
-                                        //       nameImage[index]
-                                        //           .toString(),
-                                        //       //height: index == 0 ? 30 : 50,
-                                        //       fit: BoxFit.fitHeight),
-                                        // ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Positioned(
+                                        child: Container(
+                                          //width: 100,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: indexCategory ==
+                                                    cateData[index]['status']
+                                                ? primary
+                                                : Colors.grey[300],
+                                          ),
+                                          margin: const EdgeInsets.only(
+                                              right: 15, bottom: 10),
+                                          padding: const EdgeInsets.all(10),
+                                          child: Row(
+                                            children: [
+                                              // Container(
+                                              //   height: 50,
+                                              //   width: 32,
+                                              //   padding: EdgeInsets.only(
+                                              //     top: index == 0 ? 8 : 5,
+                                              //     bottom: 5,
+                                              //   ),
+                                              //   decoration: BoxDecoration(
+                                              //       borderRadius:
+                                              //           BorderRadius.circular(
+                                              //               25),
+                                              //       color:
+                                              //           indexCategory == index
+                                              //               ? lightGreen
+                                              //               : lightGreen2),
+                                              //   child: Image.asset(
+                                              //       nameImage[index]
+                                              //           .toString(),
+                                              //       //height: index == 0 ? 30 : 50,
+                                              //       fit: BoxFit.fitHeight),
+                                              // ),
 
-                                        Text(cateData[index]['name'],
-                                            style:
-                                                const TextStyle(fontSize: 16)),
-                                      ],
-                                    ),
+                                              Text(cateData[index]['name'],
+                                                  style: const TextStyle(
+                                                      fontSize: 16)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                          left: 3,
+                                          bottom: 58,
+                                          child: Container(
+                                            height: 30,
+                                            width: 30,
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                                color: red2,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Text(billController.billsList
+                                                .where((element) =>
+                                                    element.status ==
+                                                    cateData[index]['status'])
+                                                .toList()
+                                                .length
+                                                .toString()),
+                                          ))
+                                    ],
                                   ),
                                 );
                               },
