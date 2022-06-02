@@ -16,12 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcmute.api.response.RateResponse;
 import com.hcmute.dto.RateDTO;
 import com.hcmute.service.RateService;
+import com.hcmute.util.ConstantsUtil;
 
 @RestController
 public class RateAPI {
 	
 	@Autowired
 	private RateService rateService;
+	
+	@GetMapping("/api/user/rate")
+	public ResponseEntity<List<RateDTO>> getByUser() {
+		return ResponseEntity.ok(rateService.findByUserId(ConstantsUtil.userDTO.getId()));
+	}
 	
 	@PostMapping("/api/user/rate")
 	public ResponseEntity<RateDTO> save(@RequestBody RateDTO rateDTO) {
