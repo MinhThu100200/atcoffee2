@@ -1,7 +1,9 @@
 // export const HOSTNAME = 'http://localhost:8086';
-export const HOSTNAME_DEFAULT = 'http://localhost:8080';
+export const HOSTNAME_DEFAULT = 'http://localhost:8080/v1';
+export const HOSTNAME_NOTIFICATION = 'http://localhost:8080/v2';
 // export const HOSTNAME_DEFAULT = 'https://atcoffee-web.herokuapp.com';
 export const JWT_NAME = 'jwt';
+export const TOKEN_FCM = 'AAAA-YQwquE:APA91bGUSX9_WqJauv3VE2AECILzW-NNUWEt_h8D8IcsednX6eMUSAR465RtKwDAa_WqGQ34SYwMHz8Xbg8sjdsf9149t_iJn1ZZEogZOmnYzsHocg21fyiDLLYxMpeLQUff2AF_qw9Z';
 export const ROLE = { 
   ROLE_ADMIN:'ADMIN',
   ROLE_STAFF: 'STAFF',
