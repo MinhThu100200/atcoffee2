@@ -1,4 +1,5 @@
 import 'package:at_coffee/models/cart.dart';
+import 'package:at_coffee/screens/order_page/rate_filter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -151,36 +152,37 @@ class _OrderPage extends State<OrderPage> {
                                   }),
                             ),
                           ),
-                          Obx(() {
-                            return Positioned(
-                              right: 12.0,
-                              top: 0.0,
-                              child: Container(
-                                padding: const EdgeInsets.all(0.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  color: Colors.transparent,
-                                ),
-                                child: IconButton(
-                                    icon: Icon(
-                                      EvaIcons.heart,
-                                      size: 32,
-                                      color: userController
-                                              .checkFavourite(_product)
-                                          ? Colors.red
-                                          : Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      if (userController
-                                          .checkFavourite(_product)) {
-                                        _removeFavourite(_product);
-                                      } else {
-                                        _addFavourite(_product);
-                                      }
-                                    }),
-                              ),
-                            );
-                          }),
+                          // Obx(() {
+                          //   return Positioned(
+                          //     right: 12.0,
+                          //     top: 0.0,
+                          //     child: Container(
+                          //       padding: const EdgeInsets.all(0.0),
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(8.0),
+                          //         color: Colors.transparent,
+                          //       ),
+                          //       child: IconButton(
+                          //           icon: Icon(
+                          //             EvaIcons.heart,
+                          //             size: 32,
+                          //             color: userController
+                          //                     .checkFavourite(_product)
+                          //                 ? Colors.red
+                          //                 : Colors.white,
+                          //           ),
+                          //           onPressed: () {
+                          //             if (userController
+                          //                 .checkFavourite(_product)) {
+                          //               _removeFavourite(_product);
+                          //             } else {
+                          //               _addFavourite(_product);
+                          //             }
+                          //           }),
+                          //     ),
+                          //   );
+                          // }),
+
                           Positioned.fill(
                             bottom: 20.0,
                             // left: 50,
@@ -887,9 +889,11 @@ class _OrderPage extends State<OrderPage> {
                           child: Column(
                             children: [
                               InkWell(
-                                onTap: () {
-                                  print('đã nhấn');
-                                },
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RateFilterPage())),
                                 child: Container(
                                   color: white,
                                   padding: const EdgeInsets.only(
@@ -902,17 +906,13 @@ class _OrderPage extends State<OrderPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            child: Text("Khách hàng đánh giá",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                          ),
+                                          const Text("Khách hàng đánh giá",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600)),
                                           Row(
                                             children: [
-                                              Container(
-                                                  child: Row(
+                                              Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
@@ -959,7 +959,7 @@ class _OrderPage extends State<OrderPage> {
                                                           color: Colors
                                                               .grey[500])),
                                                 ],
-                                              )),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -987,14 +987,15 @@ class _OrderPage extends State<OrderPage> {
                                   )),
                               Obx(() {
                                 if (rateController.isLoading.value) {
-                                  return Center(
+                                  return const Center(
                                       child: CircularProgressIndicator());
                                 } else {
                                   return Container(
                                     color: white,
                                     child: ListView.builder(
                                         //itemCount: storeController.storesList.length,
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemCount:
                                             rateController.ratesList.length < 3
                                                 ? rateController
@@ -1039,34 +1040,53 @@ class _OrderPage extends State<OrderPage> {
                                                                 top: 10,
                                                                 bottom: 5),
                                                         child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
-                                                            Container(
-                                                              child: Text(
-                                                                  "User " +
-                                                                      rateController
-                                                                          .ratesList[
-                                                                              index]
-                                                                          .userId
-                                                                          .toString(),
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      color:
-                                                                          gray)),
-                                                            ),
-                                                            Text('★★★★★',
-                                                                style: TextStyle(
+                                                            Text(
+                                                                "User " +
+                                                                    rateController
+                                                                        .ratesList[
+                                                                            index]
+                                                                        .userId
+                                                                        .toString(),
+                                                                style: const TextStyle(
                                                                     fontSize:
                                                                         11,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
+                                                                    color:
+                                                                        gray)),
+                                                            Text(
+                                                                "★★★★★"
+                                                                        .substring(
+                                                                      0,
+                                                                      rateController
+                                                                          .ratesList[
+                                                                              index]
+                                                                          .star
+                                                                          .toInt(),
+                                                                    ) +
+                                                                    "☆☆☆☆☆".substring(
+                                                                        rateController
+                                                                            .ratesList[
+                                                                                index]
+                                                                            .star
+                                                                            .toInt(),
+                                                                        5),
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
                                                                     color: Colors
-                                                                            .yellow[
-                                                                        700])),
+                                                                        .yellow)),
                                                           ],
                                                         ),
                                                       ),
@@ -1110,9 +1130,11 @@ class _OrderPage extends State<OrderPage> {
                       Container(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: InkWell(
-                            onTap: () {
-                              print("xem tất cả");
-                            },
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RateFilterPage())),
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -1214,13 +1236,13 @@ class _OrderPage extends State<OrderPage> {
         ));
   }
 
-  void _addFavourite(Product product) async {
-    await userController.addFavourites(product);
-  }
+  // void _addFavourite(Product product) async {
+  //   await userController.addFavourites(product);
+  // }
 
-  void _removeFavourite(Product product) async {
-    await userController.removeFavourites(product);
-  }
+  // void _removeFavourite(Product product) async {
+  //   await userController.removeFavourites(product);
+  // }
 
   void addToCart() async {
     await EasyLoading.show(

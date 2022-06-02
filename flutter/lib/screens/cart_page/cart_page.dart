@@ -4,7 +4,6 @@ import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/bill.dart';
 import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/models/payment.dart';
@@ -701,6 +700,7 @@ class _CartPage extends State<CartPage> {
       billDetail.amount = priceItem * (1 - c.product.discount / 100);
       billDetail.price = priceItem;
       billDetail.size = c.size;
+      billDetail.state = true;
       billDetail.discount = c.product.discount;
       billDetail.productId = c.productId;
       bill.billDetails.add(billDetail);

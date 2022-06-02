@@ -124,10 +124,8 @@ class _AddressDeliveryState extends State<AddressDelivery> {
                         padding: const EdgeInsets.only(top: 10),
                         child: Container(
                           alignment: Alignment.center,
-                          child: Text(
-                              "Chọn địa chỉ" +
-                                  addressController.wardList.length.toString(),
-                              style: const TextStyle(
+                          child: const Text("Chọn địa chỉ",
+                              style: TextStyle(
                                   color: white,
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold)),

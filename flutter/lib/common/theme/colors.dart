@@ -38,6 +38,7 @@ const Color lightPurple = Color(0xFF7B789F);
 const Color purple = Color(0xFF595683);
 
 const Color yellow = Color(0xFFF1CD7C);
+const Color yellowDark = Color(0xFFF6BE00);
 const Color lightYellow = Color(0xFFFFD88A);
 
 const Color pink = Color(0xFFD993B4);

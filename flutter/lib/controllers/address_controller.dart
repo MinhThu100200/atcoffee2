@@ -56,8 +56,6 @@ class AddressController extends GetxController {
           if (address[i].code == 79) {
             for (var j = 0; j < address[i].districts.length; j++) {
               if (address[i].districts[j].code == myDistrict.code) {
-                print("error in fetchAddress" +
-                    address[i].districts[j].wards.length.toString());
                 wardList.value = address[i].districts[j].wards;
               }
             }

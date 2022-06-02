@@ -3,8 +3,6 @@ import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
-import 'package:at_coffee/models/promotion.dart';
-import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_page.dart';
 import 'package:at_coffee/screens/location_page/location_store.dart';
 import 'package:at_coffee/screens/location_page/address_delivery.dart';
