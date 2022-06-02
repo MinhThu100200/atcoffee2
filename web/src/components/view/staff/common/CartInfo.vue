@@ -188,7 +188,7 @@ export default {
         amount: this.price - this.discount,
         price: this.price,
         discount: this.discountPromotion, //this.promotion != null ? this.promotion.discount : 0,
-        point: ((this.price - this.discount) * Constants.POINTS_REFUND).toFixed(0),
+        point: parseInt(((this.price - this.discount) * Constants.POINTS_REFUND).toFixed(0)),
         address: '',
         status: Constants.STATUS_BILL.PAID,
         rewardId: 0,
@@ -207,7 +207,8 @@ export default {
         }),
         createdDate: new Date().getTime(),
         state: true,
-        read: true
+        read: true,
+        token: ''
       }
      
       let result = await BillCommand.save(bill);
