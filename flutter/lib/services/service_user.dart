@@ -1,3 +1,4 @@
+import 'package:at_coffee/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:at_coffee/models/store.dart';
 import 'package:at_coffee/models/user.dart';
@@ -139,6 +140,44 @@ class RemoteServices {
       }
       return false;
     } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<List<Product>> fetchFavourites() async {
+    String url = ApiConstants.HOST + ApiConstants.FAVOURITE;
+
+    var response = await ApiService.instance().get(url);
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      return productFromJsonNotPage(jsonString);
+    } else {
+      //show error message
+      return null;
+    }
+  }
+
+  static Future<bool> addFavourites(int productId) async {
+    String url = ApiConstants.HOST + ApiConstants.FAVOURITE;
+    String body =
+        jsonEncode(<String, dynamic>{'customerId': 0, 'productId': productId});
+    var response = await ApiService.instance().post(url, body);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> removeFavourites(int productId) async {
+    String url = ApiConstants.HOST +
+        ApiConstants.FAVOURITE +
+        '?productId=' +
+        productId.toString();
+    var response = await ApiService.instance().delete(url);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
       return false;
     }
   }

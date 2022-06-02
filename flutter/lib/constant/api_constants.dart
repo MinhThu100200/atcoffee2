@@ -1,5 +1,5 @@
 class ApiConstants {
-  static String HOST = 'https://9ad9-113-161-57-17.ap.ngrok.io';
+  static String HOST = 'https://315e-125-235-238-204.ngrok.io';
   static String GET_CATEGORY = '/api/info/category/?list=true';
   static String GET_STORE = '/api/info/store';
   static String GET_ADRRESS(depth) =>
@@ -47,4 +47,5 @@ class ApiConstants {
   static String VALIDATE_CUSTOMER_SIGNUP = "/api/info/customer/validate";
   static String RESET_PASSWORD = '/api/info/reset-password';
   static String CHANGE_PASSWORD = '/api/user/change-password';
+  static String FAVOURITE = '/api/user/favourite';
 }
