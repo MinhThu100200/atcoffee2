@@ -74,7 +74,6 @@ class CartController extends GetxController {
 
   Future<Cart> updateCart(Cart cart) async {
     try {
-      // isLoading.value = true;
       // update in list
       Cart prevCart = Cart.fromJson(cart.toJson());
       var index = cartsList.indexWhere((c) => c.id == cart.id);
@@ -89,17 +88,15 @@ class CartController extends GetxController {
         var prevIndex = cartsList.indexWhere((c) => c.id == prevCart.id);
         cartsList[prevIndex] = prevCart;
         calcTotalCart();
+        return null;
       }
+    } catch (e) {
       return null;
-    } finally {
-      isLoading.value = false;
     }
   }
 
   Future<bool> deleteCart(int cartId) async {
-    print(cartId);
     try {
-      // isLoading.value = true;
       // remove in list
       Cart prevCart =
           Cart.fromJson(cartsList.firstWhere((c) => c.id == cartId).toJson());
@@ -108,22 +105,23 @@ class CartController extends GetxController {
       calcTotalCart();
       // remove in database
       bool isDeleted = await RemoteServices.deleteCart(cartId);
+      // success
       if (isDeleted) {
         return true;
+        // fail
       } else {
         // rollback list
         cartsList.insert(index, prevCart);
         calcTotalCart();
+        return false;
       }
-      return isDeleted;
-    } finally {
-      isLoading.value = false;
+    } catch (e) {
+      return false;
     }
   }
 
   Future<bool> deleteCartByUserId(int userId) async {
     try {
-      // isLoading.value = true;
       // remove list
       var prevCarts = cartFromJson(cartToJson(cartsList));
       cartsList.removeRange(0, cartsList.length);
@@ -136,16 +134,15 @@ class CartController extends GetxController {
       } else {
         //rollback list
         cartsList.value = prevCarts;
+        return false;
       }
-      return isDeleted;
-    } finally {
-      isLoading.value = false;
+    } catch (e) {
+      return false;
     }
   }
 
   Future<bool> deleteCartPayment() async {
     try {
-      // isLoading.value = true;
       List<int> ids = <int>[];
       for (var cart in cartsList) {
         if (cart.state == true) {
@@ -164,10 +161,10 @@ class CartController extends GetxController {
         // rollback list
         cartsList.value = prevCarts;
         calcTotalCart();
+        return false;
       }
-      return isDeleted;
-    } finally {
-      isLoading.value = false;
+    } catch (e) {
+      return false;
     }
   }
 
