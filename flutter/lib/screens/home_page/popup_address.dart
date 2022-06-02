@@ -312,7 +312,7 @@ class _PopUpAddress extends State<PopUpAddress> {
               ),
               Obx(() {
                 if (cartController.isLoading.value == true ||
-                    cartController.cartsList.isEmpty) {
+                    cartController.cartsList.where((c) => c.state).isEmpty) {
                   return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: const Text(""));
