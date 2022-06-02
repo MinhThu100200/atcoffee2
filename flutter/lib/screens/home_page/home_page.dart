@@ -377,6 +377,34 @@ class _HomePageState extends State<HomePage> {
                                               .productsSuggestion[index]);
                                     });
                               }
+                            }),
+                            Row(
+                              children: [
+                                Container(
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text("Sản phẩm yêu thích",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800))),
+                              ],
+                            ),
+                            Obx(() {
+                              if (userController.isLoading.value) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: userController.favourites.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ProductItem(
+                                          product:
+                                              userController.favourites[index]);
+                                    });
+                              }
                             })
                           ]),
                     ),
