@@ -173,7 +173,11 @@ class _RateFilterPage extends State<RateFilterPage> {
                                                         color: yellowDark)),
                                           ],
                                         ),
-                                        Text("(số lượng)"),
+                                        cateData[index]['id'] == 6
+                                            ? Text(
+                                                "(${rateController.ratesList.length})")
+                                            : Text(
+                                                "(${rateController.ratesList.where((item) => item.star == cateData[index]['id']).toList().length})"),
                                       ],
                                     ),
                                   ),
