@@ -190,6 +190,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                         )))
                               ],
                             )),
+                       
                         ListView.builder(
                             itemCount: _bill.billDetails.length,
                             physics: const NeverScrollableScrollPhysics(),

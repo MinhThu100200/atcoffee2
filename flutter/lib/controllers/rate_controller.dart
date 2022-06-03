@@ -12,7 +12,7 @@ class RateController extends GetxController {
     super.onInit();
   }
 
-  void fetchRates(id) async {
+  Future<void> fetchRates(id) async {
     try {
       isLoading.value = true;
       var rates = await RemoteServices.fetchRates(id);
@@ -24,7 +24,7 @@ class RateController extends GetxController {
     }
   }
 
-  void fetchRateByUser() async {
+  Future<void> fetchRateByUser() async {
     try {
       isLoading.value = true;
       var rates = await RemoteServices.fetchRateByUser();
@@ -34,5 +34,16 @@ class RateController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<bool> addRate(body) async {
+    try {
+      isLoading.value = true;
+      var rates = await RemoteServices.addRate(body);
+      if (rates) {
+        return true;
+      }
+    } finally {}
+    return false;
   }
 }

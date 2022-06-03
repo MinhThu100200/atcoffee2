@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:at_coffee/common/utils_common/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:at_coffee/models/rate.dart';
@@ -29,6 +31,18 @@ class RemoteServices {
     } else {
       //show error message
       return null;
+    }
+  }
+
+  static Future<bool> addRate(body) async {
+    String url = ApiConstants.HOST + ApiConstants.ADD_RATE;
+    var response = await ApiService.instance().post(url, jsonEncode(body));
+    if (response.statusCode == 200) {
+      //print("rate user " + jsonString);
+      return true;
+    } else {
+      //show error message
+      return false;
     }
   }
 }

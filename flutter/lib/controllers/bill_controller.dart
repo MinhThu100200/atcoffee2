@@ -25,9 +25,9 @@ class BillController extends GetxController {
   }
 
   void getBill() {
-    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('bills');
+    DatabaseReference listOrder = FirebaseDatabase.instance.ref('bills');
     isLoading(true);
-    starCountRef.onValue.listen((DatabaseEvent event) {
+    listOrder.onValue.listen((DatabaseEvent event) {
       List<Bill> bills = [];
       final data = event.snapshot.value;
       Map<Object, Object> mydata = data;
@@ -44,6 +44,15 @@ class BillController extends GetxController {
       //print(bills.length);
       //return bills;
     });
+    isLoading(false);
+    //return [];
+  }
+
+  Future<void> updateBill(idBill, idItem) async {
+    DatabaseReference listOrder = FirebaseDatabase.instance
+        .ref('bills/${idBill}/billDetails/${idItem - 1}');
+    isLoading(true);
+    await listOrder.update({"state": false});
     isLoading(false);
     //return [];
   }

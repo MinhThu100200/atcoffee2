@@ -1021,8 +1021,7 @@ class _OrderPage extends State<OrderPage> {
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  top: 10,
-                                                                  bottom: 5),
+                                                                  bottom: 20),
                                                           child: ClipRRect(
                                                               borderRadius:
                                                                   BorderRadius
@@ -1062,6 +1061,18 @@ class _OrderPage extends State<OrderPage> {
                                                                             .w700,
                                                                     color:
                                                                         gray)),
+                                                            const SizedBox(
+                                                                height: 5),
+                                                            Text(
+                                                                DateTime.fromMillisecondsSinceEpoch(rateController
+                                                                        .ratesList[
+                                                                            index]
+                                                                        .createdDate)
+                                                                    .toString(),
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            10)),
                                                             Text(
                                                                 "★★★★★"
                                                                         .substring(
@@ -1120,6 +1131,7 @@ class _OrderPage extends State<OrderPage> {
                                                   )),
                                             ],
                                           );
+                                        
                                         }),
                                   );
                                 }

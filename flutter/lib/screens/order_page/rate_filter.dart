@@ -118,9 +118,9 @@ class _RateFilterPage extends State<RateFilterPage> {
                   width: size.width,
                   padding: const EdgeInsets.only(top: 8.0),
                   decoration: const BoxDecoration(
-                      // borderRadius: BorderRadius.only(
-                      //     topLeft: Radius.circular(40),
-                      //     topRight: Radius.circular(40)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40)),
                       color: lightGray3),
                   child: Flex(
                       direction: Axis.vertical,
@@ -223,7 +223,7 @@ class _RateFilterPage extends State<RateFilterPage> {
                                               Container(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          top: 10, bottom: 5),
+                                                          bottom: 20),
                                                   child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -255,6 +255,16 @@ class _RateFilterPage extends State<RateFilterPage> {
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                             color: gray)),
+                                                    const SizedBox(height: 5),
+                                                    Text(
+                                                        DateTime.fromMillisecondsSinceEpoch(
+                                                                rateController
+                                                                    .ratesList[
+                                                                        index]
+                                                                    .createdDate)
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            fontSize: 10)),
                                                     Text(
                                                         "★★★★★".substring(
                                                               0,
@@ -308,6 +318,7 @@ class _RateFilterPage extends State<RateFilterPage> {
                                 });
                           }
                         }),
+                      
                       ]),
                 ),
               ],

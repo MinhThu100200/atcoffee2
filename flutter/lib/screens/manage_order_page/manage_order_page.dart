@@ -384,28 +384,26 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                         const SizedBox(
                                                           height: 8,
                                                         ),
-                                                        GestureDetector(
-                                                          onTap: () {},
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(">>>>> Xem chi tiết",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          800],
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontStyle:
-                                                                          FontStyle
-                                                                              .italic)),
-                                                            ],
-                                                          ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                                ">>>>> Xem chi tiết",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        800],
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontStyle:
+                                                                        FontStyle
+                                                                            .italic)),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),

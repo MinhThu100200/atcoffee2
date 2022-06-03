@@ -16,15 +16,17 @@ class ApiConstants {
       '&keyword';
   static String GET_REWARD = '/api/info/reward';
   static String GET_PROMOTION = "/api/info/promotion?list=true";
-  static String GET_RATE = '/api/info/rate';
-  static String GET_RATE_BY_PRODUCT(id) =>
-      '/api/info/rate?productId=' + id.toString();
-  static String GET_RATE_BY_USER = 'api/user/rate';
   static String GET_SUGGESTION(customerId, size) =>
       '/api/user/product/suggestion?customerId=' +
       customerId.toString() +
       '&num=' +
       size.toString();
+  //Rate
+  static String GET_RATE = '/api/info/rate';
+  static String GET_RATE_BY_PRODUCT(id) =>
+      '/api/info/rate?productId=' + id.toString();
+  static String GET_RATE_BY_USER = '/api/user/rate';
+  static String ADD_RATE = '/api/user/rate';
 
   // Api Cart
   static String GET_CARTS_BY_CUSOMTERID(id) =>
