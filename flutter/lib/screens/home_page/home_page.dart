@@ -1,4 +1,5 @@
 import 'package:at_coffee/controllers/address_controller.dart';
+import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
@@ -10,6 +11,7 @@ import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/reward_controller.dart';
+import 'package:at_coffee/controllers/notification_controller.dart';
 
 import '../products_page/product_item.dart';
 import '../products_page/products_page.dart';
@@ -29,6 +31,9 @@ class _HomePageState extends State<HomePage> {
   final AddressController addressController = Get.put(AddressController());
   final CartController cartController = Get.put(CartController());
   final RewardController rewardController = Get.put(RewardController());
+  final BillController billController = Get.put(BillController());
+  final NotificationController notificationController =
+      Get.put(NotificationController());
 
   //var selected = 0.obs;
 
@@ -42,6 +47,8 @@ class _HomePageState extends State<HomePage> {
       storeController.getStoreListNearYou();
       addressController.fetchDistrictByCity();
       userController.fetchFavourites();
+      billController.getBill();
+      notificationController.getNotifications(userController.user.value.id);
       cartController.fetchCartsByCustomerId(
           userController.user.value.id); //addressController.fetchAddress();
       //print("Build Completed:" + userController.user.value.id.toString());

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:at_coffee/constant/api_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,13 @@ class ApiService {
 
   Future<dynamic> postForm(String url, dynamic body) async {
     String token = await getToken();
+    var response = await client.post(Uri.parse(url),
+        headers: VariableConstants.API_PUT_HEADERS(token), body: body);
+    return response;
+  }
+
+  Future<dynamic> postNotification(String url, dynamic body) async {
+    String token = ApiConstants.FCM_TOKEN;
     var response = await client.post(Uri.parse(url),
         headers: VariableConstants.API_PUT_HEADERS(token), body: body);
     return response;
