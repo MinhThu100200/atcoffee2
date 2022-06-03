@@ -14,7 +14,9 @@
 import * as Constants from '../../../common/Constants' 
 import BillCommand from '../../../command/BillCommand';
 import BillDataService from '../../../services/BillDataService'
+import NotificationService from '../../../services/NotificationService'
 import AlertPopup from '../../common/popup/AlertPopup.vue';
+import NotificationCommand from '../../../command/NotificationCommand';
 
 export default {
   components: { AlertPopup },
@@ -51,8 +53,43 @@ export default {
       this.isAlertPopup = false;
     },
 
+    getMessage(code, status) {
+
+      var message = 'Đơn hàng ' + code + ' ';
+
+      switch(status) {
+        case Constants.STATUS_BILL.REQUESTED: 
+          message += 'đang chờ xác nhận';
+          break;
+        case Constants.STATUS_BILL.APPROVED: 
+          message += 'đang chuẩn bị';
+          break;
+        case Constants.STATUS_BILL.UNAPPROVED: 
+          message += 'không được chấp nhận';
+          break;
+        case Constants.STATUS_BILL.PAID: 
+          message += 'thanh toán thành công';
+          break;
+        case Constants.STATUS_BILL.UNPAID: 
+          message += 'chưa được thanh toán';
+          break;
+        case Constants.STATUS_BILL.CANCELED: 
+          message += 'đã hủy';
+          break;
+        case Constants.STATUS_BILL.DELIVERING: 
+          message += 'đang được giao';
+          break;
+        case Constants.STATUS_BILL.COMPLETED: 
+          message += 'đã giao thành công';
+          break;
+      }
+
+      return message;
+    },
+
     async handleChangeStatus(status) {
       let bill = {...this.bill, status};
+
       var isSave = false;
       if (this.bill.staffName == '') {
         bill.staffName = this.$store.getters.user.name;
@@ -65,11 +102,28 @@ export default {
           bill.id = result.id;
         }
         BillDataService.update(bill);
+
+        var message = this.getMessage(bill.code, bill.status);
+
+        var notification = {
+          id: bill.customerId,
+          code: bill.code + '_' + bill.status,
+          codeOrder: bill.code,
+          isSeen: false,
+          title: 'Thông báo',
+          body: message,
+          time: (new Date()).getTime()
+        }
+
+        NotificationCommand.sendNotification(notification.title, notification.body, bill.token);
+
+        NotificationService.save(notification);
       } else {
         this.isAlertPopup = true;
         this.msg = 'Cập nhật đơn hàng không thành công!';
       }
-    }
+    },
+
   }
 }
 </script>

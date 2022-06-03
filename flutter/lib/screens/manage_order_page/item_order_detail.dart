@@ -59,7 +59,7 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                           Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "${_billDetail.quantity} x ${productController.allProducts.where((item) => item.id == _billDetail.productId).toList()[0].name}",
+                                  "${_billDetail.quantity} x ${_billDetail.name}",
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -78,14 +78,11 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: black,
-                                        decoration:
-                                            TextDecoration.lineThrough))
+                                        decoration: TextDecoration.lineThrough))
                                 : Text(""),
                             Text(
                                 " " +
-                                    oCcy
-                                        .format(_billDetail.amount)
-                                        .toString(),
+                                    oCcy.format(_billDetail.amount).toString(),
                                 style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -121,16 +118,15 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
                             productController.allProducts
-                                .where((item) =>
-                                    item.id == _billDetail.productId)
+                                .where(
+                                    (item) => item.id == _billDetail.productId)
                                 .toList()[0]
                                 .image,
                             fit: BoxFit.contain, errorBuilder:
                                 (BuildContext context, Object exception,
                                     StackTrace stackTrace) {
                           return const Text('😢');
-                        }, loadingBuilder: (BuildContext context,
-                                Widget child,
+                        }, loadingBuilder: (BuildContext context, Widget child,
                                 ImageChunkEvent loadingProgress) {
                           if (loadingProgress == null) {
                             return child;

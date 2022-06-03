@@ -27,7 +27,6 @@ class _ProfilePage extends State<ProfilePage> {
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      billController.getBill();
       productController.fetchProducts();
     });
   }

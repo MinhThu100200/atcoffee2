@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/models/product.dart';
 import 'package:at_coffee/common/theme/colors.dart';
+import 'package:at_coffee/controllers/cart_controller.dart';
+import 'package:at_coffee/controllers/user_controller.dart';
+import 'package:get/get.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class ProductItem extends StatefulWidget {
   ProductItem({Key key, this.product}) : super(key: key);
@@ -15,6 +19,9 @@ class ProductItem extends StatefulWidget {
 
 class _ProductItem extends State<ProductItem> {
   final oCcy = NumberFormat.currency(locale: 'vi', symbol: 'đ');
+
+  CartController cartController = Get.put(CartController());
+  UserController userController = Get.put(UserController());
 
   Product _product;
   @override
@@ -107,33 +114,33 @@ class _ProductItem extends State<ProductItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                          Text(_product.rate.round().toString() + " ",
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.yellow)),
-                          Container(
-                            padding: const EdgeInsets.only(bottom: 5.0),
-                            child: Text(
-                                "★★★★★".substring(
-                                      0,
-                                      _product.rate.round(),
-                                    ) +
-                                    "☆☆☆☆☆".substring(
-                                        _product.rate.round(), 5),
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.yellow)),
-                          ),
-                          Text(
-                              "/ " +
-                                  _product.numberReviewers.toString() +
-                                  " đánh giá",
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.yellow)),
+                              Text(_product.rate.round().toString() + " ",
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.yellow)),
+                              Container(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: Text(
+                                    "★★★★★".substring(
+                                          0,
+                                          _product.rate.round(),
+                                        ) +
+                                        "☆☆☆☆☆".substring(
+                                            _product.rate.round(), 5),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.yellow)),
+                              ),
+                              Text(
+                                  "/ " +
+                                      _product.numberReviewers.toString() +
+                                      " đánh giá",
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.yellow)),
                             ],
                           ),
                         ],
@@ -154,8 +161,7 @@ class _ProductItem extends State<ProductItem> {
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace stackTrace) {
                           return const Text('😢');
-                        }, loadingBuilder: (BuildContext context,
-                                    Widget child,
+                        }, loadingBuilder: (BuildContext context, Widget child,
                                     ImageChunkEvent loadingProgress) {
                           if (loadingProgress == null) {
                             return child;
@@ -172,6 +178,26 @@ class _ProductItem extends State<ProductItem> {
                           }
                         })),
                   ),
+                  Positioned(
+                      left: 70,
+                      top: -10.0,
+                      child: Obx(() {
+                        return IconButton(
+                            icon: Icon(
+                              EvaIcons.heart,
+                              size: 24,
+                              color: userController.checkFavourite(_product)
+                                  ? Colors.red
+                                  : Colors.white,
+                            ),
+                            onPressed: () {
+                              if (userController.checkFavourite(_product)) {
+                                _removeFavourite(_product);
+                              } else {
+                                _addFavourite(_product);
+                              }
+                            });
+                      })),
                   Positioned(
                       right: 10,
                       top: 20.0,
@@ -199,5 +225,13 @@ class _ProductItem extends State<ProductItem> {
                 ],
               )),
         ));
+  }
+
+  void _addFavourite(Product product) async {
+    await userController.addFavourites(product);
+  }
+
+  void _removeFavourite(Product product) async {
+    await userController.removeFavourites(product);
   }
 }

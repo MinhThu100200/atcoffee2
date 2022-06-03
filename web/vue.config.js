@@ -2,9 +2,23 @@
 // const webpack = require('webpack');
 
 module.exports = {
-  devServer: {
-    proxy: process.env.HOSTNAME
-  },
+
+  configureWebpack: {        
+    devServer: {
+     // proxy: process.env.HOSTNAME,},
+      proxy: { '/v1': { 
+                target: 'http://localhost:8086',
+                pathRewrite: { '^/v1': '' }, 
+              }, 
+              
+              '/v2': {
+                target: 'https://fcm.googleapis.com', 
+                pathRewrite: { '^/v2': '' }, 
+              },
+      }
+    }
+      
+  }
   // configureWebpack: {
   //   plugins: [
   //     new webpack.DefinePlugin({

@@ -296,18 +296,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                             alignment: Alignment
                                                                 .centerLeft,
                                                             child: Text(
-                                                                "${data[index].billDetails[0].quantity} x " +
-                                                                    productController
-                                                                        .allProducts
-                                                                        .where((item) =>
-                                                                            item.id ==
-                                                                            data[index]
-                                                                                .billDetails[
-                                                                                    0]
-                                                                                .productId)
-                                                                        .toList()[
-                                                                            0]
-                                                                        .name,
+                                                                "${data[index].billDetails[0].quantity} x ${data[index].billDetails[0].name}",
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         16,

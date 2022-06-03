@@ -23,7 +23,8 @@ class BillDetail {
       this.size,
       this.discount,
       this.billId,
-      this.productId});
+      this.productId,
+      this.name});
   int id;
   int createdDate;
   int modifiedDate;
@@ -40,6 +41,7 @@ class BillDetail {
   int discount;
   int billId;
   int productId;
+  String name;
 
   BillDetail.fromMap(Map<dynamic, dynamic> json)
       : id = json["id"],
@@ -57,7 +59,9 @@ class BillDetail {
         size = json["size"],
         discount = json["discount"],
         billId = json["billId"],
-        productId = json["productId"];
+        productId = json["productId"],
+        name = json["name"];
+
   factory BillDetail.fromJson(Map<String, dynamic> json) => BillDetail(
       id: json["id"],
       createdDate: json["createdDate"],
@@ -93,5 +97,25 @@ class BillDetail {
         "discount": discount,
         "billId": billId,
         "productId": productId
+      };
+
+  Map<String, dynamic> toFirebaseJson() => {
+        "id": id,
+        "createdDate": createdDate,
+        "modifiedDate": modifiedDate,
+        "createdBy": createdBy,
+        "modifiedBy": modifiedBy,
+        "code": code,
+        "state": state,
+        "results": results,
+        "quantity": quantity,
+        "description": description,
+        "amount": amount,
+        "price": price,
+        "size": size,
+        "discount": discount,
+        "billId": billId,
+        "productId": productId,
+        "name": name
       };
 }

@@ -1,6 +1,10 @@
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
+import 'package:at_coffee/controllers/notification_controller.dart';
+import 'package:at_coffee/controllers/bill_controller.dart';
+import 'package:at_coffee/models/notification.dart';
+import 'package:at_coffee/screens/manage_order_page/detail_order.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -55,7 +59,10 @@ class _NotificationPage extends State<NotificationPage> {
 
   final CategoryController categoryController = Get.put(CategoryController());
   final StoreController storeController = Get.put(StoreController());
+  final BillController billController = Get.put(BillController());
   final ProductController productController = Get.put(ProductController());
+  final NotificationController notificationController =
+      Get.put(NotificationController());
   @override
   void initState() {
     // TODO: implement initState
@@ -81,29 +88,19 @@ class _NotificationPage extends State<NotificationPage> {
                 SizedBox(
                   width: size.width,
                   child: Stack(alignment: Alignment.centerLeft, children: [
-                Positioned(
-                  child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
+                    Positioned(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Text("Thông báo",
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: const Text("Thông báo",
-                          style: TextStyle(
-                              color: white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                )
+                    )
                   ]),
                 ),
                 Container(
@@ -119,73 +116,92 @@ class _NotificationPage extends State<NotificationPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(() {
-                          if (productController.isLoading.value) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (notificationController.isLoading.value) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else {
                             return Container(
                               padding: const EdgeInsets.only(top: 10),
                               child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: productController
-                                      .productsSuggestion.length,
+                                  itemCount: notificationController
+                                      .notificationsList.length,
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[400],
-                                              width: 0.5),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _seenNotification(notificationController
+                                            .notificationsList[index]);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.grey[400],
+                                                width: 0.5),
+                                          ),
+                                          color: notificationController
+                                                  .notificationsList[index]
+                                                  .isSeen
+                                              ? white
+                                              : lightYellow,
                                         ),
-                                        color: lightYellow,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(children: [
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                  color: primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8)),
+                                              height: 60,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.asset(
+                                                    "assets/icons/loudspeaker.png"),
+                                              )),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 8,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 6),
+                                                    child: Text(
+                                                        notificationController
+                                                            .notificationsList[
+                                                                index]
+                                                            .title,
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 15))),
+                                                FittedBox(
+                                                  child: SizedBox(
+                                                      width: size.width - 100,
+                                                      child: Text(
+                                                        notificationController
+                                                            .notificationsList[
+                                                                index]
+                                                            .body,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      )),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ]),
                                       ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(children: [
-                                        Container(
-                                            decoration: BoxDecoration(
-                                                color: primary,
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
-                                            height: 60,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Image.asset(
-                                                  "assets/icons/loudspeaker.png"),
-                                            )),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 8,
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                  padding: const EdgeInsets.only(
-                                                      bottom: 6),
-                                                  child: const Text("Thông báo",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 15))),
-                                              FittedBox(
-                                                child: SizedBox(
-                                                    width: size.width - 100,
-                                                    child: const Text(
-                                                      "Đơn hàng của bạn đã được giao. Xin chân thành cảm ơn. Hẹn gặp lại!!!",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    )),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ]),
                                     );
                                   }),
                             );
@@ -197,5 +213,19 @@ class _NotificationPage extends State<NotificationPage> {
             )),
           )),
     );
+  }
+
+  void _seenNotification(NotificationItem notification) async {
+    if (notification.isSeen == false) {
+      notification.isSeen = true;
+      await notificationController.updateNotification(notification);
+    }
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DetailOrderPage(
+                bill: billController.billsList
+                    .firstWhere((b) => b.code == notification.codeOrder))));
   }
 }

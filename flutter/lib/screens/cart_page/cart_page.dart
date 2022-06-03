@@ -5,6 +5,7 @@ import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/bill.dart';
+import 'package:at_coffee/models/notification.dart';
 import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/models/payment.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
@@ -14,6 +15,7 @@ import 'package:at_coffee/controllers/reward_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
 import 'package:at_coffee/controllers/type_controller.dart';
 import 'package:at_coffee/controllers/promotion_controller.dart';
+import 'package:at_coffee/controllers/notification_controller.dart';
 import 'package:at_coffee/services/service_firebase.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/constant/variable_constants.dart';
@@ -40,6 +42,8 @@ class _CartPage extends State<CartPage> {
   final PaymentController paymentController = Get.put(PaymentController());
   final UserController userController = Get.put(UserController());
   final StoreController storeController = Get.put(StoreController());
+  final NotificationController notificationController =
+      Get.put(NotificationController());
   final PromotionController promotionController =
       Get.put(PromotionController());
 
@@ -703,6 +707,7 @@ class _CartPage extends State<CartPage> {
       billDetail.state = true;
       billDetail.discount = c.product.discount;
       billDetail.productId = c.productId;
+      billDetail.name = c.product.name;
       bill.billDetails.add(billDetail);
     });
     bill.createdDate = DateTime.now().millisecondsSinceEpoch;
@@ -726,6 +731,21 @@ class _CartPage extends State<CartPage> {
         fontSize: 16.0);
 
     await EasyLoading.dismiss();
+
+    NotificationItem notification = NotificationItem();
+    notification.id = bill.customerId;
+    notification.codeOrder = bill.code;
+    notification.code = bill.code + '_' + bill.status;
+    notification.title = 'Thông báo';
+    notification.body = 'Đơn hàng ' + bill.code + ' gửi yêu cầu thành công';
+    notification.time = DateTime.now().millisecondsSinceEpoch;
+    notification.isSeen = false;
+
+    bool isSendedNotification =
+        await notificationController.sendNotification(notification, token);
+    if (isSendedNotification == true) {
+      await notificationController.addNotification(notification);
+    }
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const ManageOrderPage()));

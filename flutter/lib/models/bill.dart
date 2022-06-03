@@ -166,6 +166,7 @@ class Bill {
         "storeId": storeId,
         "read": read,
         "token": token,
-        "billDetails": List<dynamic>.from(billDetails.map((x) => x.toJson()))
+        "billDetails":
+            List<dynamic>.from(billDetails.map((x) => x.toFirebaseJson()))
       };
 }
