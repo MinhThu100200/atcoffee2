@@ -166,8 +166,8 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                 ? primary
                                                 : Colors.grey[300],
                                           ),
-                                          margin: const EdgeInsets.only(
-                                              right: 15, bottom: 10),
+                                          margin:
+                                              const EdgeInsets.only(right: 15),
                                           padding: const EdgeInsets.all(10),
                                           child: Row(
                                             children: [
@@ -200,26 +200,37 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                           ),
                                         ),
                                       ),
-                                      Positioned(
-                                          left: 3,
-                                          bottom: 58,
-                                          child: Container(
-                                            height: 30,
-                                            width: 30,
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(3),
-                                            decoration: BoxDecoration(
-                                                color: red2,
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Text(billController.billsList
-                                                .where((element) =>
-                                                    element.status ==
-                                                    cateData[index]['status'])
-                                                .toList()
-                                                .length
-                                                .toString()),
-                                          ))
+                                      billController.billsList
+                                              .where((element) =>
+                                                  element.status ==
+                                                  cateData[index]['status'])
+                                              .toList()
+                                              .isNotEmpty
+                                          ? Positioned(
+                                              left: 3,
+                                              bottom: 58,
+                                              child: Container(
+                                                height: 30,
+                                                width: 30,
+                                                alignment: Alignment.center,
+                                                padding:
+                                                    const EdgeInsets.all(3),
+                                                decoration: BoxDecoration(
+                                                    color: red2,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Text(billController
+                                                    .billsList
+                                                    .where((element) =>
+                                                        element.status ==
+                                                        cateData[index]
+                                                            ['status'])
+                                                    .toList()
+                                                    .length
+                                                    .toString()),
+                                              ))
+                                          : const Text("")
                                     ],
                                   ),
                                 );
@@ -239,7 +250,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                 .toList();
 
                             return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: data.length,
                                 shrinkWrap: true,
                                 itemBuilder: (BuildContext context, int index) {

@@ -333,9 +333,8 @@ class _ProfilePage extends State<ProfilePage> {
                             child: const Icon(Icons.logout_outlined,
                                 color: Colors.black, size: 28.0),
                           ),
-                          Container(
-                              child: const Text('Đăng xuất',
-                                  style: TextStyle(fontSize: 18.0)))
+                          const Text('Đăng xuất',
+                              style: TextStyle(fontSize: 18.0))
                         ],
                       ),
                     ),
@@ -351,6 +350,6 @@ class _ProfilePage extends State<ProfilePage> {
 
   logout() {
     removeToken();
-    Get.off(() => LoginPage());
+    Get.off(() => const LoginPage());
   }
 }

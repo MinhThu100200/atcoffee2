@@ -53,7 +53,6 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primary,
@@ -66,7 +65,7 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                     _updateUser();
                   },
                   child: const Text("Lưu",
-                      style: const TextStyle(color: Colors.white)),
+                      style: TextStyle(color: Colors.white)),
                 )
               ])),
           elevation: 0,

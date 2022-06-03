@@ -917,35 +917,36 @@ class _OrderPage extends State<OrderPage> {
                                                     MainAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                      _product.rate.toString() +
-                                                          " ",
+                                                      _product.rate
+                                                              .toStringAsFixed(
+                                                                  1) +
+                                                          "/5 ",
                                                       style: const TextStyle(
                                                           fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color:
-                                                              Colors.yellow)),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 5.0),
-                                                    child: Text(
-                                                        "★★★★★".substring(
-                                                              0,
-                                                              _product.rate
-                                                                  .toInt(),
-                                                            ) +
-                                                            "☆☆☆☆☆".substring(
-                                                                _product.rate
-                                                                    .toInt(),
-                                                                5),
-                                                        style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Colors.yellow)),
-                                                  ),
+                                                          color: yellowDark)),
+                                                  // Container(
+                                                  //   padding:
+                                                  //       const EdgeInsets.only(
+                                                  //           bottom: 5.0),
+                                                  //   child: Text(
+                                                  //       "★★★★★".substring(
+                                                  //             0,
+                                                  //             _product.rate
+                                                  //                 .toInt(),
+                                                  //           ) +
+                                                  //           "☆☆☆☆☆".substring(
+                                                  //               _product.rate
+                                                  //                   .toInt(),
+                                                  //               5),
+                                                  //       style: const TextStyle(
+                                                  //           fontSize: 16,
+                                                  //           fontWeight:
+                                                  //               FontWeight.bold,
+                                                  //           color: yellowDark)),
+                                                  // ),
+
                                                   Text(
                                                       " (" +
                                                           _product
@@ -1085,8 +1086,8 @@ class _OrderPage extends State<OrderPage> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
-                                                                    color: Colors
-                                                                        .yellow)),
+                                                                    color:
+                                                                        yellowDark)),
                                                           ],
                                                         ),
                                                       ),

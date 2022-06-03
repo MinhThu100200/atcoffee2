@@ -6,10 +6,10 @@ import 'package:at_coffee/services/service_address.dart';
 
 class AddressController extends GetxController {
   var isLoading = true.obs;
-  var addressList = List<City>().obs;
-  var cityList = List<City>().obs;
-  var districtList = List<District>().obs;
-  var wardList = List<Ward>().obs;
+  var addressList = <City>[].obs;
+  var cityList = <City>[].obs;
+  var districtList = <District>[].obs;
+  var wardList = <Ward>[].obs;
   var nameCityList = <String>[].obs;
   var nameDistrictList = <String>[].obs;
   var nameWardList = <String>[].obs;

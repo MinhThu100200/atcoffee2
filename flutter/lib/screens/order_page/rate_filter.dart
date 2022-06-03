@@ -112,15 +112,15 @@ class _RateFilterPage extends State<RateFilterPage> {
                   ]),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   width: size.width,
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40)),
+                      // borderRadius: BorderRadius.only(
+                      //     topLeft: Radius.circular(40),
+                      //     topRight: Radius.circular(40)),
                       color: lightGray3),
                   child: Flex(
                       direction: Axis.vertical,
@@ -141,7 +141,7 @@ class _RateFilterPage extends State<RateFilterPage> {
                                     setStateValue(cateData[index]['id']);
                                   },
                                   child: Container(
-                                    //width: 100,
+                                    width: 90,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
@@ -159,6 +159,10 @@ class _RateFilterPage extends State<RateFilterPage> {
                                     child: Column(
                                       children: [
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             cateData[index]['id'] == 6
                                                 ? Text(cateData[index]['name'],
@@ -186,6 +190,124 @@ class _RateFilterPage extends State<RateFilterPage> {
                             ),
                           ),
                         ),
+                        //
+                        Obx(() {
+                          if (rateController.isLoading.value) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else {
+                            var data = indexCategory != 6
+                                ? rateController.ratesList
+                                    .where((rate) => rate.star == indexCategory)
+                                    .toList()
+                                : rateController.ratesList;
+                            return ListView.builder(
+                                //itemCount: storeController.storesList.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 13, right: 0),
+                                        //margin: const EdgeInsets.only(right: 10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(children: [
+                                              Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 10, bottom: 5),
+                                                  child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      child: Image.asset(
+                                                          'assets/icons/profile.png',
+                                                          height: 25,
+                                                          width: 25))),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10,
+                                                    top: 10,
+                                                    bottom: 5),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "User " +
+                                                            rateController
+                                                                .ratesList[
+                                                                    index]
+                                                                .userId
+                                                                .toString(),
+                                                        style: const TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: gray)),
+                                                    Text(
+                                                        "★★★★★".substring(
+                                                              0,
+                                                              rateController
+                                                                  .ratesList[
+                                                                      index]
+                                                                  .star
+                                                                  .toInt(),
+                                                            ) +
+                                                            "☆☆☆☆☆".substring(
+                                                                rateController
+                                                                    .ratesList[
+                                                                        index]
+                                                                    .star
+                                                                    .toInt(),
+                                                                5),
+                                                        style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: yellowDark)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ]),
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 35, right: 10),
+                                              child: Text(
+                                                  rateController
+                                                      .ratesList[index].comment
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: gray)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          color: Colors.grey[300],
+                                          child: SizedBox(
+                                            height: 0.75,
+                                            width: size.width,
+                                          )),
+                                    ],
+                                  );
+                                });
+                          }
+                        }),
                       ]),
                 ),
               ],
