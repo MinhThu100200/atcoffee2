@@ -9,6 +9,7 @@ import 'package:at_coffee/models/bill_detail.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/manage_order_page/item_order_detail.dart';
 import 'package:at_coffee/screens/rate_page/item_rate.dart';
+import 'package:at_coffee/screens/rate_page/rate_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -85,436 +86,440 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {});
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primary,
+        title: const Text("Đánh giá sản phẩm",
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+      ),
       backgroundColor: lightGray3,
-      body: Container(
-          color: primary,
-          child: SafeArea(
+      body: Column(
+        children: [
+          Expanded(
             child: SingleChildScrollView(
-                child: Column(
-              children: [
-                SizedBox(
-                  width: size.width,
-                  child: Stack(alignment: Alignment.centerLeft, children: [
-                    Positioned(
-                      child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
-                    Positioned(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: const Text("Đánh giá sản phẩm",
-                              style: TextStyle(
-                                  color: white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: size.width,
-                  padding: const EdgeInsets.only(top: 20.0, right: 5),
-                  decoration: const BoxDecoration(
-                      // borderRadius: BorderRadius.only(
-                      //     topLeft: Radius.circular(40),
-                      //     topRight: Radius.circular(40)),
-                      color: lightGray3),
-                  child: Flex(
-                      direction: Axis.vertical,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: const EdgeInsets.only(
-                                bottom: 10, left: 15, right: 15),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.grey[400], width: 0.5),
+                child: SafeArea(
+              child: Column(
+                children: [
+                  Container(
+                    width: size.width,
+                    padding: const EdgeInsets.only(top: 20.0, right: 5),
+                    decoration: const BoxDecoration(
+                        // borderRadius: BorderRadius.only(
+                        //     topLeft: Radius.circular(40),
+                        //     topRight: Radius.circular(40)),
+                        color: lightGray3),
+                    child: Flex(
+                        direction: Axis.vertical,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              padding: const EdgeInsets.only(
+                                  bottom: 10, left: 15, right: 15),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey[400], width: 0.5),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    child: const Text("Tình trạng đơn hàng",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20))),
-                                const SizedBox(height: 5),
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                        "${cateData.where((element) => element['status'] == _bill?.status).toList()[0]['name']}",
-                                        style: const TextStyle(
-                                          color: lightBlue,
-                                          fontSize: 14,
-                                          decoration: TextDecoration.underline,
-                                        )))
-                              ],
-                            )),
-                        Container(
-                            padding: const EdgeInsets.only(
-                                bottom: 10, top: 5, left: 15, right: 15),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.grey[400], width: 0.5),
+                              child: Column(
+                                children: [
+                                  Container(
+                                      alignment: Alignment.topLeft,
+                                      child: const Text("Tình trạng đơn hàng",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20))),
+                                  const SizedBox(height: 5),
+                                  Container(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                          "${cateData.where((element) => element['status'] == _bill?.status).toList()[0]['name']}",
+                                          style: const TextStyle(
+                                            color: lightBlue,
+                                            fontSize: 14,
+                                            // decoration:
+                                            //     TextDecoration.underline,
+                                          )))
+                                ],
+                              )),
+                          Container(
+                              padding: const EdgeInsets.only(
+                                  bottom: 10, top: 5, left: 15, right: 15),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey[400], width: 0.5),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    child: const Text("Địa chỉ nhận hàng",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20))),
-                                const SizedBox(height: 5),
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                        _bill?.address == "" ||
-                                                _bill?.address == null
-                                            ? "Nhận tại cửa hàng"
-                                            : _bill?.address,
-                                        style: const TextStyle(
-                                          color: lightBlue,
-                                          fontSize: 14,
-                                          decoration: TextDecoration.underline,
-                                        )))
-                              ],
-                            )),
-                        ListView.builder(
-                            itemCount: _bill.billDetails.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              // return ItemRate(
-                              //     billDetail: _bill.billDetails[index]);
-                              return GestureDetector(
-                                  onTap: () => _bill.billDetails[index].state
-                                      ? _showModelButtonSheet(
-                                          context, _bill.billDetails[index])
-                                      : {},
-                                  child: Container(
-                                    height: 140.0,
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, right: 0.0),
-                                    child: SizedBox(
-                                        height: size.width,
-                                        width: size.width,
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              top: 20.0,
-                                              left: 70.0,
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 50.0,
-                                                    right: 10.0,
-                                                    top: 5.0,
-                                                    bottom: 5.0),
-                                                decoration: BoxDecoration(
-                                                  color: primary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                height: 100.0,
-                                                width: size.width - 110.0,
-                                                child: Column(
-                                                  children: [
-                                                    Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Text(
-                                                            "${_bill.billDetails[index].quantity} x ${_bill.billDetails[index].name}",
+                              child: Column(
+                                children: [
+                                  Container(
+                                      alignment: Alignment.topLeft,
+                                      child: const Text("Địa chỉ nhận hàng",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20))),
+                                  const SizedBox(height: 5),
+                                  Container(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                          _bill?.address == "" ||
+                                                  _bill?.address == null
+                                              ? "Nhận tại cửa hàng"
+                                              : _bill?.address,
+                                          style: const TextStyle(
+                                            color: lightBlue,
+                                            fontSize: 14,
+                                            // decoration:
+                                            //     TextDecoration.underline,
+                                          )))
+                                ],
+                              )),
+                          ListView.builder(
+                              itemCount: _bill.billDetails.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                // return ItemRate(
+                                //     billDetail: _bill.billDetails[index]);
+                                return GestureDetector(
+                                    onTap: () => _bill.billDetails[index].state
+                                        ? _showModelButtonSheet(
+                                            context, _bill.billDetails[index])
+                                        : {},
+                                    child: Container(
+                                      height: 140.0,
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, right: 0.0),
+                                      child: SizedBox(
+                                          height: size.width,
+                                          width: size.width,
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                top: 20.0,
+                                                left: 70.0,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 50.0,
+                                                          right: 10.0,
+                                                          top: 5.0,
+                                                          bottom: 5.0),
+                                                  decoration: BoxDecoration(
+                                                    color: primary,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  height: 100.0,
+                                                  width: size.width - 110.0,
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Text(
+                                                              "${_bill.billDetails[index].quantity} x ${_bill.billDetails[index].name}",
+                                                              style: const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white))),
+                                                      const SizedBox(
+                                                        height: 6,
+                                                      ),
+                                                      Row(children: [
+                                                        _bill.billDetails[index]
+                                                                    .discount >
+                                                                0
+                                                            ? Text(
+                                                                oCcy
+                                                                    .format(_bill.billDetails[index].price *
+                                                                        _bill
+                                                                            .billDetails[
+                                                                                index]
+                                                                            .quantity)
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color:
+                                                                        black,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .lineThrough))
+                                                            : Text(""),
+                                                        Text(
+                                                            " " +
+                                                                oCcy
+                                                                    .format(_bill
+                                                                        .billDetails[
+                                                                            index]
+                                                                        .amount)
+                                                                    .toString(),
                                                             style: const TextStyle(
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                color: Colors
-                                                                    .white))),
-                                                    const SizedBox(
-                                                      height: 6,
-                                                    ),
-                                                    Row(children: [
-                                                      _bill.billDetails[index]
-                                                                  .discount >
-                                                              0
-                                                          ? Text(
-                                                              oCcy
-                                                                  .format(_bill
-                                                                          .billDetails[
-                                                                              index]
-                                                                          .price *
-                                                                      _bill
-                                                                          .billDetails[
-                                                                              index]
-                                                                          .quantity)
-                                                                  .toString(),
-                                                              style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: black,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .lineThrough))
-                                                          : Text(""),
-                                                      Text(
-                                                          " " +
-                                                              oCcy
-                                                                  .format(_bill
-                                                                      .billDetails[
-                                                                          index]
-                                                                      .amount)
-                                                                  .toString(),
-                                                          style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color:
-                                                                  lightYellow)),
-                                                    ]),
-                                                    const SizedBox(
-                                                      height: 6,
-                                                    ),
-                                                    Container(
-                                                      height: 25,
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Text(
-                                                          "Chú thích: ${_bill.billDetails[index].description == null || _bill.billDetails[index].description == "" ? "Không có" : _bill.billDetails[index].description}",
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 11,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color:
-                                                                      white1)),
-                                                    ),
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.topRight,
-                                                      child: Text(
-                                                          _bill
-                                                                  .billDetails[
-                                                                      index]
-                                                                  .state
-                                                              ? ">>>>>Đánh giá"
-                                                              : "Đã đánh giá",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: gray3)),
-                                                    ),
-                                                  ],
+                                                                color:
+                                                                    lightYellow)),
+                                                      ]),
+                                                      const SizedBox(
+                                                        height: 6,
+                                                      ),
+                                                      Container(
+                                                        height: 25,
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Text(
+                                                            "Chú thích: ${_bill.billDetails[index].description == null || _bill.billDetails[index].description == "" ? "Không có" : _bill.billDetails[index].description}",
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: const TextStyle(
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: white)),
+                                                      ),
+                                                      Container(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Text(
+                                                            _bill
+                                                                    .billDetails[
+                                                                        index]
+                                                                    .state
+                                                                ? ">>>>>Đánh giá"
+                                                                : "Đã đánh giá",
+                                                            style: const TextStyle(
+                                                                fontSize: 13,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: white)),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              height: 110.0,
-                                              width: 110.0,
-                                              decoration: BoxDecoration(
-                                                color: lightYellow,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: ClipRRect(
+                                              Container(
+                                                height: 110.0,
+                                                width: 110.0,
+                                                decoration: BoxDecoration(
+                                                  color: lightYellow,
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                      productController
-                                                          .allProducts
-                                                          .where((item) =>
-                                                              item.id ==
-                                                              _bill
-                                                                  .billDetails[
-                                                                      index]
-                                                                  .productId)
-                                                          .toList()[0]
-                                                          .image,
-                                                      fit: BoxFit.contain,
-                                                      errorBuilder:
-                                                          (BuildContext context,
-                                                              Object exception,
-                                                              StackTrace stackTrace) {
-                                                    return const Text('😢');
-                                                  }, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                                                    if (loadingProgress ==
-                                                        null) {
-                                                      return child;
-                                                    } else {
-                                                      return Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          value: loadingProgress
-                                                                      .expectedTotalBytes !=
-                                                                  null
-                                                              ? loadingProgress
-                                                                      .cumulativeBytesLoaded /
-                                                                  loadingProgress
-                                                                      .expectedTotalBytes
-                                                              : null,
-                                                        ),
-                                                      );
-                                                    }
-                                                  })),
-                                            ),
-                                          ],
-                                        )),
-                                  ));
-                            }),
-                        Container(
-                            padding: const EdgeInsets.only(
-                                bottom: 10, top: 5, left: 15, right: 15),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.grey[400], width: 0.5),
+                                                ),
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(
+                                                        10),
+                                                    child: Image.network(
+                                                        productController.allProducts
+                                                            .where((item) =>
+                                                                item.id ==
+                                                                _bill
+                                                                    .billDetails[
+                                                                        index]
+                                                                    .productId)
+                                                            .toList()[0]
+                                                            .image,
+                                                        fit: BoxFit.contain,
+                                                        errorBuilder: (BuildContext context,
+                                                            Object exception,
+                                                            StackTrace stackTrace) {
+                                                      return const Text('😢');
+                                                    }, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                                                      if (loadingProgress ==
+                                                          null) {
+                                                        return child;
+                                                      } else {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            value: loadingProgress
+                                                                        .expectedTotalBytes !=
+                                                                    null
+                                                                ? loadingProgress
+                                                                        .cumulativeBytesLoaded /
+                                                                    loadingProgress
+                                                                        .expectedTotalBytes
+                                                                : null,
+                                                          ),
+                                                        );
+                                                      }
+                                                    })),
+                                              ),
+                                            ],
+                                          )),
+                                    ));
+                              }),
+                          Container(
+                              padding: const EdgeInsets.only(
+                                  bottom: 10, top: 5, left: 15, right: 15),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey[400], width: 0.5),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.topLeft,
-                                    child: const Text("Tổng tiền",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20))),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: const Text("Tổng cộng:",
-                                            style: TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                            oCcy
-                                                .format(totalPrice())
-                                                .toString(),
-                                            style: const TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: const Text("Giảm giá:",
-                                            style: TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                            oCcy.format(_bill.price).toString(),
-                                            style: const TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: const Text(
-                                            "Khuyến mãi/Phần thưởng:",
-                                            style: TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                            oCcy
-                                                .format(
-                                                    _bill.price - _bill.amount)
-                                                .toString(),
-                                            style: const TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: const Text("Thành tiền:",
-                                            style: TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                    Container(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                            oCcy
-                                                .format(_bill.amount)
-                                                .toString(),
-                                            style: const TextStyle(
-                                              color: gray1,
-                                              fontSize: 14,
-                                            ))),
-                                  ],
-                                )
-                              ],
-                            )),
-                      ]),
-                ),
-              ],
+                              child: Column(
+                                children: [
+                                  Container(
+                                      alignment: Alignment.topLeft,
+                                      child: const Text("Tổng tiền",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20))),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: const Text("Tổng cộng:",
+                                              style: TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                              oCcy
+                                                  .format(totalPrice())
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: const Text("Giảm giá:",
+                                              style: TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                              oCcy
+                                                  .format(_bill.price)
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: const Text(
+                                              "Khuyến mãi/Phần thưởng:",
+                                              style: TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                              oCcy
+                                                  .format(_bill.price -
+                                                      _bill.amount)
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: const Text("Thành tiền:",
+                                              style: TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                      Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                              oCcy
+                                                  .format(_bill.amount)
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: gray1,
+                                                fontSize: 14,
+                                              ))),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                        ]),
+                  ),
+                ],
+              ),
             )),
-          )),
+          ),
+          Column(children: [
+            InkWell(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RateDetailPage(bill: _bill))),
+                child: Container(
+                    width: size.width,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: primary,
+                        border: Border.all(color: primary),
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(
+                        bottom: 5, top: 15, right: 10, left: 10),
+                    child: const Text("Đánh giá",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: white))))
+          ])
+        ],
+      ),
     );
   }
 
@@ -551,7 +556,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
         Get.snackbar(
           "Đánh giá thành công",
           "Cảm ơn những đánh giá quý báu của bạn!",
-          icon: Icon(Icons.person, color: Colors.white),
+          icon: const Icon(Icons.person, color: Colors.white),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
         );
@@ -560,7 +565,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
         Get.snackbar(
           "Đánh giá không thành công",
           "Bạn ơi vui lòng thử lại",
-          icon: Icon(Icons.person, color: Colors.white),
+          icon: const Icon(Icons.person, color: Colors.white),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
         );
@@ -621,8 +626,9 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                             direction: Axis.horizontal,
                             //allowHalfRating: true,
                             itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: Colors.amber,
                             ),
@@ -647,8 +653,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                               controller: _comment,
                               style: const TextStyle(fontSize: 15),
                               decoration: const InputDecoration(
-                                labelStyle:
-                                    TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
                                 hintText: "Đánh giá",
                                 border: InputBorder.none,
                               ),
@@ -682,25 +687,6 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                       ),
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () => _orderHere(item),
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(8),
-                  //     decoration: BoxDecoration(
-                  //         color: primary, borderRadius: BorderRadius.circular(8)),
-                  //     child: Column(
-                  //       children: const [
-                  //         Text("Đặt hàng",
-                  //             style: TextStyle(
-                  //                 color: white,
-                  //                 fontSize: 14,
-                  //                 fontWeight: FontWeight.w700)),
-                  //         Text("Tự đến lấy tại cửa hàng này",
-                  //             style: TextStyle(color: white, fontSize: 13)),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             );
