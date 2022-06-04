@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/category_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/store_controller.dart';
@@ -5,6 +6,7 @@ import 'package:at_coffee/models/bill.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/manage_order_page/item_order_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -59,8 +61,8 @@ class _DetailOrderPage extends State<DetailOrderPage> {
   }
 
   final CategoryController categoryController = Get.put(CategoryController());
-  final StoreController storeController = Get.put(StoreController());
   final ProductController productController = Get.put(ProductController());
+  final BillController billController = Get.put(BillController());
   @override
   void initState() {
     // TODO: implement initState
@@ -71,10 +73,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      storeController.getAddress();
-      storeController.getStoreListNearYou();
-    });
+    WidgetsBinding.instance?.addPostFrameCallback((_) {});
 
     return Scaffold(
       backgroundColor: lightGray3,
@@ -154,7 +153,7 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                         style: const TextStyle(
                                           color: lightBlue,
                                           fontSize: 14,
-                                          decoration: TextDecoration.underline,
+                                          //decoration: TextDecoration.underline,
                                         )))
                               ],
                             )),
@@ -186,11 +185,10 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                         style: const TextStyle(
                                           color: lightBlue,
                                           fontSize: 14,
-                                          decoration: TextDecoration.underline,
+                                          //decoration: TextDecoration.underline,
                                         )))
                               ],
                             )),
-                       
                         ListView.builder(
                             itemCount: _bill.billDetails.length,
                             physics: const NeverScrollableScrollPhysics(),
@@ -315,7 +313,32 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                               fontSize: 14,
                                             ))),
                                   ],
-                                )
+                                ),
+                                _bill?.status == 'REQUESTED'
+                                    ? Column(children: [
+                                        InkWell(
+                                            onTap: () =>
+                                                cancelOrder(_bill.code),
+                                            child: Container(
+                                                width: size.width,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: primary),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 5, top: 15),
+                                                child: const Text("Huỷ đơn",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600))))
+                                      ])
+                                    : const Text("")
                               ],
                             )),
                       ]),
@@ -324,6 +347,20 @@ class _DetailOrderPage extends State<DetailOrderPage> {
             )),
           )),
     );
+  }
+
+  Future<void> cancelOrder(billCode) async {
+    try {
+      await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
+      await billController.updateBillStatus(billCode);
+      EasyLoading.dismiss();
+    } catch (error) {
+      EasyLoading.dismiss();
+    }
+    Navigator.pop(context);
   }
 
   double totalPrice() {

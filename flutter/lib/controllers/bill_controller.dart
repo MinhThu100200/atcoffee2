@@ -57,6 +57,15 @@ class BillController extends GetxController {
     //return [];
   }
 
+  Future<void> updateBillStatus(idBill) async {
+    DatabaseReference listOrder =
+        FirebaseDatabase.instance.ref('bills/${idBill}');
+    isLoading(true);
+    await listOrder.update({"status": "CANCELED"});
+    isLoading(false);
+    //return [];
+  }
+
   void saveData(billList) {
     try {
       isLoading(true);

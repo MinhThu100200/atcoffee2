@@ -527,7 +527,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
     return total;
   }
 
-  Future<bool> _addRate(BillDetail _billDetail) async {
+  Future<void> _addRate(BillDetail _billDetail) async {
     await EasyLoading.show(
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
@@ -570,7 +570,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
       Get.snackbar(
         "Đánh giá lỗi",
         "Bạn ơi vui lòng thử lại",
-        icon: Icon(Icons.person, color: Colors.white),
+        icon: const Icon(Icons.person, color: Colors.white),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
       );
@@ -588,7 +588,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
               builder: (BuildContext context, StateSetter myState) {
             return Container(
               height: 300,
-              margin: EdgeInsets.only(bottom: 250),
+              margin: const EdgeInsets.only(bottom: 250),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -634,7 +634,7 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                           ),
                           Container(
                             height: 120,
-                            margin: EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey[400])),
@@ -646,9 +646,9 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                               cursorColor: black.withOpacity(0.5),
                               controller: _comment,
                               style: const TextStyle(fontSize: 15),
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelStyle:
-                                    const TextStyle(color: Colors.black),
+                                    TextStyle(color: Colors.black),
                                 hintText: "Đánh giá",
                                 border: InputBorder.none,
                               ),
