@@ -128,12 +128,14 @@ class UserController extends GetxController {
 
   Future<bool> addFavourites(Product product) async {
     try {
+      isLoading.value = true;
       // previous favourites -- use rollback
       var prevFavourites = productFromJsonNotPage(productToJson(favourites));
       // add to list
       favourites.add(product);
       var isSuccess = await RemoteServices.addFavourites(product.id);
       if (isSuccess) {
+        fetchFavourites();
         return true;
       } else {
         // rollback favourite
@@ -149,10 +151,12 @@ class UserController extends GetxController {
 
   Future<bool> removeFavourites(Product product) async {
     try {
+      isLoading.value = true;
       var prevFavourites = productFromJsonNotPage(productToJson(favourites));
       favourites.removeWhere((p) => p.id == product.id);
       var isSuccess = await RemoteServices.removeFavourites(product.id);
       if (isSuccess) {
+        fetchFavourites();
         return true;
       } else {
         // rollback favourite

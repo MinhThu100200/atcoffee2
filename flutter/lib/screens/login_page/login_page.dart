@@ -1,6 +1,7 @@
 import 'package:at_coffee/controllers/promotion_controller.dart';
 import 'package:at_coffee/screens/forget_password/forget_password.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:at_coffee/screens/signup_page/sign_up_page.dart';
@@ -45,14 +46,47 @@ class _loginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  void _login(String email, String password) async {
+  Future<void> _login(String email, String password) async {
     // Data Fixed - Change
-    await userController.authUser('0346279377', '1234567890');
-    if (userController.user.value.name != "" &&
-        userController.user.value.name != null) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => RootApp(nameRoute: 'home')));
-      // Get.off(() => new RootApp());
+    try {
+      EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
+      await userController.authUser(email, password);
+      EasyLoading.dismiss();
+      if (userController.user.value.name != "" &&
+          userController.user.value.name != null) {
+        Get.snackbar(
+          "Đăng nhập thành công",
+          "Có quá trời ưu đãi luôn nè. Mua ngay bạn ơi~",
+          icon: const Icon(Icons.person, color: Colors.white),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RootApp(nameRoute: 'home')));
+        // Get.off(() => new RootApp());
+      } else {
+        Get.snackbar(
+          "Đăng nhập không thành công",
+          "Bạn yêu vui lòng thử lại ạ~",
+          icon: const Icon(Icons.person, color: Colors.white),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+        );
+      }
+    } catch (error) {
+      EasyLoading.dismiss();
+      Get.snackbar(
+        "Đăng nhập lỗi",
+        "Vui lòng thử lại bạn ơi~",
+        icon: const Icon(Icons.person, color: Colors.white),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+      );
     }
   }
 
@@ -119,7 +153,7 @@ class _loginPageState extends State<LoginPage> {
                                   controller: _email,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
-                                    labelText: 'Nhập email',
+                                    labelText: 'Nhập email/Số điện thoại',
                                     labelStyle:
                                         const TextStyle(color: Colors.black),
                                     //hintText: "Email",

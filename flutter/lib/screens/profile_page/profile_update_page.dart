@@ -64,8 +64,8 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
                   onTap: () {
                     _updateUser();
                   },
-                  child: const Text("Lưu",
-                      style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("Lưu", style: TextStyle(color: Colors.white)),
                 )
               ])),
           elevation: 0,
@@ -353,7 +353,9 @@ class _ProfileUpdatePage extends State<ProfileUpdatePage> {
   _selectDate(BuildContext context) async {
     final DateTime selected = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate.isAfter(DateTime(1990))
+          ? _selectedDate
+          : DateTime(1990),
       firstDate: DateTime(1990),
       lastDate: DateTime(2050),
     );
