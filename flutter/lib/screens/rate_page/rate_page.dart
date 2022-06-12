@@ -1,20 +1,11 @@
-import 'dart:async';
-
 import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/controllers/rate_controller.dart';
-import 'package:at_coffee/models/store.dart';
-import 'package:at_coffee/screens/manage_order_page/detail_order.dart';
 import 'package:at_coffee/screens/rate_page/detail_order_rate.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:at_coffee/common/theme/colors.dart';
 import 'package:get/get.dart';
-import 'package:at_coffee/controllers/store_controller.dart';
-import 'package:at_coffee/common/utils_common/utils_common.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RatePage extends StatefulWidget {
   const RatePage({Key key}) : super(key: key);
@@ -136,7 +127,6 @@ class _RatePage extends State<RatePage> {
                                                     : gray,
                                                 fontWeight: FontWeight.w600)),
                                         const SizedBox(width: 3),
-                                        // check đánh giá
                                         index == 0 &&
                                                 billController.billsList
                                                     .where((element) =>
@@ -190,7 +180,6 @@ class _RatePage extends State<RatePage> {
                                                   left: 13,
                                                   right: 0,
                                                 ),
-                                                //margin: const EdgeInsets.only(right: 10),
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,

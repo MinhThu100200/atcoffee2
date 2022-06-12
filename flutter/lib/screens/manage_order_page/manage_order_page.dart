@@ -340,11 +340,14 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                           Text(
                                                               " " +
                                                                   oCcy
-                                                                      .format(data[
-                                                                              index]
-                                                                          .billDetails[
-                                                                              0]
-                                                                          .amount)
+                                                                      .format(data[index]
+                                                                              .billDetails[
+                                                                                  0]
+                                                                              .amount *
+                                                                          data[index]
+                                                                              .billDetails[
+                                                                                  0]
+                                                                              .quantity)
                                                                       .toString(),
                                                               style: const TextStyle(
                                                                   fontSize: 14,

@@ -61,11 +61,11 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                               child: Text(
                                   "${_billDetail.quantity} x ${_billDetail.name}",
                                   style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white))),
                           const SizedBox(
-                            height: 6,
+                            height: 4,
                           ),
                           Row(children: [
                             _billDetail.discount > 0
@@ -75,31 +75,45 @@ class _ItemOrderDetail extends State<ItemOrderDetail> {
                                             _billDetail.quantity)
                                         .toString(),
                                     style: const TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         color: black,
                                         decoration: TextDecoration.lineThrough))
                                 : Text(""),
                             Text(
                                 " " +
-                                    oCcy.format(_billDetail.amount).toString(),
+                                    oCcy
+                                        .format(_billDetail.amount *
+                                            _billDetail.quantity)
+                                        .toString(),
                                 style: const TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                     color: lightYellow)),
                           ]),
                           const SizedBox(
-                            height: 6,
+                            height: 4,
                           ),
                           Container(
-                            height: 40,
+                            alignment: Alignment.centerLeft,
+                            child: Text("Size: ${_billDetail.size}",
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: white)),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Container(
+                            height: 30,
                             alignment: Alignment.topLeft,
                             child: Text(
                                 "Chú thích: ${_billDetail.description == null || _billDetail.description == "" ? "Không có" : _billDetail.description}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     color: white1)),
                           ),
