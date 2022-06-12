@@ -174,196 +174,172 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
                                           )))
                                 ],
                               )),
+                          const SizedBox(height: 10),
                           ListView.builder(
                               itemCount: _bill.billDetails.length,
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
-                                // return ItemRate(
-                                //     billDetail: _bill.billDetails[index]);
                                 return GestureDetector(
-                                    onTap: () => _bill.billDetails[index].state
-                                        ? _showModelButtonSheet(
-                                            context, _bill.billDetails[index])
-                                        : {},
+                                    // onTap: () => _bill.billDetails[index].state
+                                    //     ? _showModelButtonSheet(
+                                    //         context, _bill.billDetails[index])
+                                    //     : {},
                                     child: Container(
-                                      height: 140.0,
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0, right: 0.0),
-                                      child: SizedBox(
-                                          height: size.width,
-                                          width: size.width,
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                top: 20.0,
-                                                left: 70.0,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 50.0,
-                                                          right: 10.0,
-                                                          top: 5.0,
-                                                          bottom: 5.0),
-                                                  decoration: BoxDecoration(
-                                                    color: primary,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  height: 100.0,
-                                                  width: size.width - 110.0,
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Text(
-                                                              "${_bill.billDetails[index].quantity} x ${_bill.billDetails[index].name}",
-                                                              style: const TextStyle(
-                                                                  fontSize: 16,
+                                  height: 140.0,
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, right: 0.0),
+                                  child: SizedBox(
+                                      height: size.width,
+                                      width: size.width,
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            top: 20.0,
+                                            left: 70.0,
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 50.0,
+                                                  right: 10.0,
+                                                  top: 5.0,
+                                                  bottom: 5.0),
+                                              decoration: BoxDecoration(
+                                                color: primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              height: 100.0,
+                                              width: size.width - 110.0,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                          "${_bill.billDetails[index].quantity} x ${_bill.billDetails[index].name}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 18,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
                                                                   color: Colors
                                                                       .white))),
-                                                      const SizedBox(
-                                                        height: 6,
-                                                      ),
-                                                      Row(children: [
-                                                        _bill.billDetails[index]
-                                                                    .discount >
-                                                                0
-                                                            ? Text(
-                                                                oCcy
-                                                                    .format(_bill.billDetails[index].price *
-                                                                        _bill
-                                                                            .billDetails[
-                                                                                index]
-                                                                            .quantity)
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color:
-                                                                        black,
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .lineThrough))
-                                                            : Text(""),
-                                                        Text(
-                                                            " " +
-                                                                oCcy
-                                                                    .format(_bill
+                                                  const SizedBox(
+                                                    height: 6,
+                                                  ),
+                                                  Row(children: [
+                                                    _bill.billDetails[index]
+                                                                .discount >
+                                                            0
+                                                        ? Text(
+                                                            oCcy
+                                                                .format(_bill
                                                                         .billDetails[
                                                                             index]
-                                                                        .amount)
-                                                                    .toString(),
+                                                                        .price *
+                                                                    _bill
+                                                                        .billDetails[
+                                                                            index]
+                                                                        .quantity)
+                                                                .toString(),
                                                             style: const TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                color:
-                                                                    lightYellow)),
-                                                      ]),
-                                                      const SizedBox(
-                                                        height: 6,
-                                                      ),
-                                                      Container(
-                                                        height: 25,
-                                                        alignment:
-                                                            Alignment.topLeft,
-                                                        child: Text(
-                                                            "Chú thích: ${_bill.billDetails[index].description == null || _bill.billDetails[index].description == "" ? "Không có" : _bill.billDetails[index].description}",
-                                                            maxLines: 2,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: const TextStyle(
-                                                                fontSize: 11,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: white)),
-                                                      ),
-                                                      Container(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        child: Text(
-                                                            _bill
+                                                                color: black,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .lineThrough))
+                                                        : Text(""),
+                                                    Text(
+                                                        " " +
+                                                            oCcy
+                                                                .format(_bill
                                                                     .billDetails[
                                                                         index]
-                                                                    .state
-                                                                ? ">>>>>Đánh giá"
-                                                                : "Đã đánh giá",
-                                                            style: const TextStyle(
-                                                                fontSize: 13,
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: white)),
-                                                      ),
-                                                    ],
+                                                                    .amount)
+                                                                .toString(),
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                lightYellow)),
+                                                  ]),
+                                                  const SizedBox(
+                                                    height: 6,
                                                   ),
-                                                ),
+                                                  Container(
+                                                    height: 30,
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                        "Chú thích: ${_bill.billDetails[index].description == null || _bill.billDetails[index].description == "" ? "Không có" : _bill.billDetails[index].description}",
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: white)),
+                                                  ),
+                                                ],
                                               ),
-                                              Container(
-                                                height: 110.0,
-                                                width: 110.0,
-                                                decoration: BoxDecoration(
-                                                  color: lightYellow,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(
-                                                        10),
-                                                    child: Image.network(
-                                                        productController.allProducts
-                                                            .where((item) =>
-                                                                item.id ==
-                                                                _bill
-                                                                    .billDetails[
-                                                                        index]
-                                                                    .productId)
-                                                            .toList()[0]
-                                                            .image,
-                                                        fit: BoxFit.contain,
-                                                        errorBuilder: (BuildContext context,
-                                                            Object exception,
-                                                            StackTrace stackTrace) {
-                                                      return const Text('😢');
-                                                    }, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      } else {
-                                                        return Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            value: loadingProgress
-                                                                        .expectedTotalBytes !=
-                                                                    null
-                                                                ? loadingProgress
-                                                                        .cumulativeBytesLoaded /
-                                                                    loadingProgress
-                                                                        .expectedTotalBytes
-                                                                : null,
-                                                          ),
-                                                        );
-                                                      }
-                                                    })),
-                                              ),
-                                            ],
-                                          )),
-                                    ));
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 110.0,
+                                            width: 110.0,
+                                            decoration: BoxDecoration(
+                                              color: lightYellow,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                    productController.allProducts
+                                                        .where((item) =>
+                                                            item.id ==
+                                                            _bill
+                                                                .billDetails[
+                                                                    index]
+                                                                .productId)
+                                                        .toList()[0]
+                                                        .image,
+                                                    fit: BoxFit.contain, errorBuilder: (BuildContext context,
+                                                        Object exception,
+                                                        StackTrace stackTrace) {
+                                                  return const Text('😢');
+                                                }, loadingBuilder: (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  } else {
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  }
+                                                })),
+                                          ),
+                                        ],
+                                      )),
+                                ));
                               }),
                           Container(
                               padding: const EdgeInsets.only(
@@ -532,165 +508,166 @@ class _DetailOrderRatePage extends State<DetailOrderRatePage> {
     return total;
   }
 
-  Future<void> _addRate(BillDetail _billDetail) async {
-    await EasyLoading.show(
-      status: 'loading...',
-      maskType: EasyLoadingMaskType.black,
-    );
-    var body = {
-      "code": 'RATE${_billDetail.code}',
-      "state": true,
-      "comment": _comment.text,
-      "productId": _billDetail.productId,
-      "userId": userController.user.value.id,
-      "star": star,
-    };
-    var idBill = _billDetail.code.split('D');
+  // Future<void> _addRate(BillDetail _billDetail) async {
+  //   await EasyLoading.show(
+  //     status: 'loading...',
+  //     maskType: EasyLoadingMaskType.black,
+  //   );
+  //   var body = {
+  //     "code": 'RATE${_billDetail.code}',
+  //     "state": true,
+  //     "comment": _comment.text,
+  //     "productId": _billDetail.productId,
+  //     "userId": userController.user.value.id,
+  //     "star": star,
+  //   };
+  //   var idBill = _billDetail.code.split('D');
 
-    print("my id bill " + idBill[0]);
-    try {
-      billController.updateBill(idBill[0], int.parse(idBill[1]));
-      var res = await rateController.addRate(body);
-      if (res) {
-        await EasyLoading.dismiss();
-        Get.snackbar(
-          "Đánh giá thành công",
-          "Cảm ơn những đánh giá quý báu của bạn!",
-          icon: const Icon(Icons.person, color: Colors.white),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-        );
-      } else {
-        await EasyLoading.dismiss();
-        Get.snackbar(
-          "Đánh giá không thành công",
-          "Bạn ơi vui lòng thử lại",
-          icon: const Icon(Icons.person, color: Colors.white),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-        );
-      }
-    } catch (error) {
-      await EasyLoading.dismiss();
-      Get.snackbar(
-        "Đánh giá lỗi",
-        "Bạn ơi vui lòng thử lại",
-        icon: const Icon(Icons.person, color: Colors.white),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
-    }
-    Navigator.pop(context);
-  }
+  //   print("my id bill " + idBill[0]);
+  //   try {
+  //     billController.updateBill(idBill[0], int.parse(idBill[1]));
+  //     var res = await rateController.addRate(body);
+  //     if (res) {
+  //       await EasyLoading.dismiss();
+  //       Get.snackbar(
+  //         "Đánh giá thành công",
+  //         "Cảm ơn những đánh giá quý báu của bạn!",
+  //         icon: const Icon(Icons.person, color: Colors.white),
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         backgroundColor: Colors.green,
+  //       );
+  //     } else {
+  //       await EasyLoading.dismiss();
+  //       Get.snackbar(
+  //         "Đánh giá không thành công",
+  //         "Bạn ơi vui lòng thử lại",
+  //         icon: const Icon(Icons.person, color: Colors.white),
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         backgroundColor: Colors.red,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     await EasyLoading.dismiss();
+  //     Get.snackbar(
+  //       "Đánh giá lỗi",
+  //       "Bạn ơi vui lòng thử lại",
+  //       icon: const Icon(Icons.person, color: Colors.white),
+  //       snackPosition: SnackPosition.BOTTOM,
+  //       backgroundColor: Colors.red,
+  //     );
+  //   }
+  //   Navigator.pop(context);
+  // }
 
-  void _showModelButtonSheet(BuildContext context, BillDetail _billDetail) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter myState) {
-            return Container(
-              height: 300,
-              margin: const EdgeInsets.only(bottom: 250),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 16, top: 16),
-                              child: Text(_billDetail.name,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey[800]))),
-                          Container(
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 16, top: 4),
-                              child: Text(_billDetail.description,
-                                  style: const TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black))),
-                          RatingBar.builder(
-                            initialRating: 3,
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            //allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              setState(() {
-                                star = rating.toInt();
-                              });
-                            },
-                          ),
-                          Container(
-                            height: 120,
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey[400])),
-                            padding: const EdgeInsets.only(
-                              left: 5,
-                            ),
-                            child: TextField(
-                              maxLines: 5,
-                              cursorColor: black.withOpacity(0.5),
-                              controller: _comment,
-                              style: const TextStyle(fontSize: 15),
-                              decoration: const InputDecoration(
-                                labelStyle: TextStyle(color: Colors.black),
-                                hintText: "Đánh giá",
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => _addRate(_billDetail),
-                            child: Container(
-                                padding:
-                                    const EdgeInsets.only(right: 10, top: 16),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                        height: 30,
-                                        width: 60,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            color: primary,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: const Text("Gửi",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black))),
-                                  ],
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          });
-        });
-  }
+  // void _showModelButtonSheet(BuildContext context, BillDetail _billDetail) {
+  //   showModalBottomSheet(
+  //       backgroundColor: Colors.transparent,
+  //       context: context,
+  //       isScrollControlled: true,
+  //       builder: (BuildContext context) {
+  //         return StatefulBuilder(
+  //             builder: (BuildContext context, StateSetter myState) {
+  //           return Container(
+  //             height: 300,
+  //             margin: const EdgeInsets.only(bottom: 250),
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.circular(20),
+  //             ),
+  //             child: Column(
+  //               children: [
+  //                 Expanded(
+  //                   child: SingleChildScrollView(
+  //                     child: Column(
+  //                       children: [
+  //                         Container(
+  //                             alignment: Alignment.centerLeft,
+  //                             padding: const EdgeInsets.only(left: 16, top: 16),
+  //                             child: Text(_billDetail.name,
+  //                                 style: TextStyle(
+  //                                     fontSize: 14,
+  //                                     fontWeight: FontWeight.w600,
+  //                                     color: Colors.grey[800]))),
+  //                         Container(
+  //                             alignment: Alignment.centerLeft,
+  //                             padding: const EdgeInsets.only(left: 16, top: 4),
+  //                             child: Text(_billDetail.description,
+  //                                 style: const TextStyle(
+  //                                     fontSize: 13,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     color: Colors.black))),
+  //                         RatingBar.builder(
+  //                           initialRating: 3,
+  //                           minRating: 1,
+  //                           direction: Axis.horizontal,
+  //                           //allowHalfRating: true,
+  //                           itemCount: 5,
+  //                           itemPadding:
+  //                               const EdgeInsets.symmetric(horizontal: 4.0),
+  //                           itemBuilder: (context, _) => const Icon(
+  //                             Icons.star,
+  //                             color: Colors.amber,
+  //                           ),
+  //                           onRatingUpdate: (rating) {
+  //                             setState(() {
+  //                               star = rating.toInt();
+  //                             });
+  //                           },
+  //                         ),
+  //                         Container(
+  //                           height: 120,
+  //                           margin: const EdgeInsets.all(8),
+  //                           decoration: BoxDecoration(
+  //                               borderRadius: BorderRadius.circular(8),
+  //                               border: Border.all(color: Colors.grey[400])),
+  //                           padding: const EdgeInsets.only(
+  //                             left: 5,
+  //                           ),
+  //                           child: TextField(
+  //                             maxLines: 5,
+  //                             cursorColor: black.withOpacity(0.5),
+  //                             controller: _comment,
+  //                             style: const TextStyle(fontSize: 15),
+  //                             decoration: const InputDecoration(
+  //                               labelStyle: TextStyle(color: Colors.black),
+  //                               hintText: "Đánh giá",
+  //                               border: InputBorder.none,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         GestureDetector(
+  //                           onTap: () => _addRate(_billDetail),
+  //                           child: Container(
+  //                               padding:
+  //                                   const EdgeInsets.only(right: 10, top: 16),
+  //                               child: Row(
+  //                                 mainAxisAlignment: MainAxisAlignment.end,
+  //                                 children: [
+  //                                   Container(
+  //                                       height: 30,
+  //                                       width: 60,
+  //                                       alignment: Alignment.center,
+  //                                       decoration: BoxDecoration(
+  //                                           color: primary,
+  //                                           borderRadius:
+  //                                               BorderRadius.circular(8)),
+  //                                       padding: const EdgeInsets.only(left: 5),
+  //                                       child: const Text("Gửi",
+  //                                           style: TextStyle(
+  //                                               fontSize: 14,
+  //                                               color: Colors.black))),
+  //                                 ],
+  //                               )),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           );
+  //         });
+  //       });
+  // }
+
 }

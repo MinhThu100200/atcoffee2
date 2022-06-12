@@ -1,7 +1,6 @@
 import 'package:at_coffee/controllers/user_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/bill.dart';
 
 class BillController extends GetxController {
@@ -11,7 +10,6 @@ class BillController extends GetxController {
   final UserController userController = Get.put(UserController());
   @override
   void onInit() {
-    //fetchPromotions();
     super.onInit();
   }
 
@@ -32,29 +30,23 @@ class BillController extends GetxController {
       final data = event.snapshot.value;
       Map<Object, Object> mydata = data;
       mydata.forEach((key, values) {
-        //print(values);
         var mybill = Bill.fromDocumentSnapshot(values);
         if (mybill.customerId == userController.user.value.id) {
           bills.add(mybill);
         }
       });
 
-      //print("my data");
       billsList.value = bills;
-      //print(bills.length);
-      //return bills;
     });
     isLoading(false);
-    //return [];
   }
 
-  Future<void> updateBill(idBill, idItem) async {
-    DatabaseReference listOrder = FirebaseDatabase.instance
-        .ref('bills/${idBill}/billDetails/${idItem - 1}');
+  Future<void> updateBill(idBill) async {
+    DatabaseReference listOrder =
+        FirebaseDatabase.instance.ref('bills/${idBill}');
     isLoading(true);
-    await listOrder.update({"state": false});
+    await listOrder.update({"rate": false});
     isLoading(false);
-    //return [];
   }
 
   Future<void> updateBillStatus(idBill) async {
@@ -63,7 +55,6 @@ class BillController extends GetxController {
     isLoading(true);
     await listOrder.update({"status": "CANCELED"});
     isLoading(false);
-    //return [];
   }
 
   void saveData(billList) {

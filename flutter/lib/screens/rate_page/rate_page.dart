@@ -137,7 +137,14 @@ class _RatePage extends State<RatePage> {
                                                 fontWeight: FontWeight.w600)),
                                         const SizedBox(width: 3),
                                         // check đánh giá
-                                        index == 0
+                                        index == 0 &&
+                                                billController.billsList
+                                                    .where((element) =>
+                                                        element.status ==
+                                                            'COMPLETED' &&
+                                                        element.rate)
+                                                    .toList()
+                                                    .isNotEmpty
                                             ? Container(
                                                 decoration: BoxDecoration(
                                                     borderRadius:
@@ -171,12 +178,14 @@ class _RatePage extends State<RatePage> {
                                           (BuildContext context, int index) {
                                         return Container(
                                           color: lightGray3,
-                                          margin: const EdgeInsets.only(bottom: 5),
+                                          margin:
+                                              const EdgeInsets.only(bottom: 5),
                                           child: Column(
                                             children: [
                                               Container(
                                                 //color: lightGray3,
-                                                margin: const EdgeInsets.only(top: 3),
+                                                margin: const EdgeInsets.only(
+                                                    top: 3),
                                                 padding: const EdgeInsets.only(
                                                   left: 13,
                                                   right: 0,
@@ -389,7 +398,8 @@ class _RatePage extends State<RatePage> {
                                 } else {
                                   var data = billController.billsList
                                       .where((element) =>
-                                          element.status == 'COMPLETED')
+                                          element.status == 'COMPLETED' &&
+                                          element.rate)
                                       .toList();
                                   return ListView.builder(
                                       physics:

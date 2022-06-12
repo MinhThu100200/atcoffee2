@@ -32,6 +32,7 @@ class Bill {
       this.staffId,
       this.customerId,
       this.storeId,
+      this.rate,
       this.billDetails});
   int id;
   int createdDate;
@@ -54,7 +55,7 @@ class Bill {
   int customerId;
   int storeId;
   List<BillDetail> billDetails;
-
+  bool rate;
   // Firebase data
   String promotionCode;
   String paymentName;
@@ -89,6 +90,7 @@ class Bill {
         staffName = json["staffName"],
         customerName = json["customerName"],
         read = json["read"],
+        rate = json["rate"],
         billDetails = List<BillDetail>.from(
             json["billDetails"].map((x) => BillDetail.fromMap(x)));
 
@@ -113,6 +115,7 @@ class Bill {
       staffId: json["staffId"],
       customerId: json["customerId"],
       storeId: json["storeId"],
+      rate: json["rate"],
       billDetails: billDetailFromJson(json["billDetails"]));
 
   Map<String, dynamic> toJson() => {
@@ -136,6 +139,7 @@ class Bill {
         "staffId": staffId,
         "customerId": customerId,
         "storeId": storeId,
+        "rate": rate,
         "billDetails": billDetailToJson(billDetails)
       };
 
@@ -166,6 +170,7 @@ class Bill {
         "storeId": storeId,
         "read": read,
         "token": token,
+        "rate": rate,
         "billDetails":
             List<dynamic>.from(billDetails.map((x) => x.toFirebaseJson()))
       };

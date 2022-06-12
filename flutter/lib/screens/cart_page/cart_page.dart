@@ -63,99 +63,6 @@ class _CartPage extends State<CartPage> {
         ? paymentController.paymentsList[0].id.toString()
         : '';
   }
-// //check here
-//   double _calPromotion(carts) {
-//     if (carts == null || carts.length == 0) {
-//       cartController.total["promotion"] = 0.toInt();
-//       return 0;
-//     }
-//     _isValidPromotion = true;
-
-//     double promotionValue = 0;
-
-//     switch (cartController.type.value) {
-//       case 0:
-//         break;
-//       case 1:
-//         Promotion promotion = cartController.promotion.value;
-//         if (_validPromotion(promotion)) {
-
-//           promotionValue =
-//               cartController.total["amount"] * promotion.discount / 100;
-//         } else {
-//           _isValidPromotion = false;
-//         }
-//         break;
-//       case 2:
-//         Reward reward = cartController.reward.value;
-//         if (_validReward(reward)) {
-//           promotionValue = reward.redution.toDouble();
-//         } else {
-//           _isValidPromotion = false;
-//         }
-//         break;
-//     }
-//     //check here
-//     cartController.total["promotion"] = promotionValue.toInt();
-//     return promotionValue;
-//   }
-
-//   double _calAmount(carts) {
-//     if (carts == null || carts.length == 0) {
-//       return 0;
-//     }
-
-//     double amount = 0;
-//     for (int i = 0; i < carts.length; i++) {
-//       if (carts[i].state == true) {
-//         amount += (carts[i]
-//                         .product
-//                         .sizes[carts[i].size == 'S'
-//                             ? 0
-//                             : carts[i].size == 'M'
-//                                 ? 1
-//                                 : 2]
-//                         .price *
-//                     (1 - carts[i].product.discount / 100))
-//                 .toInt() *
-//             carts[i].quantity;
-//       }
-//     }
-//     //check here
-//     cartController.total["amount"] = amount.toInt();
-//     print("_calAmount" +
-//         cartController.total["amount"].toString() +
-//         amount.toInt().toString());
-//     return amount;
-//   }
-
-//   double _calTotalAmount(carts) {
-//     double amount = _calAmount(carts) - _calPromotion(carts);
-//     amount = amount < 0 ? 0 : amount;
-//     //check here
-//     cartController.total["totalAmount"] = amount.toInt();
-//     print("_calTotalAmount" +
-//         cartController.total["totalAmount"].toString() +
-//         amount.toInt().toString());
-//     return amount;
-//   }
-
-//   int _calTotalQuantity(carts) {
-//     if (carts == null || carts.length == 0) {
-//       return 0;
-//     }
-
-//     int quantity = 0;
-//     for (int i = 0; i < carts.length; i++) {
-//       if (carts[i].state == true) {
-//         quantity += carts[i].quantity;
-//       }
-//     }
-//     //check here
-//     cartController.total["quantity"] = quantity.toInt();
-
-//     return quantity;
-//   }
 
   @override
   Widget build(BuildContext context) {
@@ -654,8 +561,6 @@ class _CartPage extends State<CartPage> {
       return;
     }
 
-    //cartController.isLoading.value = true;
-
     String token = await FirebaseMessaging.instance.getToken();
 
     var now = DateTime.now();
@@ -714,6 +619,7 @@ class _CartPage extends State<CartPage> {
     bill.state = true;
     bill.read = false;
     bill.token = token;
+    bill.rate = true;
 
     await FireBaseService.addBill(bill);
 
@@ -1351,29 +1257,15 @@ class _PromotionCartPage extends State<PromotionCartPage> {
 
   void _applyPromotion(Promotion promotion) {
     cartController.applyPromotion(promotion);
-    // //check here
-    // cartController.promotion.value = promotion;
-    // //check here
-    // cartController.type.value = 1;
     Navigator.pop(context);
   }
 
   void _applyReward(Reward reward) {
-    // //check here
-    // cartController.reward.value = reward;
-    // //check here
-    // cartController.type.value = 2;
     cartController.applyReward(reward);
     Navigator.pop(context);
   }
 
   void _cancelApply() {
-    // //check here
-    // cartController.promotion.value = Promotion();
-    // //check here
-    // cartController.reward.value = Reward();
-    // //check here
-    // cartController.type.value = 0;
     cartController.cancelApply();
     Navigator.pop(context);
   }
