@@ -1131,7 +1131,6 @@ class _OrderPage extends State<OrderPage> {
                                                   )),
                                             ],
                                           );
-                                        
                                         }),
                                   );
                                 }
@@ -1200,7 +1199,8 @@ class _OrderPage extends State<OrderPage> {
                             onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const CartPage())),
+                                    builder: (context) =>
+                                        CartPage(isPaid: false, idOrder: ''))),
                             child: Text(
                                 'Giỏ hàng (' +
                                     cartController.cartsList.length.toString() +

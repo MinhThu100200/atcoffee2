@@ -3,6 +3,7 @@ import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
+import 'package:at_coffee/screens/momo_page/momo_page.dart';
 import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/common/theme/colors.dart';
@@ -444,6 +445,7 @@ class _HomePageState extends State<HomePage> {
     storeController.setSeleted(0);
 
     Get.to(() => const ProductsPage());
+    //Get.to(() => MomoPage());
   }
 
   void _takeAway() {

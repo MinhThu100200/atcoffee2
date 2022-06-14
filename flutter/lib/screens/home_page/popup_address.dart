@@ -318,7 +318,7 @@ class _PopUpAddress extends State<PopUpAddress> {
                       child: const Text(""));
                 } else {
                   return GestureDetector(
-                    onTap: () => Get.to(() => const CartPage()),
+                    onTap: () => Get.to(() => CartPage(isPaid: false, idOrder: "")),
                     child: Container(
                         margin: const EdgeInsets.only(left: 8.0),
                         padding: const EdgeInsets.all(6),

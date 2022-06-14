@@ -2,6 +2,8 @@ import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
 import 'package:at_coffee/screens/manage_order_page/manage_order_page.dart';
+import 'package:at_coffee/screens/momo_page/momo_page.dart';
+import 'package:at_coffee/screens/products_page/products_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:at_coffee/models/bill.dart';
@@ -28,8 +30,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key key}) : super(key: key);
-
+  CartPage({Key key, this.isPaid, this.idOrder}) : super(key: key);
+  bool isPaid = false;
+  String idOrder;
   @override
   _CartPage createState() => _CartPage();
 }
@@ -54,10 +57,15 @@ class _CartPage extends State<CartPage> {
   ];
 
   String _selectedPayment = '';
+  //bool _isPaid;
 
   @override
   void initState() {
     super.initState();
+    print(widget.isPaid);
+    if (widget.isPaid) {
+      _paymentOrder(widget.idOrder);
+    }
     _selectedPayment = paymentController.paymentsList != null &&
             paymentController.paymentsList.isEmpty == false
         ? paymentController.paymentsList[0].id.toString()
@@ -175,37 +183,35 @@ class _CartPage extends State<CartPage> {
                                     child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        children: const [
-                                          Text("Các sản phẩm đã chọn",
+                                        children: [
+                                          const Text("Các sản phẩm đã chọn",
                                               style: TextStyle(
                                                   fontSize: 20.0,
                                                   fontWeight: FontWeight.w600)),
-                                          // GestureDetector(
-                                          //   onTap: () {},
-                                          //   child: Container(
-                                          //     padding:
-                                          //         const EdgeInsets.symmetric(
-                                          //             horizontal: 10.0,
-                                          //             vertical: 4.0),
-                                          //     decoration: BoxDecoration(
-                                          //       borderRadius:
-                                          //           BorderRadius.circular(
-                                          //               10.0),
-                                          //       color:
-                                          //           primary.withOpacity(0.3),
-                                          //     ),
-                                          //     child: GestureDetector(
-                                          //       onTap: () {
-                                          //         Get.to(
-                                          //             () => ProductsPage());
-                                          //       },
-                                          //       child: const Text("+ Thêm",
-                                          //           style: TextStyle(
-                                          //               fontSize: 16.0,
-                                          //               color: primary)),
-                                          //     ),
-                                          //   ),
-                                          // ),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 4.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                color: primary.withOpacity(0.3),
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Get.to(() =>
+                                                      const ProductsPage());
+                                                },
+                                                child: const Text("+ Thêm",
+                                                    style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: primary)),
+                                              ),
+                                            ),
+                                          ),
                                         ]),
                                   ),
                                   if (cartController.cartsList.isEmpty ==
@@ -511,7 +517,7 @@ class _CartPage extends State<CartPage> {
                       ),
                       ElevatedButton(
                           onPressed: () {
-                            _paymentOrder();
+                            _paymentOrder("");
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -541,7 +547,7 @@ class _CartPage extends State<CartPage> {
     );
   }
 
-  void _paymentOrder() async {
+  void _paymentOrder(id) async {
     await EasyLoading.show(
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
@@ -557,14 +563,33 @@ class _CartPage extends State<CartPage> {
           textColor: Colors.white,
           fontSize: 16.0);
 
-      await EasyLoading.dismiss();
+      EasyLoading.dismiss();
+      return;
+    }
+    var now = DateTime.now();
+    String code = '';
+    if (id != "") {
+      code = id;
+    } else {
+      code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
+    }
+
+    if (_selectedPayment == "2") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MomoPage(
+                  idOrder: code,
+                  amount:
+                      cartController.totalCart.value.totalAmount.toDouble())));
+      EasyLoading.dismiss();
       return;
     }
 
     String token = await FirebaseMessaging.instance.getToken();
 
-    var now = DateTime.now();
-    String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
+    // var now = DateTime.now();
+    // String code = 'BI' + now.millisecondsSinceEpoch.toString().substring(1, 9);
 
     Bill bill = Bill();
     bill.code = code;
@@ -1226,7 +1251,7 @@ class _PromotionCartPage extends State<PromotionCartPage> {
 
   bool checkExpired(item) {
     int milis = DateTime.now().millisecondsSinceEpoch;
-    print(item.endDate.toString() + ' ' + milis.toString());
+
     if (item.endDate > milis) {
       return true;
     }

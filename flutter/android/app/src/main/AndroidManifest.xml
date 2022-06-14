@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.at_coffee">
+    package="com.example.at_coffee"
+    xmlns:tools="http://schemas.android.com/tools">
      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -10,9 +11,11 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> 
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" /> 
    <application
+  
         android:label="at_coffee"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher_round">
+       android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher_round"
+         tools:replace="label">
         <activity
             android:name=".MainActivity"
             android:exported="true"
