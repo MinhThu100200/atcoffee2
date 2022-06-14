@@ -200,12 +200,21 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                           ),
                                         ),
                                       ),
-                                      billController.billsList
-                                              .where((element) =>
-                                                  element.status ==
-                                                  cateData[index]['status'])
-                                              .toList()
-                                              .isNotEmpty
+                                      Obx(() => billController.billsList
+                                                  .where((element) =>
+                                                      element.status ==
+                                                      cateData[index]['status'])
+                                                  .toList()
+                                                  .isNotEmpty ||
+                                              cateData[index]['status'] ==
+                                                      "RATE" &&
+                                                  billController.billsList
+                                                      .where((element) =>
+                                                          element.status ==
+                                                              "COMPLETED" &&
+                                                          element.rate)
+                                                      .toList()
+                                                      .isNotEmpty
                                           ? Positioned(
                                               left: 3,
                                               bottom: 58,
@@ -221,16 +230,31 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                         BorderRadius.circular(
                                                             15)),
                                                 child: Text(billController
-                                                    .billsList
-                                                    .where((element) =>
-                                                        element.status ==
-                                                        cateData[index]
-                                                            ['status'])
-                                                    .toList()
-                                                    .length
-                                                    .toString()),
+                                                        .billsList
+                                                        .where((element) =>
+                                                            element.status ==
+                                                            cateData[index]
+                                                                ['status'])
+                                                        .toList()
+                                                        .isNotEmpty
+                                                    ? billController.billsList
+                                                        .where((element) =>
+                                                            element.status ==
+                                                            cateData[index]
+                                                                ['status'])
+                                                        .toList()
+                                                        .length
+                                                        .toString()
+                                                    : billController.billsList
+                                                        .where((element) =>
+                                                            element.status ==
+                                                                "COMPLETED" &&
+                                                            element.rate)
+                                                        .toList()
+                                                        .length
+                                                        .toString()),
                                               ))
-                                          : const Text("")
+                                          : const Text(""))
                                     ],
                                   ),
                                 );
