@@ -174,6 +174,8 @@ export default {
 	width: 0;
   height: 0;
   border-top-right-radius: .25rem;
+  -webkit-border-top-right-radius: .25rem;
+  -moz-border-top-right-radius: .25rem;
   border-top: 40px solid orange;
   border-left: 40px solid transparent;
 }

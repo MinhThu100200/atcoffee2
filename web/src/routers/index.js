@@ -38,6 +38,9 @@ import NotificationsStaff from '../components/view/staff/notification/Notificati
 import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
+/** User Components */
+import DashBoardUser from '../components/view/user/dashboard/Dashboard.vue'
+
 const routes = [
   {path: '/login', component: Login, meta: {title: 'A&T Coffee | Đăng nhập'}},
   {path: '/forgot-password', component: ForgotPassword, meta: {title: 'A&T Coffee | Quên mật khẩu'}},
@@ -80,7 +83,12 @@ const routes = [
   {path: '/staff/profile', name: 'profile-staff', component: ProfileStaff, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 
+  /** User URL */
+  {path: '/', name: 'dashboard', component: DashBoardUser, meta: {title: 'A&T Coffee | Trang chủ'}},
+
+
   {path: '/:pathMatch(.*)', component: Error, meta: {title: 'A&T Coffee | Lỗi'}},
+  
 ]
 
 const router = createRouter({

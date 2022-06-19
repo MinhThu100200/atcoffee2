@@ -12,7 +12,7 @@ var CategoryCommand = {
 
   async findAll(store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/category?list`;
-    let result = await ConnectServer.getData(url);
+    let result = await ConnectServer.getDataInfo(url);
     if (result != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_CATEGORIES, result) : '';
       return result;
