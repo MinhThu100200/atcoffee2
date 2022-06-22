@@ -21,13 +21,13 @@ var ProductCommand = {
 
   async findOne(id) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product/${id}`;
-    let res = await ConnectServer.getData(url);
+    let res = await ConnectServer.getDataInfo(url);
     return res;
   },
 
   async findOneByCode(code, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?code=${code}`;
-    let res = await ConnectServer.getData(url);
+    let res = await ConnectServer.getDataInfo(url);
     if (res != null) {
       store != null
         ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res)

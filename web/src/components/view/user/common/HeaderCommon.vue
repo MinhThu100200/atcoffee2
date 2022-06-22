@@ -13,9 +13,9 @@
   <div class="navbar-container">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand header-logo" href="/">
+        <router-link class="navbar-brand header-logo" to="/">
           <span>A&amp;T COFFEE</span>
-        </a>
+        </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Cà phê</a>
+              <router-link class="nav-link" to="/">Cà phê</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Trà sữa</a>
@@ -83,8 +83,6 @@ export default {
 </script>
 
 <style scoped>
-
-/* @import url('https://fonts.googleapis.com/css2?family=Sofia:wght@300&display=swap'); */
 
 .dropdown-menu.show {
   background-color: rgba(255, 255, 255, 0.7);
@@ -212,6 +210,8 @@ input.form-control {
 
 .btn-outline-success {
   padding: 4px 8px;
+  white-space: nowrap;
+  margin-left: 8px;
 }
 
 @media (min-width: 992px){
@@ -219,5 +219,26 @@ input.form-control {
     padding: 0 4.2%;
   }
 }
- 
+
+.mr-auto {
+  margin-right: auto;
+}
+.form-inline {
+  width: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-wrap: wrap;
+  /* -ms-flex-flow: row wrap;
+  flex-flow: row wrap; */
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.form-inline .form-control {
+  width: auto;
+}
 </style>

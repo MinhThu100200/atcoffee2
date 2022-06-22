@@ -1,32 +1,45 @@
 <template>
   <div class="col-lg-3 col-md-6 col-6 mb-30 product-item">
-    <a href="#" class="image">
+    <router-link :to="'/product?id=' + product.id" class="image">
       <span class="promotion" v-if="product.discount != 0">
         <span>
           {{product.discount}}%
         </span>
       </span>
       <img :src="product.image"/>
-    </a>
-    <a href="#" class="name">{{product.name}}</a>
+    </router-link>
+    <router-link :to="'/product?id=' + product.id" class="name">{{product.name}}</router-link>
     <span class="price">
-      <span v-html="processPrice(product.sizes[0].price)"></span>
-        {{formatPrice(product.sizes[0].price * (1 - product.discount / 100))}}
+      <span>{{formatPrice(product.sizes[0].price * (1 - product.discount / 100))}} &nbsp;</span>
+      <span v-if="product.discount > 0" v-html="processPrice(product.sizes[0].price)"></span>
+      <span class="b-icons">
+        <span class="b-icon-container heart">
+          <b-icon-heart-fill v-if="true" class="b-icon heart active"/>
+          <b-icon-heart  v-if="false" class="b-icon heart"/>
+        </span>
+        <span class="b-icon-container cart">
+          <b-icon-cart-plus-fill class="b-icon cart"/>
+        </span>
+      </span>
     </span>
-    <i class="fa-solid fa-moped"></i>
-
-
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
+import {BIconHeart, BIconHeartFill, BIconCartPlusFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_PRODUCT_ITEM_USER,
 
   props: ['product'],
+
+  components: {
+    BIconCartPlusFill,
+    BIconHeart,
+    BIconHeartFill
+  },
 
   methods: {
     formatPrice(price) {
@@ -43,8 +56,9 @@ export default {
 <style scoped>
 
 .product-item {
+  position: relative;
   padding: 8px;
-  padding-bottom: 40px;
+  padding-bottom: 32px;
 }
 
 a.image {
@@ -94,20 +108,21 @@ a.name {
 }
 
 .price {
-  font-weight: 500;
+  display:flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-weight: 600;
   font-size: 16px;
   width: 100%;
-  color: #555
+  color: var(--primary);
 }
 
-.price:hover {
-  color: #555
-}
-
-.price >>> .decoration-line{
+.price:deep(.decoration-line){
   text-decoration: line-through;
-  color: lightcoral;
+  color: #555;
   margin-right: 8px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 a {
@@ -120,4 +135,42 @@ a:hover{
   color: var(--primary);
 }
 
+.b-icons {
+  flex: 1;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end; 
+}
+
+.b-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.b-icon-container.heart {
+  background-color: #fdeddc;
+}
+
+.b-icon-container.cart {
+  background-color: var(--primary);
+}
+
+.b-icon.heart.active {
+  color: #f7a754;
+}
+
+.b-icon.heart {
+  color: #fff;
+}
+
+.b-icon.cart {
+  color: #fff;
+}
 </style>

@@ -3,6 +3,7 @@ import * as MutationsName from "../../components/common/MutationsName";
 const ProductModule = {
   state() {
     return {
+      product: null,
       products: null,
       totalPageProduct: 0,
       currentPageProduct: 1,
@@ -17,6 +18,9 @@ const ProductModule = {
   },
 
   getters: {
+    product(state) {
+      return state.product;
+    },
     products(state) {
       return state.products;
     },
