@@ -1,8 +1,10 @@
 <template>
   <div class="user">
     <div class="background-user"></div>
-    <header-common />
-    <slot></slot>
+    <header-common/>
+    <div class="content">
+      <slot></slot>
+    </div>
     <footer-common/>
   </div>
 </template>
@@ -27,7 +29,23 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+slot {
+  flex: 1;
+}
+
+
+.user {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
 .background {
   position: fixed;
   top: 0;

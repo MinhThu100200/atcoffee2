@@ -10,7 +10,7 @@
             <li><a href="#">Cửa Hàng</a></li>
           </ul>
         </div>
-        <div class="col-3">
+        <div class="col-lg-4 col-md-6 col-6">
           <span class="title"><b-icon-telephone class="b-icon"/>Đặt hàng: 1811 0200</span>
           <span class="title"><b-icon-geo-alt class="b-icon"/>Liên hệ</span>
           <span class="location">
@@ -77,5 +77,11 @@ ul li a {
 
 .location {
   font-size: 12px;
+}
+
+@media (min-width: 1400px){
+  .container {
+  max-width: 1200px;
+  }
 }
 </style>

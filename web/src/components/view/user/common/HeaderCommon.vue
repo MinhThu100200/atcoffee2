@@ -3,9 +3,16 @@
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <header class="header-meta">
-          <div class="item"><b-icon-geo-alt class="b-icon"/><span>2 Cửa hàng tại TP.HCM</span></div>
-          <div class="item"><b-icon-telephone class="b-icon"/><span>Đặt hàng:&nbsp;<a href="tel:0388.888.888"> 0388.888.888</a></span></div>
-          <div class="item"><b-icon-bicycle class="b-icon"/><span>Giao hàng phạm vi 5km</span></div>
+          <div class="flex-left">
+            <div class="item"><b-icon-download class="b-icon"/><span>Tải ứng dụng</span></div>
+            <span class="v-line">|</span>
+            <div class="item"><b-icon-telephone class="b-icon"/><span>Liên hệ:&nbsp;<a href="tel:0392889894"> 0392.889.894</a></span></div>
+          </div>
+          <div class="flex-right">
+            <div class="item">
+              <router-link to="/login" class="flex"><b-icon-box-arrow-in-right class="b-icon"/><span>Đăng nhập</span></router-link>
+            </div>
+          </div>
         </header>
       </div>
     </div>
@@ -13,7 +20,7 @@
   <div class="navbar-container">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <router-link class="navbar-brand header-logo" to="/">
+        <router-link class="navbar-brand header-logo" to="" @click="handleChangeCategory('')">
           <span>A&amp;T COFFEE</span>
         </router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,20 +29,24 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/">Cà phê</router-link>
+            <li class="nav-item" v-if="this.$store.getters.categories?.length > 0">
+              <router-link class="nav-link" to="" @click="handleChangeCategory(this.$store.getters.categories[0].code)">
+                {{this.$store.getters.categories[0].name}}
+              </router-link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Trà sữa</a>
+            <li class="nav-item" v-if="this.$store.getters.categories?.length > 1">
+              <router-link class="nav-link" to="" @click="handleChangeCategory(this.$store.getters.categories[1].code)">
+                {{this.$store.getters.categories[1].name}}
+              </router-link>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Menu
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Tất cả</a>
+                <router-link class="dropdown-item" to="" @click="handleChangeCategory('')">Tất cả</router-link>
                 <div v-for="(category) in this.$store.getters.categories" :key="category.code">
-                  <a class="dropdown-item" href="#">{{category.name}}</a>
+                  <router-link class="dropdown-item" to="" @click="handleChangeCategory(category.code)">{{category.name}}</router-link>
                 </div>
               </div>
             </li>
@@ -43,9 +54,15 @@
               <a class="nav-link" href="#">Cửa hàng</a>
             </li>
           </ul>
-          <div class="form-inline my-2 my-lg-0">
+          <!-- <div class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Tên sản phẩm" aria-label="Tên sản phẩm">
             <button class="btn btn-outline-success my-2 my-sm-0">Tìm kiếm</button>
+          </div> -->
+          <div>
+            <div class="cart">
+              <b-icon-cart class="b-icon b-cart"></b-icon-cart>
+              <span class="quantity">0</span>
+            </div>
           </div>
         </div>
       </nav>
@@ -57,23 +74,41 @@
 <script>
 import * as Constants from '../../../common/Constants';
 import CategoryCommand from '../../../command/CategoryCommand';
-import {BIconGeoAlt, BIconTelephone, BIconBicycle} from 'bootstrap-icons-vue'
+import ProductCommand from '../../../command/ProductCommand'
+import {BIconDownload, BIconTelephone, BIconBoxArrowInRight, BIconCart} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_HEADER_COMMON_USER,
 
   components: {
-    BIconGeoAlt,
+    BIconDownload,
     BIconTelephone, 
-    BIconBicycle
+    BIconCart,
+    BIconBoxArrowInRight
   },
 
   methods: {
     
     async loadCategories() {
       await CategoryCommand.findAll(this.$store);
-    }
+    },
 
+    async handleChangeCategory(categoryCode) {
+      // const query = Object.assign({}, this.$route.query);
+      categoryCode = categoryCode || '';
+
+      if (categoryCode != '') {
+        this.$router.push({path: '/', query: {category: categoryCode}});
+      } else {
+        this.$router.push({path: '/'});
+      }
+
+      await this.loadProducts(categoryCode);
+    },
+
+    async loadProducts(categoryCode) {
+      await ProductCommand.findAllByOrder(1, Constants.PAGE_SIZE_MAX, '', categoryCode, '', this.$store);
+    },
   },
 
   created() {
@@ -84,6 +119,10 @@ export default {
 
 <style scoped>
 
+.flex {
+  display: flex;
+}
+
 .dropdown-menu.show {
   background-color: rgba(255, 255, 255, 0.7);
 }
@@ -92,8 +131,17 @@ export default {
   display: flex;
   margin: 0;
   padding: 8px 0;
-  justify-content: center;
+  justify-content: space-between;
   touch-action: manipulation;
+}
+
+.header-meta .flex-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-meta .flex-left .v-line{
+  margin: 0px 4px;
 }
 
 .header-meta .item {
@@ -213,13 +261,6 @@ input.form-control {
   white-space: nowrap;
   margin-left: 8px;
 }
-
-@media (min-width: 992px){
-      .header-meta > .item {
-    padding: 0 4.2%;
-  }
-}
-
 .mr-auto {
   margin-right: auto;
 }
@@ -240,5 +281,43 @@ input.form-control {
 
 .form-inline .form-control {
   width: auto;
+}
+
+.cart {
+  position: relative;
+}
+
+.cart .b-cart{
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.cart span.quantity {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  color: #fff;
+  z-index: 2;
+  border-radius: 10px;
+  font-size: 13px;
+  width: 26px;
+  height: 18px;
+  font-weight: 600;
+}
+
+@media (min-width: 992px){
+      .header-meta > .item {
+    padding: 0 4.2%;
+  }
+}
+
+@media (min-width: 1400px){
+  .container {
+  max-width: 1200px;
+  }
 }
 </style>
