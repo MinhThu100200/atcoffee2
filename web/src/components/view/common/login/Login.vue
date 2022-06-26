@@ -126,6 +126,8 @@ export default {
         this.$router.push('/admin')
       } else if (result && result.user.roleName == Constants.ROLE.ROLE_STAFF){
         this.$router.push({path: '/staff/products'})
+      } else if (result && result.user.roleName == Constants.ROLE.ROLE_USER){
+        this.$router.push({path: '/'})
       } else {
         this.incorrect = true;
         this.msg = 'Tên đăng nhập hoặc mật khẩu không khớp!';
@@ -152,6 +154,8 @@ export default {
             this.incorrect = true;
             this.msg = 'Cửa hàng không còn tồn tại!';
           }
+        } else if (auth && auth.roleName == Constants.ROLE.ROLE_USER) {
+          this.$router.push({path: '/'});
         }
       }
     },
