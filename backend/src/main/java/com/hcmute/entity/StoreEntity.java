@@ -13,6 +13,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "store")
 public class StoreEntity extends BaseEntity implements Serializable{
@@ -33,6 +36,10 @@ public class StoreEntity extends BaseEntity implements Serializable{
 			inverseJoinColumns = {@JoinColumn(name = "product_id")})
 	private List<ProductEntity> products = new ArrayList<>();
 	
+	@ManyToMany(mappedBy = "favouriteStores", fetch = FetchType.LAZY)
+	@Fetch(value = FetchMode.SUBSELECT)
+	private List<UserEntity> customers = new ArrayList<>();
+
 	@OneToMany(mappedBy = "store")
 	private List<UserEntity> users = new ArrayList<>();
 	
@@ -137,4 +144,31 @@ public class StoreEntity extends BaseEntity implements Serializable{
 		this.carts = carts;
 	}
 	
+	public List<UserEntity> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<UserEntity> customers) {
+		this.customers = customers;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// If the object is compared with itself then return true 
+        if (obj == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(obj instanceof StoreEntity)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        StoreEntity storeCompare = (StoreEntity) obj;
+         
+        // Compare the data members and return accordingly
+        return Long.compare(getId(), storeCompare.getId()) == 0;
+	}
 }

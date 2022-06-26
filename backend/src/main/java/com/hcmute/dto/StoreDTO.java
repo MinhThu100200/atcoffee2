@@ -8,6 +8,8 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 	private String image;
 	private double latitude;
 	private double longitude;
+
+	private boolean favourited;
 	
 	public StoreDTO() {
 		super();
@@ -70,6 +72,13 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	public boolean isFavourited() {
+		return favourited;
+	}
+	public void setFavourited(boolean favourited) {
+		this.favourited = favourited;
 	}
 
 }

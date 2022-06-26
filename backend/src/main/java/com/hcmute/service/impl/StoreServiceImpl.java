@@ -9,11 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.request.FavouriteStoreRequest;
 import com.hcmute.api.response.StoreResponse;
 import com.hcmute.dto.StoreDTO;
 import com.hcmute.entity.StoreEntity;
+import com.hcmute.entity.UserEntity;
 import com.hcmute.repository.StoreRepository;
+import com.hcmute.repository.UserRepository;
 import com.hcmute.service.StoreService;
+import com.hcmute.util.ConstantsUtil;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -22,6 +26,8 @@ public class StoreServiceImpl implements StoreService {
 	private ModelMapper mapper;
 	@Autowired
 	private StoreRepository storeRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public StoreDTO save(StoreDTO storeDTO) {
@@ -36,7 +42,12 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public StoreDTO findOne(Long id) {
-		return mapper.map(storeRepository.findOne(id), StoreDTO.class);
+		StoreEntity entity = storeRepository.findOne(id);
+		StoreDTO dto = mapper.map(entity, StoreDTO.class);
+		if (ConstantsUtil.userDTO != null) {
+			dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+		}
+		return dto;
 	}
 	
 	@Override
@@ -48,7 +59,13 @@ public class StoreServiceImpl implements StoreService {
 	public List<StoreDTO> findAll() {
 		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
 		List<StoreEntity> entities = storeRepository.findAll();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
+		entities.forEach(entity -> {
+			StoreDTO dto = mapper.map(entity, StoreDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		return dtos;
 	}
 	
@@ -56,7 +73,13 @@ public class StoreServiceImpl implements StoreService {
 	public List<StoreDTO> findByState(Boolean state) {
 		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
 		List<StoreEntity> entities = storeRepository.findByState(state);
-		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
+		entities.forEach(entity -> {
+			StoreDTO dto = mapper.map(entity, StoreDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		return dtos;
 	}
 	
@@ -94,6 +117,49 @@ public class StoreServiceImpl implements StoreService {
 		result.setSize(page.getSize());
 		result.setPage(pageable.getPageNumber());
 		return result;
+	}
+
+	@Override
+	public List<StoreDTO> findFavouriteStoresByCustomerId(long customerId) {
+		UserEntity customer = userRepository.findOne(customerId);
+		List<StoreEntity> entities = customer.getFavouriteStores();
+		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
+		entities.forEach(entity -> {
+			StoreDTO dto = mapper.map(entity, StoreDTO.class);
+			dto.setFavourited(true);
+			dtos.add(dto);
+		});
+		return dtos;
+	}
+
+	@Override
+	public boolean saveFavouriteStore(FavouriteStoreRequest favouriteStoreRequest) {
+		try {
+			UserEntity userEntity = userRepository.findOne(favouriteStoreRequest.getCustomerId());
+			StoreEntity storeEntity = storeRepository.findOne(favouriteStoreRequest.getStoreId());
+			if (userEntity.getFavouriteStores().contains(storeEntity) == false) {
+				userEntity.getFavouriteStores().add(storeEntity);
+				userRepository.save(userEntity);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean deleteFavouriteStore(FavouriteStoreRequest favouriteStoreRequest) {
+		try {
+			UserEntity userEntity = userRepository.findOne(favouriteStoreRequest.getCustomerId());
+			StoreEntity storeEntity = storeRepository.findOne(favouriteStoreRequest.getStoreId());
+			if (userEntity.getFavouriteStores().contains(storeEntity)) {
+				userEntity.getFavouriteStores().remove(storeEntity);
+				userRepository.save(userEntity);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

@@ -26,6 +26,7 @@ import com.hcmute.repository.ProductRepository;
 import com.hcmute.repository.StoreRepository;
 import com.hcmute.repository.UserRepository;
 import com.hcmute.service.ProductService;
+import com.hcmute.util.ConstantsUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -88,7 +89,13 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public ProductDTO findOne(long id) {
-		return mapper.map(productRepository.findOne(id), ProductDTO.class);
+		ProductEntity entity = productRepository.findOne(id);
+		ProductDTO dto = mapper.map(entity, ProductDTO.class);
+		dto.setNumberFavourites(entity.getCustomers().size());
+		if (ConstantsUtil.userDTO != null) {
+			dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+		}
+		return dto;
 	}
 	
 	@Override
