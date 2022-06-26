@@ -107,7 +107,13 @@ public class ProductServiceImpl implements ProductService{
 	public List<ProductDTO> findAll() {
 		List<ProductEntity> entities = productRepository.findAll();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		entities.forEach(entity -> {
+			ProductDTO dto = mapper.map(entity, ProductDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		return dtos;
 	}
 	
@@ -136,7 +142,13 @@ public class ProductServiceImpl implements ProductService{
 			}
 		}
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		entities.forEach(entity -> {
+			ProductDTO dto = mapper.map(entity, ProductDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		return dtos;
 	}
 	
@@ -145,7 +157,13 @@ public class ProductServiceImpl implements ProductService{
 		UserEntity customer = userRepository.findOne(customerId);
 		List<ProductEntity> entities = customer.getFavourites();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		entities.forEach(entity -> {
+			ProductDTO dto = mapper.map(entity, ProductDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		return dtos;
 	}
 
@@ -238,7 +256,13 @@ public class ProductServiceImpl implements ProductService{
 	public ProductResponse resultResponse(Page<ProductEntity> page, Pageable pageable) {
 		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		entities.forEach(entity -> {
+			ProductDTO dto = mapper.map(entity, ProductDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dtos.add(dto);
+		});
 		ProductResponse result = new ProductResponse();
 		result.setProducts(dtos);
 		result.setTotalPage(page.getTotalPages());

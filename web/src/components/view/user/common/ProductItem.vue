@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-3 col-md-6 col-6 mb-30 product-item">
+  <div v-if="product != null" class="col-lg-3 col-md-6 col-6 mb-30 product-item">
     <router-link :to="'/product?id=' + product.id" class="image">
       <span class="promotion" v-if="product.discount != 0">
         <span>
@@ -13,9 +13,9 @@
       <span>{{formatPrice(product.sizes[0].price * (1 - product.discount / 100))}} &nbsp;</span>
       <span v-if="product.discount > 0" v-html="processPrice(product.sizes[0].price)"></span>
       <span class="b-icons">
-        <span class="b-icon-container heart">
-          <b-icon-heart-fill v-if="true" class="b-icon heart active"/>
-          <b-icon-heart  v-if="false" class="b-icon heart"/>
+        <span class="b-icon-container heart" @click="handleToggleFavourite">
+          <b-icon-heart-fill v-if="product.favourited" class="b-icon heart active"/>
+          <b-icon-heart v-else class="b-icon heart"/>
         </span>
         <span class="b-icon-container cart">
           <b-icon-cart-plus-fill class="b-icon cart"/>
@@ -28,6 +28,7 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
+import ProductCommand from '../../../command/ProductCommand'
 import {BIconHeart, BIconHeartFill, BIconCartPlusFill} from 'bootstrap-icons-vue'
 
 export default {
@@ -48,6 +49,27 @@ export default {
 
     processPrice(price) {
       return `<span class="decoration-line">${this.formatPrice(price)}</span>`
+    },
+
+    async handleToggleFavourite() {
+      if (this.checkLogon()) {
+        if (!this.product.favourited) {
+          await ProductCommand.addFavourite(this.product, this.$store);
+        } else {
+          await ProductCommand.removeFavourite(this.product, this.$store);
+        }
+      }
+      
+    },
+
+    checkLogon() {
+      if (this.$store.getters.user != null) {
+        return true;
+      }
+
+      if (confirm("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.")) {
+        this.$router.push({path: '/login'});
+      }
     }
   }
 }
@@ -162,12 +184,8 @@ a:hover{
   background-color: var(--primary);
 }
 
-.b-icon.heart.active {
-  color: #f7a754;
-}
-
 .b-icon.heart {
-  color: #fff;
+  color: #f7a754;
 }
 
 .b-icon.cart {

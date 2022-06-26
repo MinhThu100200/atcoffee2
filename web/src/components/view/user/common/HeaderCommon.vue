@@ -9,8 +9,26 @@
             <div class="item"><b-icon-telephone class="b-icon"/><span>Liên hệ:&nbsp;<a href="tel:0392889894"> 0392.889.894</a></span></div>
           </div>
           <div class="flex-right">
-            <div class="item">
+            <div class="item" v-if="$store.getters.user == null">
               <router-link to="/login" class="flex"><b-icon-box-arrow-in-right class="b-icon"/><span>Đăng nhập</span></router-link>
+            </div>
+            <div v-if="$store.getters.user != null" class="item">
+              <li class="dropdown transition">
+                <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown" aria-expanded="false">
+                  <img :src="$store.getters.user.image"/>
+                  <span>{{$store.getters.user.name}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <div class="dropdown-title">Thông tin</div>
+                    <router-link :to="'/profile'" class="dropdown-item has-icon">
+                      <i class="far fa-user"></i> Hồ sơ
+                    </router-link>
+                    <div class="dropdown-divider"></div>
+                  <router-link to="" class="dropdown-item has-icon text-danger" @click.prevent="handleLogout">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                  </router-link>
+                </div>
+              </li>
             </div>
           </div>
         </header>
@@ -61,7 +79,7 @@
           <div>
             <div class="cart">
               <b-icon-cart class="b-icon b-cart"></b-icon-cart>
-              <span class="quantity">0</span>
+              <span class="quantity">{{ $store.getters.user != null ? $store.getters.carts?.length || 0 : 0}}</span>
             </div>
           </div>
         </div>
@@ -74,6 +92,8 @@
 <script>
 import * as Constants from '../../../common/Constants';
 import CategoryCommand from '../../../command/CategoryCommand';
+import CartCommand from '../../../command/CartCommand';
+import LoginCommand from '../../../command/LoginCommand';
 import ProductCommand from '../../../command/ProductCommand'
 import {BIconDownload, BIconTelephone, BIconBoxArrowInRight, BIconCart} from 'bootstrap-icons-vue'
 
@@ -89,6 +109,13 @@ export default {
 
   methods: {
     
+    async init() {
+      await Promise.all([
+        this.loadCategories(),
+        this.loadCarts(),
+      ]);
+    },
+
     async loadCategories() {
       await CategoryCommand.findAll(this.$store);
     },
@@ -103,28 +130,53 @@ export default {
         this.$router.push({path: '/'});
       }
 
-      await this.loadProducts(categoryCode);
+      this.loadProducts(categoryCode);
     },
 
     async loadProducts(categoryCode) {
       await ProductCommand.findAllByOrder(1, Constants.PAGE_SIZE_MAX, '', categoryCode, '', this.$store);
     },
+
+    async loadCarts() {
+      if (this.$store.getters.user != null) {
+        await CartCommand.findByCustomerId(this.$store.getters.user.id, this.$store);
+      }
+    },
+
+    handleLogout() {
+      let isLogout = LoginCommand.logout(this.$store);      
+      isLogout ? this.$router.push({path: '/login'}) : '';
+    },
   },
 
   created() {
-    this.loadCategories();
+    this.init();
   }
 }
 </script>
 
 <style scoped>
 
+li {
+  list-style:none ;
+}
+
 .flex {
   display: flex;
 }
 
 .dropdown-menu.show {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-menu .dropdown-title{
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: #191d21 !important;
+  padding: 10px 20px;
+  line-height: 20px;
 }
 
 .header-meta {
@@ -157,6 +209,12 @@ export default {
   margin: 0px 4px;
 }
 
+.header-meta .item img {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
 .header-meta .item span {
   /* height: 100%; */
   font-size: 13.5px;
@@ -168,6 +226,13 @@ export default {
   letter-spacing: 0.3px;
   transition: all 0.3s ease-in-out;
 }
+
+.header-meta .item a {
+
+  display: flex;
+  align-items: center;
+}
+
 
 a {
   color: #555 ;

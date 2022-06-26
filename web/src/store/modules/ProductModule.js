@@ -51,6 +51,15 @@ const ProductModule = {
     [MutationsName.MUTATION_NAME_SET_SORT_PRODUCT](state, sortProduct) {
       state.sortProduct = sortProduct;
     },
+
+    [MutationsName.MUTATION_NAME_SET_UPDATE_PRODUCT](state, product) {
+      state.products = state.products.map(item => {
+        if (item.id == product.id) {
+          item = product;
+        }
+        return item;
+      });
+    },
   }
 };
 

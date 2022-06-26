@@ -11,7 +11,7 @@
         {{product.name}}
       </div>
     </section-header>
-    <product-detail :product="product"/>
+    <product-detail @toggleFavourite="toggleFavourite" :product="product"/>
     <div class="container">
       <hr class="col-md-12"/>
     </div>
@@ -102,6 +102,14 @@ export default {
       await ProductCommand.findAllByOrder(1, Constants.PAGE_SIZE_MAX, '', categoryCode, '', this.$store);
     },
 
+    toggleFavourite() {
+      this.product.favourited = !this.product.favourited;
+      if (this.product.favourited) {
+        this.product.numberFavourites += 1;
+      } else {
+        this.product.numberFavourites -= 1;
+      }
+    }
   },
 
   created() {

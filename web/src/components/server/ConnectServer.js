@@ -103,6 +103,25 @@ const connect = {
       }
     },
 
+    /**
+     * postData
+     * @param {*} url 
+     * @param {*} data 
+     * @returns 
+     */
+     deleteData: async (url) => {
+      try {
+        let res = await instance.delete(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': JWT.getBearerJWT()
+          }
+        });
+        return res && res.data ? res.data : null;
+      } catch (error) {
+        return null;
+      }
+    },
 }
 
 export default connect;

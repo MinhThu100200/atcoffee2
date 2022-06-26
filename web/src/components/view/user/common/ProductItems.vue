@@ -4,8 +4,8 @@
       <div v-if="this.$store.getters.products == null || this.$store.getters.products?.length == 0" class="row">
         <span class="no-result">Không có sản phẩm phù hợp</span>
       </div>
-      <div class="row">
-        <product-item v-for="(product) in this.$store.getters.products" :key="product.id" :product="product"></product-item> 
+      <div class="row" v-if="this.$store.getters.products != null && this.$store.getters.products.length > 0">
+        <product-item v-for="(product, index) in this.$store.getters.products" :key="product?.id || index" :product="product"></product-item> 
       </div>
     </div>
   </section>

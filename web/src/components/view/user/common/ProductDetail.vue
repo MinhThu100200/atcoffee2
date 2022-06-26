@@ -73,6 +73,34 @@
 															</span>
 													</div>
 												</div>
+                        <div class="option option-savor form-group">
+                          <div class="flex">
+                            <div class="savor-item">
+                              <span class="span-title-savor">Sữa</span>
+                              <div class="option-adjust-quantity">
+                                <button class="btn btn-minus" @click="handleMilk(-1)"><b-icon-chevron-left class="b-icon"/></button>
+                                <input type="text" :value="cart.milk" readonly class="form-control milk quantity center">
+                                <button class="btn btn-add" @click="handleMilk(1)"><b-icon-chevron-right class="b-icon"/></button>
+                              </div>
+                            </div>
+                            <div class="savor-item">
+                               <span class="span-title-savor">Đường</span>
+                              <div class="option-adjust-quantity">
+                                <button class="btn btn-minus" @click="handleSugar(-25)"><b-icon-dash class="b-icon"/></button>
+                                <input type="text" :value="cart.sugar +'%'" readonly class="form-control quantity center">
+                                <button class="btn btn-add" @click="handleSugar(25)"><b-icon-plus class="b-icon"/></button>
+                              </div>
+                            </div>
+                            <div class="savor-item">
+                              <span class="span-title-savor">Đá</span>
+                              <div class="option-adjust-quantity">
+                                <button class="btn btn-minus" @click="handleIce(-25)"><b-icon-dash class="b-icon"/></button>
+                                <input type="text" :value="cart.ice +'%'" readonly class="form-control quantity center">
+                                <button class="btn btn-add" @click="handleIce(25)"><b-icon-plus class="b-icon"/></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <div class="option option-quantity form-group">
 														<span class="span-title">Số lượng</span>
                             <div class="option-adjust-quantity">
@@ -89,7 +117,11 @@
                             <button class="btn btn-round buy-now" type="button">Mua ngay </button>
 														<div class="flex">
 															<button class="btn btn-round add-to-cart" type="button"><b-icon-cart-plus class="b-icon"/> <span class="text-hidden">Thêm vào giỏ hàng</span></button>
-															<button class="btn btn-round heart" type="button"><b-icon-heart class="b-icon heart"/> <span class="text-hidden">Yêu thích</span> (25)</button>
+															<button class="btn btn-round heart" type="button" @click="handleToggleFavourite">
+                                <b-icon-heart v-if="!product.favourited" class="b-icon heart"/>
+                                <b-icon-heart-fill v-if="product.favourited" class="b-icon heart"/>
+                                <span class="text-hidden">Yêu thích&nbsp; </span> ({{product?.numberFavourites || 0}})
+                              </button>
 														</div>
                         </div>
                     </div>
@@ -103,8 +135,9 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
+import ProductCommand from '../../../command/ProductCommand'
 
-import {BIconCartPlus, BIconHeart, BIconPlus, BIconDash} from 'bootstrap-icons-vue'
+import {BIconCartPlus, BIconHeart, BIconHeartFill, BIconPlus, BIconDash, BIconChevronRight, BIconChevronLeft} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_PRODUCT_DETAIL_USER,
@@ -114,17 +147,25 @@ export default {
   components: {
 		BIconCartPlus,
 		BIconHeart,
+    BIconHeartFill,
     BIconPlus,
-    BIconDash
+    BIconDash,
+    BIconChevronRight,
+    BIconChevronLeft
 	},
 
   data() {
     return {
       cart: {
-        quantity: 1
+        quantity: 1,
+        milk: "Sữa ngôi sao",
+        sugar: 50,
+        ice: 50,
       },
       preQuantity: 1,
 			selectedSize: 0,
+      milkNames: ["Sữa ngôi sao", "Sữa ông thọ", "Sữa tươi"],
+      milkSelected: 0
     }
   },
 
@@ -172,6 +213,50 @@ export default {
           return false;
       }
       return true;
+    },
+
+    handleMilk(value) {
+      if (value < 0) {
+        this.milkSelected = this.milkSelected == 0 ? this.milkSelected : this.milkSelected + value;
+      } else {
+        this.milkSelected = this.milkSelected == this.milkNames.length - 1 ? this.milkSelected : this.milkSelected + value;
+      }
+      this.cart.milk = this.milkNames[this.milkSelected];
+    },
+
+    handleSugar(value) {
+      var nextValue = Number(this.cart.sugar) + value;
+      this.cart.sugar += nextValue >= 0 && nextValue <= 100 ? value : 0;
+    },
+
+    handleIce(value) {
+      var nextValue = Number(this.cart.ice) + value;
+      this.cart.ice += nextValue >= 0 && nextValue <= 100 ? value : 0;
+    },
+
+    async handleToggleFavourite() {
+      if (this.checkLogon()) {
+        var isSuccess = false;
+        if (!this.product.favourited) {
+          isSuccess = await ProductCommand.addFavourite(this.product);
+        } else {
+          isSuccess = await ProductCommand.removeFavourite(this.product);
+        }
+        if (isSuccess) {
+          this.$emit("toggleFavourite")
+        }
+      }
+      
+    },
+
+    checkLogon() {
+      if (this.$store.getters.user != null) {
+        return true;
+      }
+
+      if (confirm("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.")) {
+        this.$router.push({path: '/login'});
+      }
     }
   },
 }
@@ -556,6 +641,30 @@ export default {
   margin: 4px;
 }
 
+.option-savor {
+  padding-top: 6px;
+}
+
+.option-savor .flex {
+  display: flex;
+}
+
+.option-savor .savor-item {
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.option-savor .savor-item .span-title-savor{
+  font-size: 16px;
+}
+
+.option-savor .savor-item .form-control.milk {
+  width: 140px !important;
+}
+
+.option-savor .savor-item input:read-only{
+  background-color: #aaa1;
+}
 
 .center {
   text-align: center;
@@ -587,6 +696,17 @@ input[type=number] {
 @media (min-width: 1400px){
   .container {
   max-width: 1200px;
+  }
+}
+
+@media (max-width: 1000px){
+  .option-savor .flex {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .option-savor .savor-item {
+    margin-right: 0;
   }
 }
 
