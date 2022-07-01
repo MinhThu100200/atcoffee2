@@ -2,7 +2,7 @@
   <staff>
     <section-header :title="title">
       <div class="breadcrumb-item active">
-        <router-link to="/staff">Trang chủ</router-link>
+        <router-link to="/staff/products">Trang chủ</router-link>
       </div>
       <div class="breadcrumb-item">
         Đơn hàng
