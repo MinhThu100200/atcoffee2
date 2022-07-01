@@ -1,6 +1,7 @@
 package com.hcmute.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmute.api.request.FavouriteStoreRequest;
 import com.hcmute.api.response.StoreResponse;
@@ -26,6 +30,8 @@ import com.hcmute.util.ConstantsUtil;
 @RestController
 public class StoreAPI {
 
+	@Autowired
+	private Cloudinary cloudinary;
 	@Autowired
 	private StoreService storeService;
 	@Autowired
@@ -64,9 +70,16 @@ public class StoreAPI {
 	}
 	
 	@PostMapping("/api/admin/store")
-	public ResponseEntity<StoreDTO> save(@RequestParam("store") String storeJson){
+	public ResponseEntity<StoreDTO> save(@RequestParam(value="file", required=false) MultipartFile multipartFile, @RequestParam("store") String storeJson){
 		try {
 			StoreDTO storeDTO = objectMapper.readValue(storeJson, StoreDTO.class);	
+			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+				storeDTO.setImage(img);
+			}
 			return ResponseEntity.ok(storeService.save(storeDTO));
 		} catch (Exception e) {
 			return ResponseEntity.ok(null);

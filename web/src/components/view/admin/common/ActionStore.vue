@@ -35,10 +35,25 @@
                     <input type="text" class="form-control" id="address" v-model="store.address" required>
                   </div>
                 </div>
+                <div class="line">
+                  <div class="info-group">
+                    <label>Vĩ độ - Kinh độ</label>
+                    <span class="line">
+                      <input type="text" class="form-control" id="latitude" v-model="store.latitude" required placeholder="0.00"> 
+                      <span class="sign">-</span>
+                      <input type="text" class="form-control" id="longitude" v-model="store.longitude" required placeholder="0.00">
+                    </span>
+                  </div>
+                  <div class="info-group flex-3">
+                    
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-3 col-custom custom-logo col-center info-basic-left">
-              <img src="https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png" alt="Hình ảnh">
+            <div class="col-3 col-custom custom-logo col-center info-basic-left image-content">
+                <img :src="store.image || url" alt="Ảnh" @click="$refs.file.click()" style="cursor: pointer;">
+                <input type="file" accept="image/*" ref="file" name="file" @change="handleSelectedImage" class="invisible"/>
+              <!-- <img src="https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png" alt="Hình ảnh"> -->
             </div>
             </div>
             <div class="action">
@@ -102,6 +117,11 @@ export default {
         })
     },
 
+    handleSelectedImage() {
+      let file = this.$refs.file.files[0];
+      this.url = URL.createObjectURL(file);
+    },
+
     handleHideAlert() {
       this.isAlertPopup = false;
     },
@@ -111,6 +131,7 @@ export default {
     },
 
     async handleSave() {
+      let file = typeof this.$refs.file.files[0] == 'undefined' ? null : this.$refs.file.files[0];
       var validate = await this.validate();
       if (!validate) {
         return;
@@ -118,6 +139,7 @@ export default {
       this.formData = new FormData();
       this.store.state = this.$route.path.includes('stores') ? true : this.store.state;
       this.formData.append('store', JSON.stringify(this.store));
+      this.formData.append('file', file);
       this.isSpinner = true;
       let result = await StoreCommand.save(this.formData);
       this.isSpinner = false;
@@ -134,7 +156,13 @@ export default {
     },
 
     async validate() {
-       if (this.store.code.trim() == '' || this.store.name.trim() == '' || this.store.timeOpen.trim() == ''
+       if (!this.$route.path.includes('store-info') && this.$refs.file.files[0] == null) {
+        this.isAlertPopup = true;
+        this.msg = 'Vui lòng chọn ảnh cửa hàng!';
+        return false;
+      }
+
+      if (this.store.code.trim() == '' || this.store.name.trim() == '' || this.store.timeOpen.trim() == ''
         || this.store.timeClose.trim() == '' || this.store.address.trim() == '') {
         this.isAlertPopup = true;
         this.msg = 'Vui lòng không để trống dữ liệu!';
@@ -357,5 +385,15 @@ form .action {
   justify-content: center;
   margin: 0px 4px !important;
   height: 100%;
+}
+
+.img-content img{
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 8px;
 }
 </style>
