@@ -5,6 +5,8 @@ const PromotionModule = {
     return {
       promotions: null,
       promotion: null,
+      promotionsSearch: [],
+      promotionKeySearch: '',
       sortPromotion: {
         page: 1,
         totalPage: 0
@@ -17,12 +19,20 @@ const PromotionModule = {
       return state.promotions;
     },
 
+    promotionsSearch(state) {
+      return state.promotionsSearch.filter(item => item.code.includes(state.promotionKeySearch.toUpperCase()));
+    },
+
     promotion(state) {
       return state.promotion;
     },
 
     sortPromotion(state) {
       return state.sortPromotion;
+    },
+
+    promotionKeySearch(state) {
+      return state.promotionKeySearch;
     }
   },
 
@@ -31,8 +41,16 @@ const PromotionModule = {
       state.promotions = promotions;
     },
 
+    [MutationsName.MUTATION_NAME_SET_PROMOTIONS_SEARCH](state, promotionsSearch) {
+      state.promotionsSearch = promotionsSearch;
+    },
+
     [MutationsName.MUTATION_NAME_SET_PROMOTION](state, promotion) {
       state.promotion = promotion;
+    },
+
+    [MutationsName.MUTATION_NAME_SET_PROMOTION_KEY_SEARCH](state, promotionKeySearch) {
+      state.promotionKeySearch = promotionKeySearch;
     },
 
     [MutationsName.MUTATION_NAME_SET_SORT_PROMOTION](state, sortPromotion) {

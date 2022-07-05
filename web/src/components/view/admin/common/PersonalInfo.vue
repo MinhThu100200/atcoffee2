@@ -220,6 +220,7 @@ export default {
 .official-info .dropdown-setting {
   position: relative;
   right: 0;
+  z-index: 9;
 }
 
 .dropdown-setting .icon-absolute {
@@ -233,6 +234,7 @@ export default {
 .dropdown-setting .dropdown-menu {
   position: absolute;
   right: 0;
+  left: auto;
   top: 20px;
   background: white;
   border: none;

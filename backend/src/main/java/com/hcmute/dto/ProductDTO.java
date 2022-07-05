@@ -16,6 +16,8 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	private float rate;
 	private int numberReviewers;
 	private boolean milk;
+	private int numberFavourites;
+	private boolean favourited;
 	private List<CategoryDTO> categories;
 	private List<StoreDTO> stores;
 	private List<SizeDTO> sizes;
@@ -110,6 +112,18 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 		} else {
 			this.rate = 0;
 		}
+	}
+	public int getNumberFavourites() {
+		return numberFavourites;
+	}
+	public void setNumberFavourites(int numberFavourite) {
+		this.numberFavourites = numberFavourite;
+	}
+	public boolean isFavourited() {
+		return favourited;
+	}
+	public void setFavourited(boolean favourited) {
+		this.favourited = favourited;
 	}
 	
 }

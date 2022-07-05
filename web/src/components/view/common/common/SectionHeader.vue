@@ -2,13 +2,7 @@
   <div class="section-header">
     <h1>{{title}}</h1>
     <div class="section-header-breadcrumb">
-        <slot/>
-      <!-- <div class="breadcrumb-item active">
-        <router-link to="/admin">Dashboard</router-link>
-      </div>
-      <div class="breadcrumb-item">
-        Products
-      </div> -->
+        <slot></slot>
     </div>
   </div>
 </template>

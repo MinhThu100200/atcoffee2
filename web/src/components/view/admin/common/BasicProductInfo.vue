@@ -214,11 +214,13 @@ export default {
   font-size: 16px;
   cursor: pointer;
   color: #212529;
+  z-index: 9;
 } 
 
 .dropdown-setting .dropdown-menu {
   position: absolute;
   right: 0;
+  left: auto;
   top: 20px;
   background: white;
   border: none;

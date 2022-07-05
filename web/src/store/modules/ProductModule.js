@@ -3,6 +3,7 @@ import * as MutationsName from "../../components/common/MutationsName";
 const ProductModule = {
   state() {
     return {
+      product: null,
       products: null,
       totalPageProduct: 0,
       currentPageProduct: 1,
@@ -17,6 +18,9 @@ const ProductModule = {
   },
 
   getters: {
+    product(state) {
+      return state.product;
+    },
     products(state) {
       return state.products;
     },
@@ -46,6 +50,15 @@ const ProductModule = {
 
     [MutationsName.MUTATION_NAME_SET_SORT_PRODUCT](state, sortProduct) {
       state.sortProduct = sortProduct;
+    },
+
+    [MutationsName.MUTATION_NAME_SET_UPDATE_PRODUCT](state, product) {
+      state.products = state.products.map(item => {
+        if (item.id == product.id) {
+          item = product;
+        }
+        return item;
+      });
     },
   }
 };

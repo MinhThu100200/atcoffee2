@@ -78,6 +78,7 @@
                       Đăng nhập
                     </button>
                   </div>
+                  <router-link to="/" class="back">Quay lại trang chủ</router-link>
                 </form>
               </div>
             </div>
@@ -125,6 +126,8 @@ export default {
         this.$router.push('/admin')
       } else if (result && result.user.roleName == Constants.ROLE.ROLE_STAFF){
         this.$router.push({path: '/staff/products'})
+      } else if (result && result.user.roleName == Constants.ROLE.ROLE_USER){
+        this.$router.push({path: '/'})
       } else {
         this.incorrect = true;
         this.msg = 'Tên đăng nhập hoặc mật khẩu không khớp!';
@@ -151,6 +154,8 @@ export default {
             this.incorrect = true;
             this.msg = 'Cửa hàng không còn tồn tại!';
           }
+        } else if (auth && auth.roleName == Constants.ROLE.ROLE_USER) {
+          this.$router.push({path: '/'});
         }
       }
     },
@@ -244,5 +249,19 @@ export default {
   letter-spacing: 0.5px;
   padding: 12px 12px;
   margin-bottom: 20px;
+}
+
+.login .back {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.login .back:hover {
+  text-decoration: underline;
 }
 </style>

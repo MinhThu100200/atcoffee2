@@ -40,10 +40,18 @@
                     <span>{{store.address}}</span>
                   </div>
                 </div>
+                <div class="line">
+                  <div class="info-group">
+                    <label>Vĩ độ - Kinh độ</label>
+                    <span>{{store.latitude}} - {{store.longitude}}</span>
+                  </div>
+                  <div class="info-group flex-4">
+                  </div>
+                </div>
               </div>
             </div>
             <div class="col-3 col-custom custom-logo col-center info-basic-left">
-              <img src="https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png" alt="Hình ảnh">
+              <img :src="store.image || url" alt="Hình ảnh">
             </div>
           </div>
         </div>
@@ -74,6 +82,7 @@ export default {
 
   data() {
     return {
+      url: 'https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png',
       isSpinner: false,
       isSetting: false,
       isEdit: false,

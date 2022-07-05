@@ -50,6 +50,14 @@ public class RateAPI {
 		return ResponseEntity.ok(rateService.findByProductId(productId));
 	}
 	
+	@GetMapping(value = "/api/info/rate/pageable", params = "productId")
+	public ResponseEntity<RateResponse> findPageableByProductId(@RequestParam(name = "productId") Long productId,
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size",required = false, defaultValue = "10000") int size) {
+			Pageable pageable = new PageRequest(page - 1, size);
+		return ResponseEntity.ok(rateService.findByProductId(productId, pageable));
+	}
+	
 	@GetMapping(value = "/api/info/rate", params = "userId")
 	public ResponseEntity<List<RateDTO>> findByUserId(@RequestParam(name = "userId") Long userId) {
 		return ResponseEntity.ok(rateService.findByUserId(userId));

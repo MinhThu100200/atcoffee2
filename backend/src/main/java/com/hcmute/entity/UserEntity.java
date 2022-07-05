@@ -74,6 +74,12 @@ public class UserEntity extends BaseEntity implements Serializable{
 			inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<ProductEntity> favourites = new ArrayList<>();
 	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE} , fetch = FetchType.LAZY)
+	@JoinTable(name = "user_store",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "store_id"))
+	private List<StoreEntity> favouriteStores = new ArrayList<>();
+	
 	public String getUsername() {
 		return username;
 	}
@@ -232,5 +238,33 @@ public class UserEntity extends BaseEntity implements Serializable{
 
 	public void setFavourites(List<ProductEntity> favourites) {
 		this.favourites = favourites;
+	}
+	
+	public List<StoreEntity> getFavouriteStores() {
+		return favouriteStores;
+	}
+
+	public void setFavouriteStores(List<StoreEntity> favouriteStores) {
+		this.favouriteStores = favouriteStores;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// If the object is compared with itself then return true 
+        if (obj == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(obj instanceof UserEntity)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        UserEntity userCompare = (UserEntity) obj;
+         
+        // Compare the data members and return accordingly
+        return Long.compare(getId(), userCompare.getId()) == 0;
 	}
 }

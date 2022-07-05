@@ -21,13 +21,13 @@ var ProductCommand = {
 
   async findOne(id) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product/${id}`;
-    let res = await ConnectServer.getData(url);
+    let res = await ConnectServer.getDataInfo(url);
     return res;
   },
 
   async findOneByCode(code, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?code=${code}`;
-    let res = await ConnectServer.getData(url);
+    let res = await ConnectServer.getDataInfo(url);
     if (res != null) {
       store != null
         ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res)
@@ -84,23 +84,9 @@ var ProductCommand = {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
-      store != null
-        ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products)
-        : "";
-      store != null
-        ? store.commit(
-            MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT,
-            res.totalPage
-          )
-        : "";
-      store != null
-        ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {
-            page,
-            store: storeCode,
-            category: categoryCode,
-            keyword,
-            totalPage: res.totalPage,
-          })
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products) : "";
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage) : "";
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword, totalPage: res.totalPage,})
         : "";
       return res.products;
     }
@@ -148,6 +134,34 @@ var ProductCommand = {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product/count?category=${categoryCode}`;
     let res = await ConnectServer.getData(url);
     return res;
+  },
+
+  async addFavourite(product, store = null) {
+    try {
+      const url = `${Constants.HOSTNAME_DEFAULT}/api/user/favourite`;
+      let res = await ConnectServer.postData(url, {customerId: 0, productId: product.id});
+      if (store != null && res == true) {
+        product.favourited = true;
+        store.commit(MutationsName.MUTATION_NAME_SET_UPDATE_PRODUCT, product)
+      }
+      return res != null ? res : false;
+    } catch (error) {
+      return false;
+    }
+  },
+
+  async removeFavourite(product, store = null) {
+    try {
+      const url = `${Constants.HOSTNAME_DEFAULT}/api/user/favourite?productId=${product.id}`;
+      let res = await ConnectServer.deleteData(url);
+      if (store != null && res == true) {
+        product.favourited = false;
+        store.commit(MutationsName.MUTATION_NAME_SET_UPDATE_PRODUCT, product)
+      }
+      return res != null ? res : false;
+    } catch (error) {
+      return false;
+    }
   },
 };
 

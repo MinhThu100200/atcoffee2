@@ -13,6 +13,7 @@ export default {
 <style>
 :root {
   --primary: #37A372;
+  --primaryBackground: #37a37211;
   --lightPurple: "#595683";
   --yellow: "#F1CD7C";
   --lightYellow: "#FFD88A";

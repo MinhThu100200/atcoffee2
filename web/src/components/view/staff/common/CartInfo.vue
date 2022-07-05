@@ -46,7 +46,14 @@
                     <i class="far fa-check-circle" v-if="verifyPromotion"></i>
                     <i class="fas fa-exclamation-circle" v-else></i>
                   </div>
-                  <input type="text" class="form-control" v-model="promotionCode" @input="handleChangePromotion">
+                  <input type="text" class="form-control" v-model="promotionCode"
+                    @keyup.enter="handleHidePromotionPopup"
+                    @input="handleChangePromotion"
+                    @focus="handleShowPromotionPopup"
+                    @blur="handleHidePromotionPopup">
+                  <div class="promotion-popup">
+                    <promotion-popup :isPromotionPopup="isPromotionPopup" @select="handleSelect"></promotion-popup>
+                  </div>
                 </div>
               </div>
               <div class="row-custom" v-if="false">
@@ -84,12 +91,12 @@ import CommonUtils from '../../../common/CommonUtils'
 import PaymentCommand from '../../../command/PaymentCommand'
 import PromotionCommand from '../../../command/PromotionCommand'
 import BillCommand from '../../../command/BillCommand'
-// import BillCommand from '../../../command/BillCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import TypeCommand from '../../../command/TypeCommand'
 import BillDataService from '../../../services/BillDataService'
 import CartPopupItem from './CartPopupItem.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
+import PromotionPopup from '../popup/PromotionPopup.vue'
 import SpinnerSuccess from '../../common/popup/SpinnerSuccess.vue'
 
 export default {
@@ -100,7 +107,8 @@ export default {
   components: {
     CartPopupItem,
     AlertPopup,
-    SpinnerSuccess
+    SpinnerSuccess,
+    PromotionPopup
   },
 
   data() {
@@ -117,6 +125,7 @@ export default {
       verifyPromotion: false,
       store: {},
       isAlertPopup: false,
+      isPromotionPopup: false,
       msg: 'Chưa có sản phẩm nào được chọn',
       isSpinnerSuccess: false,
       src: ''
@@ -140,11 +149,41 @@ export default {
   },
 
   methods: {
+    async init() {
+      await Promise.all([
+        this.loadPayments(),
+        this.loadTypes(),
+        this.loadStore(),
+        this.loadPromotions(),
+      ]);
+    },
 
-    async handleChangePromotion() {
+    handleChangePromotion() {
       this.promotionCode = this.promotionCode.toUpperCase();
-      this.promotion = await PromotionCommand.findOneByCode(this.promotionCode);
-      this.verifyPromotion = this.vetifyPromotionCode(this.promotion);
+      this.promotion = this.$store.getters.promotions.find(item => item.code == this.promotionCode);
+      this.verifyPromotion = this.verifyPromotionCode(this.promotion);
+
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_PROMOTION_KEY_SEARCH, this.promotionCode);
+    },
+
+    handleSelect(promotionCode) {
+      this.promotionCode = promotionCode.toUpperCase();
+      this.promotion = this.$store.getters.promotions.find(item => item.code == this.promotionCode);
+      this.verifyPromotion = this.verifyPromotionCode(this.promotion);
+
+      this.handleHidePromotionPopup();
+    },
+
+    handleShowPromotionPopup() {
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_PROMOTION_KEY_SEARCH, this.promotionCode);
+      this.isPromotionPopup = true;
+    },
+
+    handleHidePromotionPopup() {
+      this.isPromotionPopup = false;
+      setTimeout(() => {
+        this.$store.commit(MutationsName.MUTATION_NAME_SET_PROMOTION_KEY_SEARCH, '');
+      }, 300);
     },
 
     handleChangePoint() {
@@ -173,6 +212,10 @@ export default {
       }, 1000);
     },
 
+    async loadPromotions(){
+      await PromotionCommand.findAll(this.$store);
+    },
+
     async handlePayment() {
 
       if (this.$store.getters.carts == null || this.$store.getters.carts.length == 0) {
@@ -192,7 +235,7 @@ export default {
         address: '',
         status: Constants.STATUS_BILL.PAID,
         rewardId: 0,
-        promotionId: this.vetifyPromotionCode(this.promotion) ? this.promotion.id : 0,
+        promotionId: this.verifyPromotionCode(this.promotion) ? this.promotion.id : 0,
         promotionCode: this.promotionCode,
         paymentId: this.paymentId,
         paymentName: this.payments.find(item => item.id = this.paymentId).name,
@@ -224,7 +267,7 @@ export default {
       }
     },
 
-    vetifyPromotionCode(promotion){
+    verifyPromotionCode(promotion){
       this.discountPromotion = 0;
       if (promotion == null || typeof promotion == 'undefined') {
         this.errorPromotionCode = `Mã khuyến mãi không tồn tại!`;
@@ -272,9 +315,7 @@ export default {
   },
 
   created() {
-    this.loadPayments();
-    this.loadTypes();
-    this.loadStore();
+    this.init();
   }
 }
 </script>
@@ -377,4 +418,5 @@ export default {
   font-weight: 500 !important;
   color: #000;
 }
+
 </style>

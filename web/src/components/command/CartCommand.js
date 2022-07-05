@@ -2,19 +2,19 @@ import ConnectServer from '../server/ConnectServer'
 import * as Constants from '../common/Constants'
 import * as MutationsName from '../common/MutationsName'
 
-var CategoryCommand = {
+var CartCommand = {
 
   async save(category) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/category`;
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/user/cart`;
     let res = await ConnectServer.postData(url, category);
     return res != null ? res : null;
   },
 
-  async findAll(store = null) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/category?list`;
-    let result = await ConnectServer.getDataInfo(url);
+  async findByCustomerId(customerId, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/user/cart?customerId=${customerId}`;
+    let result = await ConnectServer.getData(url);
     if (result != null) {
-      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_CATEGORIES, result) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_CARTS, result) : '';
       return result;
     }
     return null;
@@ -63,4 +63,4 @@ var CategoryCommand = {
   }
 }
 
-export default CategoryCommand;
+export default CartCommand;
