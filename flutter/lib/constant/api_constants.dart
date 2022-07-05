@@ -1,5 +1,5 @@
 class ApiConstants {
-  static String HOST = 'https://a92f-116-102-46-99.ap.ngrok.io';
+  static String HOST = 'https://924d-116-108-12-132.ap.ngrok.io';
 
   static String FCM_TOKEN =
       'AAAA-YQwquE:APA91bGUSX9_WqJauv3VE2AECILzW-NNUWEt_h8D8IcsednX6eMUSAR465RtKwDAa_WqGQ34SYwMHz8Xbg8sjdsf9149t_iJn1ZZEogZOmnYzsHocg21fyiDLLYxMpeLQUff2AF_qw9Z';

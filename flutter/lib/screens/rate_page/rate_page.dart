@@ -93,6 +93,7 @@ class _RatePage extends State<RatePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
+                          alignment: Alignment.center,
                           padding: const EdgeInsets.only(
                               top: 10, left: 20, right: 10),
                           height: 38,
@@ -106,8 +107,7 @@ class _RatePage extends State<RatePage> {
                                     setStateValue(index);
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.only(
-                                        right: 15, left: 15),
+                                    width: size.width / 2,
                                     decoration: BoxDecoration(
                                       border: Border(
                                         bottom: BorderSide(
@@ -118,6 +118,10 @@ class _RatePage extends State<RatePage> {
                                       ),
                                     ),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(listTab[index],
                                             style: TextStyle(
@@ -167,7 +171,7 @@ class _RatePage extends State<RatePage> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Container(
-                                          color: lightGray3,
+                                          color: Colors.white70,
                                           margin:
                                               const EdgeInsets.only(bottom: 5),
                                           child: Column(
@@ -191,7 +195,8 @@ class _RatePage extends State<RatePage> {
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  bottom: 20),
+                                                                  //bottom: 20,
+                                                                  left: 16),
                                                           child: ClipRRect(
                                                               borderRadius:
                                                                   BorderRadius
@@ -199,8 +204,8 @@ class _RatePage extends State<RatePage> {
                                                                           5.0),
                                                               child: Image.asset(
                                                                   'assets/icons/profile.png',
-                                                                  height: 25,
-                                                                  width: 25))),
+                                                                  height: 22,
+                                                                  width: 22))),
                                                       Container(
                                                         padding:
                                                             const EdgeInsets
@@ -225,58 +230,66 @@ class _RatePage extends State<RatePage> {
                                                                         .toString(),
                                                                 style: const TextStyle(
                                                                     fontSize:
-                                                                        11,
+                                                                        13,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
                                                                     color:
                                                                         gray)),
-                                                            const SizedBox(
-                                                                height: 5),
-                                                            Text(
-                                                                DateTime.fromMillisecondsSinceEpoch(rateController
-                                                                        .rateByUser[
-                                                                            index]
-                                                                        .createdDate)
-                                                                    .toString(),
-                                                                style:
-                                                                    const TextStyle(
-                                                                        fontSize:
-                                                                            10)),
-                                                            Text(
-                                                                "★★★★★"
-                                                                        .substring(
-                                                                      0,
-                                                                      rateController
-                                                                          .rateByUser[
-                                                                              index]
-                                                                          .star
-                                                                          .toInt(),
-                                                                    ) +
-                                                                    "☆☆☆☆☆".substring(
-                                                                        rateController
-                                                                            .rateByUser[
-                                                                                index]
-                                                                            .star
-                                                                            .toInt(),
-                                                                        5),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color:
-                                                                        yellowDark)),
                                                           ],
                                                         ),
                                                       ),
                                                     ]),
+                                                    const SizedBox(height: 5),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 16),
+                                                      child: Text(
+                                                          DateTime.fromMillisecondsSinceEpoch(
+                                                                  rateController
+                                                                      .rateByUser[
+                                                                          index]
+                                                                      .createdDate)
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      11)),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 16),
+                                                      child: Text(
+                                                          "★★★★★".substring(
+                                                                0,
+                                                                rateController
+                                                                    .rateByUser[
+                                                                        index]
+                                                                    .star
+                                                                    .toInt(),
+                                                              ) +
+                                                              "☆☆☆☆☆".substring(
+                                                                  rateController
+                                                                      .rateByUser[
+                                                                          index]
+                                                                      .star
+                                                                      .toInt(),
+                                                                  5),
+                                                          style: const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  yellowDark)),
+                                                    ),
                                                     Container(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              left: 35,
-                                                              right: 15),
+                                                              left: 16,
+                                                              right: 16),
                                                       child: Text(
                                                           rateController
                                                               .rateByUser[index]
@@ -284,21 +297,12 @@ class _RatePage extends State<RatePage> {
                                                               .toString(),
                                                           style:
                                                               const TextStyle(
-                                                                  fontSize: 12,
+                                                                  fontSize: 15,
                                                                   color: gray)),
                                                     )
                                                   ],
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                  color: Colors.grey[300],
-                                                  child: SizedBox(
-                                                    height: 0.75,
-                                                    width: size.width,
-                                                  )),
                                               const SizedBox(
                                                 height: 5,
                                               ),
@@ -314,7 +318,7 @@ class _RatePage extends State<RatePage> {
                                                       //         lightGreen2)
                                                     ),
                                                     margin: const EdgeInsets.only(
-                                                        left: 45, right: 3),
+                                                        left: 30, right: 3),
                                                     child: ClipRRect(
                                                         borderRadius:
                                                             BorderRadius.circular(
@@ -371,6 +375,15 @@ class _RatePage extends State<RatePage> {
                                                       .name),
                                                 ),
                                               ]),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                  color: Colors.grey[300],
+                                                  child: SizedBox(
+                                                    height: 0.75,
+                                                    width: size.width,
+                                                  )),
                                               const SizedBox(
                                                 height: 5,
                                               ),

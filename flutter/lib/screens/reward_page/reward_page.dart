@@ -166,7 +166,7 @@ class _RewardPage extends State<RewardPage> {
                                                                         .only(
                                                                     left: 15,
                                                                     right: 15.0,
-                                                                    bottom: 15),
+                                                                    bottom: 10),
                                                                 child: Text(
                                                                     'Hết hạn ' +
                                                                         DateFormat('dd/MM/yyyy')
