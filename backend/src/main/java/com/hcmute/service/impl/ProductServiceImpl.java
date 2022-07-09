@@ -100,7 +100,13 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Override
 	public ProductDTO findOneByCode(String code ) {
-		return mapper.map(productRepository.findOneByCode(code), ProductDTO.class);
+		ProductEntity entity = productRepository.findOneByCode(code);
+		ProductDTO dto = mapper.map(entity, ProductDTO.class);
+		dto.setNumberFavourites(entity.getCustomers().size());
+		if (ConstantsUtil.userDTO != null) {
+			dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+		}
+		return dto;
 	}
 
 	@Override
@@ -112,6 +118,7 @@ public class ProductServiceImpl implements ProductService{
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
@@ -147,6 +154,7 @@ public class ProductServiceImpl implements ProductService{
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
@@ -162,6 +170,7 @@ public class ProductServiceImpl implements ProductService{
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
@@ -261,6 +270,7 @@ public class ProductServiceImpl implements ProductService{
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		ProductResponse result = new ProductResponse();

@@ -35,6 +35,8 @@ import PaymentStaff from '../components/view/staff/payment/Payment.vue'
 import OrdersStaff from '../components/view/staff/order/Orders.vue'
 import OrderInfoStaff from '../components/view/staff/order/OrderInfo.vue'
 import NotificationsStaff from '../components/view/staff/notification/Notifications.vue'
+import SendNotificationStaff from '../components/view/staff/notification/SendNotification.vue'
+import AddNotificationStaff from '../components/view/staff/notification/AddNotification.vue'
 import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
@@ -82,6 +84,8 @@ const routes = [
   {path: '/staff/orders', name: 'orders-staff', component: OrdersStaff, meta: {title: 'A&T Coffee | Đơn hàng'}},
   {path: '/staff/order-info', name: 'order-info-staff', component: OrderInfoStaff, meta: {title: 'A&T Coffee | Chi tiết đơn hàng'}},
   {path: '/staff/notifications', name: 'notification-staff', component: NotificationsStaff, meta: {title: 'A&T Coffee | Danh sách thông báo'}},
+  {path: '/staff/send-notifications', name: 'send-notification-staff', component: SendNotificationStaff, meta: {title: 'A&T Coffee | Gửi thông báo'}},
+  {path: '/staff/add-notification', name: 'add-notification-staff', component: AddNotificationStaff, meta: {title: 'A&T Coffee | Tạo thông báo'}},
   {path: '/staff/profile', name: 'profile-staff', component: ProfileStaff, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 

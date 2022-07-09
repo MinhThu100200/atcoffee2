@@ -6,6 +6,7 @@ const UserModule = {
     return {
       user: null,
       users: null,
+      tokens: [],
       sortUser: {
         page: '',
         store : '',
@@ -27,6 +28,10 @@ const UserModule = {
     sortUser(state) {
       return state.sortUser;
     },
+
+    tokens(state) {
+      return state.tokens;
+    }
   },
 
   mutations: {
@@ -53,6 +58,10 @@ const UserModule = {
 
     [MutationsName.MUTATION_NAME_SET_SORT_USER](state, sortUser) {
       state.sortUser = sortUser;
+    },
+
+    [MutationsName.MUTATION_NAME_SET_TOKENS](state, tokens) {
+      state.tokens = tokens;
     },
   },
 

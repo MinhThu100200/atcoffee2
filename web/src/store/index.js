@@ -15,6 +15,7 @@ import BillModule from "./modules/BillModule";
 import CartModule from "./modules/CartModule";
 import TypeModule from "./modules/TypeModule";
 import PaymentModule from "./modules/PaymentModule"
+import NotificationModule from "./modules/NotificationModule";
 
 const store = createStore({
   plugins: [createPersistedState()],
@@ -31,7 +32,8 @@ const store = createStore({
     BillModule,
     CartModule,
     TypeModule,
-    PaymentModule
+    PaymentModule,
+    NotificationModule
   },
 });
 

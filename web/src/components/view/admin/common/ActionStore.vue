@@ -265,6 +265,9 @@ form .action .action-edit input:nth-child(2){
   margin-left: 10px;
 }
 
+form .action .action-edit input:nth-child(3){
+  margin-left: 20px;
+}
 
 .card .card-body {
   padding: 15px 25px;

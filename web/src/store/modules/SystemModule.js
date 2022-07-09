@@ -74,6 +74,9 @@ const SystemModule = {
         notification: {
           value: false,
         },
+        sendNotification: {
+          value: false,
+        },
         profile: {
           value: false,
           submenu: {

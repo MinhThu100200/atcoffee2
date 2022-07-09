@@ -55,6 +55,30 @@ var BillDataService = {
     });
   },
 
+  findAllTokens(store) {
+    const dbRef = ref(database, collectionName);
+
+    onValue(dbRef, (snapshot) => {
+      let bills = [];
+      snapshot.forEach((childSnapshot) => {
+        // const childKey = childSnapshot.key;
+        const childData = childSnapshot.val();
+        
+        bills.push(childData);
+      });
+      let tokens = bills.map(item => {
+        if (item.token && item.token != undefined)
+        {
+          return item.token;
+        } 
+      }).filter((v, i, a) => v !== undefined &&  a.indexOf(v) === i);
+      
+      store.commit(MutationsName.MUTATION_NAME_SET_TOKENS, tokens);
+    }, {
+      onlyOnce: true
+    });
+  },
+
   findByStoreId(store) {
     const dbRef = ref(database, collectionName);
     const lastBillsRef = query(dbRef, orderByChild('storeId'), equalTo(store.getters.user.storeId));

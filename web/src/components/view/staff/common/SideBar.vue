@@ -30,6 +30,12 @@
           <span>Thông báo</span>
         </router-link>
       </li>
+      <li class="nav-item dropdown" :class="menuStaff.sendNotification.value ? 'active' : ''">  
+        <router-link to="/staff/send-notifications?page=1" class="nav-link" @click="handleDropdown(menuStaff.sendNotification)">
+          <i class="fas fa-paper-plane"></i>
+          <span>Gửi thông báo</span>
+        </router-link>
+      </li>
       <li class="menu-header">{{$store.getters.miniSidebar ? 'HS' : 'HỒ SƠ'}}</li>
       <li class="nav-item dropdown" :class="[menuStaff.profile.value ? 'active' : '', activeProfile ? 'option' : '']"
       @mouseover="handleMouseOver('activeProfile')" @mouseleave="handleMouseLeave('activeProfile')">
