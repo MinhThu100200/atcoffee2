@@ -80,6 +80,7 @@
             <div class="cart">
               <b-icon-cart class="b-icon b-cart"></b-icon-cart>
               <span class="quantity">{{ $store.getters.user != null ? $store.getters.carts?.length || 0 : 0}}</span>
+              <cart-popup></cart-popup>
             </div>
           </div>
         </div>
@@ -95,6 +96,7 @@ import CategoryCommand from '../../../command/CategoryCommand';
 import CartCommand from '../../../command/CartCommand';
 import LoginCommand from '../../../command/LoginCommand';
 import ProductCommand from '../../../command/ProductCommand'
+import CartPopup from '../popup/CartPopup.vue'
 import {BIconDownload, BIconTelephone, BIconBoxArrowInRight, BIconCart} from 'bootstrap-icons-vue'
 
 export default {
@@ -104,7 +106,8 @@ export default {
     BIconDownload,
     BIconTelephone, 
     BIconCart,
-    BIconBoxArrowInRight
+    BIconBoxArrowInRight,
+    CartPopup
   },
 
   methods: {

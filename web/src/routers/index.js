@@ -39,10 +39,11 @@ import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
 /** User Components */
-import DashBoardUser from '../components/view/user/dashboard/Dashboard.vue'
+// import DashBoardUser from '../components/view/user/dashboard/Dashboard.vue'
 import ProductUser from '../components/view/user/product/Product.vue'
 
 const routes = [
+  {path: '/', component: Login, meta: {title: 'A&T Coffee | Đăng nhập'}},
   {path: '/login', component: Login, meta: {title: 'A&T Coffee | Đăng nhập'}},
   {path: '/forgot-password', component: ForgotPassword, meta: {title: 'A&T Coffee | Quên mật khẩu'}},
   /**Admin URL */
@@ -85,7 +86,7 @@ const routes = [
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 
   /** User URL */
-  {path: '/', name: 'dashboard-user', component: DashBoardUser, meta: {title: 'A&T Coffee | Trang chủ'}},
+  // {path: '/', name: 'dashboard-user', component: DashBoardUser, meta: {title: 'A&T Coffee | Trang chủ'}},
   {path: '/product', name: 'product-user', component: ProductUser, meta: {title: 'A&T Coffee | Thông tin sản phẩm'}},
 
 
