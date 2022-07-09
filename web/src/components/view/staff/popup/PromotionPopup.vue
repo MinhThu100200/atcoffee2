@@ -6,7 +6,7 @@
           Khuyến mãi
         </div>
         <!-- List item -->
-        <div class="promotions" v-if="$store.getters.promotionsSearch.length">
+        <div class="promotions" v-if="$store.getters.promotionsSearch.length > 0">
           <promotion-popup-item v-for="(promotion, index) in $store.getters.promotionsSearch" :key="index"
             @select="handleSelect"
             :promotion="promotion"

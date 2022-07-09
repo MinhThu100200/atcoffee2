@@ -20,7 +20,9 @@ const PromotionModule = {
     },
 
     promotionsSearch(state) {
-      return state.promotionsSearch.filter(item => item.code.includes(state.promotionKeySearch.toUpperCase()));
+      return state.promotions
+        .filter(item => item.endDate >= (new Date().getTime()))
+        .filter(item => item.code.includes(state.promotionKeySearch.toUpperCase()));
     },
 
     promotion(state) {
