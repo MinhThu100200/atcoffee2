@@ -60,7 +60,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="store">Cửa hàng áp dụng</label>
               <div class="form-group-horizontal" id="store">
                 <div class="chip"
@@ -69,7 +69,7 @@
                   <span>{{store.address}}</span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="action">
               <input class="btn btn-success" v-if="this.$route.path.includes('add-product')" type="submit" value="Thêm">
               <div class="action-edit" v-else> 
@@ -171,12 +171,12 @@ export default {
     async handleSave() {
       let file = typeof this.$refs.file.files[0] == 'undefined' ? null : this.$refs.file.files[0];
       let categories = this.processCategories();
-      let stores = this.processStores();
+      let stores = this.processStores(true);
       var validate = await this.validate();
       if (!validate) {
         return;
       }
-      if (categories != null && stores != null) {
+      if (categories != null) {
         this.formData = new FormData();
         this.formData.append('file', file);
         this.product.categories = categories;
@@ -196,7 +196,7 @@ export default {
         }
         this.toast(text, type);
       } else {
-        this.error = categories == null ? 'Vui lòng chọn loại đồ uống!' : 'Vui lòng chọn cửa hàng muốn thêm sản phẩm!';
+        this.error = categories == null ? 'Vui lòng chọn loại đồ uống!' : '';
       }
     },
 
@@ -221,6 +221,8 @@ export default {
       this.categories = this.categories.map(item => {
         if (item.id == category.id) {
           item.selected = !item.selected;
+        } else {
+          item.selected = false;
         }
         return item;
       })
@@ -247,7 +249,12 @@ export default {
       return categories.length > 0 ? categories : null;
     },
 
-    processStores() {
+    processStores(isAll) {
+      if (isAll) {
+        stores = this.stores.filter(store => store.id > 0);
+        return stores.length > 0 ? stores : null;
+      }
+
       let stores = null;
       if (this.stores[0].selected) {
         stores = this.stores.filter(store => store.id > 0);

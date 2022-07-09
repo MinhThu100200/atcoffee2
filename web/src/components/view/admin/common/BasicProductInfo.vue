@@ -69,7 +69,7 @@
                   </div>
                 </div>
               </div>
-              <div class="line">
+              <!-- <div class="line">
                 <div class="info-group">
                   <label for="store">Cửa hàng áp dụng</label>
                   <div class="form-group-horizontal" id="store">
@@ -80,7 +80,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="col-3 col-custom col-center info-basic">
               <img :src="product.image" alt="Hình ảnh">
