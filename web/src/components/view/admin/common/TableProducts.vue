@@ -5,7 +5,7 @@
         <div class="card-header">
           <h4>Danh sách sản phẩm</h4>
           <div class="card-header-form flex-row">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <select v-model="storeSelected" class="form-custom" @change="handleChangeStore">
                 <option value="ALL">Tất cả các cửa hàng</option>
                 <option v-for="store in this.$store.getters.stores" :key="store.id"
@@ -13,7 +13,7 @@
                   {{store.address}}
                 </option>
               </select>
-            </div>
+            </div> -->
             <div class="empty-space"></div>
             <div class="form-group">
               <select v-model="categorySelected" class="form-custom" @change="handleChangeCategory">
@@ -45,6 +45,7 @@
                   <th class="text-center">Tên sản phẩm</th>
                   <th class="text-center">Hình ảnh</th>
                   <th class="text-center">Giá sản phẩm</th>
+                  <th class="text-center">Lượt thích</th>
                   <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
@@ -56,6 +57,7 @@
                     <img :src="product.image" alt="Ảnh" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
+                  <td class="text-center flex-center">{{product.numberFavourites}} <b-icon-heart-fill class="b-icon b-heart-fill active"/></td>
                   <td class="text-center">
                     <i class="fas fa-circle" :class="product.state ? 'active' : 'inactive'"></i>
                   </td>
@@ -84,13 +86,15 @@ import CategoryCommand from '../../../command/CategoryCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import Pagination from '../../common/common/Pagination.vue'
 import ViewImage from '../../common/popup/ViewImage.vue'
+import {BIconHeartFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_PRODUCTS,
 
   components: {
     Pagination,
-    ViewImage
+    ViewImage,
+    BIconHeartFill
   },
 
   data() {
@@ -233,6 +237,21 @@ export default {
 </script>
 
 <style>
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.b-icon.b-heart-fill {
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+.b-icon.b-heart-fill.active {
+	color: #f55951;
+}
 
 .row {
   display: flex;

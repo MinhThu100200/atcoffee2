@@ -55,6 +55,12 @@
                     <label>Giảm giá sản phẩm</label>
                     <span>{{product.discount}}%</span>
                   </div>
+                  <div class="info-group favourited">
+                    <label>Lượt thích</label>
+                    <span>{{product.numberFavourites}} <b-icon-heart-fill class="b-icon b-heart-fill active"/></span>
+                  </div>
+                  <div class="info-group">
+                  </div>
                 </div>
                 <div class="line">
                   <div class="info-group">
@@ -98,6 +104,7 @@ import * as Constants from '../../../common/Constants'
 import Spinner from '../../common/popup/Spinner.vue'
 import CommonUtils from '../../../common/CommonUtils'
 import vClickOutside from 'click-outside-vue3'
+import {BIconHeartFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_BASIC_PRODUCT_INFO,
@@ -109,7 +116,8 @@ export default {
   },
 
   components: {
-    Spinner
+    Spinner,
+    BIconHeartFill
   },
 
   data() {
@@ -158,6 +166,14 @@ export default {
 
 <style scoped>
 
+.b-icon.b-heart-fill {
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+.b-icon.b-heart-fill.active {
+	color: #f55951;
+}
 .col-center {
   display: flex;
   flex-direction: column;
@@ -276,6 +292,14 @@ a.dropdown-item {
   margin-left: 40px;
   width: 400px;
   padding: 10px 0;
+}
+
+.line .info-group.favourited span {
+  display: flex;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0px 4px;
+  align-items: center;
 }
 
 .line .info-group:nth-child(1) {
