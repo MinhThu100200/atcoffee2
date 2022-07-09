@@ -78,7 +78,11 @@
                   <td class="text-center">{{formatPrice(bill.price)}}</td>
                   <td class="text-center">{{formatPrice(bill.discount)}}</td>
                   <td class="text-center">{{formatPrice(bill.amount)}}</td>
-                  <td class="text-center order" :class="colorStatus(bill.status)"><i class="fas fa-circle"></i> {{viStatus(bill.status)}}</td>
+                  <td class="text-center" :class="colorStatus(bill.status)">
+                    <div class="order">
+                      <i class="fas fa-circle"></i> {{viStatus(bill.status)}}
+                    </div>
+                  </td>
                   <td class="text-center">{{formatDateTime(new Date(bill.modifiedDate))}}</td>
                   <td class="text-center">{{processAddressStore(bill.storeId)}}</td>
                   <td class="text-center">
