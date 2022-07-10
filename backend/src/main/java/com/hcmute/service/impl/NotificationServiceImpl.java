@@ -26,13 +26,13 @@ public class NotificationServiceImpl implements NotificationService {
 	
 	@Override
 	public NotificationResponse findByKeyword(String keyword, Pageable pageable) {
-		Page<NotificationEntity> page = notificationRepository.findByTitleContainingOrMessageContaining(keyword, keyword, pageable);
+		Page<NotificationEntity> page = notificationRepository.findByTitleContainingOrMessageContainingOrderByCreatedDateDesc(keyword, keyword, pageable);
 		return resultResponse(page, pageable);
 	}
 
 	@Override
 	public NotificationResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable) {
-		Page<NotificationEntity> page = notificationRepository.findByTitleContainingOrMessageContainingAndState(keyword, keyword, state, pageable);
+		Page<NotificationEntity> page = notificationRepository.findByTitleContainingAndStateOrMessageContainingAndStateOrderByCreatedDateDesc(keyword, state, keyword, state, pageable);
 		return resultResponse(page, pageable);
 	}
 
@@ -65,6 +65,12 @@ public class NotificationServiceImpl implements NotificationService {
 		
 		entity = notificationRepository.save(entity);
 		
+		return mapper.map(entity, NotificationDTO.class);
+	}
+
+	@Override
+	public NotificationDTO findOne(Long id) {
+		NotificationEntity entity = notificationRepository.findOne(id);
 		return mapper.map(entity, NotificationDTO.class);
 	}
 }

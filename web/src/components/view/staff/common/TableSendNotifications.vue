@@ -5,6 +5,23 @@
         <div class="card-header">
           <h4>Danh sách đơn hàng</h4>
           <div class="card-header-form flex-row">
+            <div class="form-group">
+              <select v-model="state" class="form-custom" @change="handleChangeState">
+                <option value="">Tất cả các trạng thái</option>
+                <option value="true">Đã gửi</option>
+                <option value="false">Chưa gửi</option>
+              </select>
+            </div>
+            <div class="empty-space"></div>
+            <form @submit.prevent="handleSearch">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" v-model="keyword">
+                <div class="input-group-btn">
+                  <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+            <div class="empty-space"></div>
             <button class="btn btn-success btn-medium" @click="handleAdd" style="width: 160px;">Tạo thông báo</button>
           </div>
         </div>
@@ -26,14 +43,17 @@
                 <tr v-for="(notification, index) in this.$store.getters.notifications" :key="notification.code">
                   <td class="text-center">{{number(index)}}</td>
                   <td class="text-center">{{notification.title}}</td>
-                  <td class="text-center">{{notification.message}}</td>
+                  <td class="text-center" v-html="notification.message.replace(/\n/g, '</p>\n<p>')"></td>
                   <td class="text-center">{{notification.creator}}</td>
                   <td class="text-center">{{formatDate(notification.createdDate)}}</td>
                   <td class="text-center">{{notification.sender}}</td>
-                  <td class="text-center">{{formatDate(notification.sendedDate)}}</td>
-                  <td class="text-center">{{notification.state}}</td>
+                  <td class="text-center">{{notification.sendedDate ? formatDate(notification.sendedDate) : ''}}</td>
                   <td class="text-center">
-                    <button class="btn btn-secondary" @click="handleNotificationInfo(notification.id)">Chi tiết</button>
+                    <span v-if="notification.state" class="notification-state active">Đã gửi</span>
+                    <span v-else class="notification-state" title="Gửi" @click="sendNotifications(notification)"><i class="fas fa-paper-plane" style="cursor: pointer;"></i></span>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(notification.id)">Chi tiết</button>
                   </td>
                 </tr>
               </tbody>
@@ -45,6 +65,7 @@
         </div>
       </div>
     </div>
+    <spinner :isSpinner="isSpinner">Đang xử lý...</spinner>
   </div>
 </template>
 
@@ -53,24 +74,43 @@ import * as Constants from '../../../common/Constants'
 import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
 import Pagination from '../../common/common/Pagination.vue'
+import Spinner from '../../common/popup/Spinner.vue'
 import NotificationCommand from '../../../command/NotificationCommand'
+import BillDataService from '../../../services/BillDataService'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_SEND_NOTIFICATION_STAFF,
 
   components: {
     Pagination,
+    Spinner
   },
 
   data() {
     return {
       currentPage: 1,
       keyword: '',
-      state: null,
+      state: '',
+      isSpinner: false,
     }
   },
 
   methods: {
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
 
     init(){
       this.currentPage = this.$route.query.page;
@@ -78,11 +118,19 @@ export default {
         this.currentPage = 1;
       }
       this.keyword = this.$route.query.keyword;
-      if (typeof this.status == 'undefined') {
+      if (typeof this.keyword == 'undefined') {
         this.keyword = '';
       }
-      this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_NOTIFICATION, {...this.$store.getters.sortNotification, keyword: this.keyword, page: this.currentPage});
+      this.state = this.$route.query.state;
+      if (typeof this.state == 'undefined') {
+        this.state = '';
+      }
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_NOTIFICATION, {...this.$store.getters.sortNotification, keyword: this.keyword, state: this.state, page: this.currentPage});
       
+    },
+
+    loadTokens() {
+      BillDataService.findAllTokens(this.$store);
     },
 
     handleAdd() {
@@ -96,12 +144,37 @@ export default {
     formatDate(timeStamp) {
       return CommonUtils.formatDateTime(new Date(timeStamp));
     },
+
+    handleSearch() {
+      const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
+      if (this.keyword.trim() == '') {
+        delete query.keyword;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/staff/send-notifications', query: {...query, page: this.currentPage, keyword: this.keyword}});
+      }
+      this.loadNotification();
+    },
+
+    handleChangeState() {
+      const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
+      if (this.state == '') {
+        delete query.state;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/staff/send-notifications', query: {...query, page: this.currentPage, state: this.state}});
+      }
+      this.loadNotification();
+    }, 
     
     handleChangePage(page) {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
       this.$router.push({path: '/staff/send-notifications', query: {...query, page: this.currentPage}});
       this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_NOTIFICATION, {...this.$store.getters.sortNotification, page: this.currentPage});
+      this.loadNotification();
     },
 
     async loadNotification() {
@@ -112,8 +185,31 @@ export default {
       await this.loadNotification();
     },
 
+    async sendNotifications(notification) {
+      var formData = new FormData();
+      notification.state = true;
+      formData.append('notification', JSON.stringify(notification));
+      this.isSpinner = true;
+      let saved = await NotificationCommand.save(formData);
+      var result = null;
+      if (saved) {
+        result = await NotificationCommand.sendAllNotifications(notification.title, notification.message, notification.image, this.$store.getters.tokens);
+      }
+      this.isSpinner = false;
+      var text = '', type = 'success';
+      if (result != null) {
+
+        await this.loadNotification();
+        text = 'Gửi thông báo thành công';
+      } else {
+        text = 'Gửi thông báo thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
+    },
+
     handleInfo(id){
-      this.$router.push({path: '/admin/notification-info', query: {id}});
+      this.$router.push({path: '/staff/notification-info', query: {id}});
     },
 
   },
@@ -121,6 +217,7 @@ export default {
   created() {
     this.init();
     this.loadData();
+    this.loadTokens();
   }
 
 }
@@ -128,43 +225,12 @@ export default {
 
 <style>
 
-.order {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.notification-state {
+  font-weight: 600;
 }
 
-.order .fas.fa-circle {
-  font-size: 10px;
-  margin-right: 4px;
-  line-height: 20px;
+.notification-state.active {
+  color: var(--primary);
 }
 
-.requested {
-  color: #21a6d2 !important;
-}
-
-.canceled {
-  color: #ef065d !important;
-}
-
-.completed {
-  color: #00ad8a !important;
-}
-
-.delivering {
-  color: #ff8a65 !important;
-}
-
-.unapproved {
-  color: #474747 !important;
-}
-
-.approved {
-  color: #00e676 !important;
-}
-
-.paid {
-  color: #f7810f !important;
-}
 </style>

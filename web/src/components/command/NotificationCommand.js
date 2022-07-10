@@ -53,9 +53,18 @@ var NotificationCommand = {
     return res != null ? res : null;
   },
 
+  async findOne(id, store) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification/${id}`;
+    let result = await ConnectServer.getData(url);
+    store != null ? store.commit(MutationsName.MUTATION_NAME_SET_NOTIFICATION, result) : '';
+    return result;
+  },
+
   async findAllByOrder(page, size, keyword, state, store = null) {
     var searchState = state != null && state !== '';
-    state = state != null && state !== '' ? state : true;
+    if (searchState) {
+      state = state != null && state !== '' ? state : true;
+    }
     const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification?keyword=${keyword}&state=${state}&searchState=${searchState}&page=${page}&size=${size}`;
     let result = await ConnectServer.getData(url);
     if (result != null) {

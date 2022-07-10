@@ -7,6 +7,7 @@ import com.hcmute.dto.NotificationDTO;
 
 public interface NotificationService {
 	NotificationDTO save(NotificationDTO notificationDTO);
+	NotificationDTO findOne(Long id);
 	NotificationResponse findByKeyword(String keyword, Pageable pageable);
 	NotificationResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
 }

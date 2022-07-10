@@ -27,12 +27,11 @@
                 </div>
               </div>
             </div>
-           
             <div class="action">
               <input class="btn btn-success" v-if="this.$route.path.includes('stores')" type="submit" value="Thêm">
               <div class="action-edit" v-else> 
-                <input class="btn btn-success" type="button" value="Lưu và gửi" @click="sendNotifications">
-                <input class="btn btn-info" type="submit" value="Lưu">
+                <input class="btn btn-success" type="button" :value="this.$route.path.includes('add-notification') ? 'Lưu và gửi' : 'Cập nhật và gửi'" @click="sendNotifications">
+                <input class="btn btn-info" type="submit" :value="this.$route.path.includes('add-notification') ? 'Lưu' : 'Cập nhật'">
                 <input class="btn btn-danger" type="button" value="Hủy" @click="handleCancel">
               </div>
             </div>
@@ -60,7 +59,7 @@ export default {
   data() {
     return {
       notification: {
-        title: '',
+        title: 'A&T Coffee',
         message: '',
         image: '',
         state: false
@@ -69,6 +68,7 @@ export default {
       isSpinner: false,
       isAlertPopup: false,
       formData: null,
+      msg: '',
     }
   },
 
@@ -105,6 +105,22 @@ export default {
       this.isAlertPopup = false;
     },
 
+    handleCancel() {
+      var query = {
+        page: this.$store.getters.sortNotification.page,
+      };
+
+      var sortNotification = this.$store.getters.sortNotification;
+      if (sortNotification.keyword != '') {
+        query = {...query, keyword: this.$store.getters.sortNotification.keyword};
+      }
+      if (sortNotification.state != '') {
+        query = {...query, state: this.$store.getters.sortNotification.state};
+      }
+
+      this.$router.push({path: '/staff/send-notifications', query});
+    },
+
     async sendNotifications() {
       var validate = this.validate();
       if (!validate) {
@@ -128,6 +144,7 @@ export default {
         type = 'danger';
       }
       this.toast(text, type);
+      this.$router.push({path: '/staff/send-notifications', query: {page: 1}});
     },
 
     async handleSave() {
@@ -149,6 +166,7 @@ export default {
         type = 'danger';
       }
       this.toast(text, type);
+      this.$router.push({path: '/staff/send-notifications', query: {page: 1}});
     },
 
     validate() {
@@ -165,12 +183,25 @@ export default {
       }
 
       return true;
-    }
+    },
+
+    async loadNotificationById(id) {
+      this.notification = await NotificationCommand.findOne(id);
+    },
+
+    async loadData() {
+      if(this.$route.path.includes('notification-info')) {
+        this.isSpinner = true;
+        await this.loadNotificationById(this.$route.query.id);
+        this.isSpinner = false;
+      }
+    },
     
   },
 
   created() {
     this.loadTokens();
+    this.loadData();
   }
 }
 </script>

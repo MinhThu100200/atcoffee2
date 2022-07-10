@@ -133,7 +133,7 @@ public class ProductServiceImpl implements ProductService{
 		for (int i = 0; i < billEntities.size(); i++) {
 			List<BillDetailEntity> billDetailEntities = billEntities.get(i).getBillDetails();
 			for (int j = 0; j < billDetailEntities.size(); j++) {
-				if (entities.contains(billDetailEntities.get(j).getProduct()) == false) {
+				if (billDetailEntities.get(j).getProduct().isState() && entities.contains(billDetailEntities.get(j).getProduct()) == false) {
 					entities.add(billDetailEntities.get(j).getProduct());
 					
 					if (entities.size() == num) {
