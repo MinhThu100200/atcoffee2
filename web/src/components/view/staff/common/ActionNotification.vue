@@ -19,10 +19,19 @@
                     <div class="info-group"></div>
                   </div>
                   <div class="line">
-                      <div class="info-group flex-3">
+                    <div class="info-group flex-3">
                       <label for="name">Nội dung</label>
-                      <textarea class="form-control" id="name" v-model="notification.message" required></textarea>
-                  </div>
+                      <textarea class="form-control" rows="5" id="name" v-model="notification.message" required></textarea>
+                    </div>
+                    <div class="info-group">
+                      <label for="name">&nbsp;</label>
+                      <div class="position-promotion">
+                        <i class="fa fa-plus" @click="handleShowSelectPromotion" aria-hidden="true"></i>
+                        <div class="promotion-popup" v-click-outside="handleHideSelectPromotion">
+                          <promotion-popup :isPromotionPopup="isPromotionPopup" @select="handleSelect"></promotion-popup>
+                        </div>
+                      </div>
+                      </div>
                 </div>
                 </div>
               </div>
@@ -50,11 +59,17 @@ import NotificationCommand from '../../../command/NotificationCommand'
 import BillDataService from '../../../services/BillDataService'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
+import PromotionPopup from '../popup/PromotionPopup.vue'
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css';
+import vClickOutside from 'click-outside-vue3'
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_NOTIFICATION_STAFF,
+
+  directives: {
+      clickOutside: vClickOutside.directive
+  },
 
   data() {
     return {
@@ -69,12 +84,15 @@ export default {
       isAlertPopup: false,
       formData: null,
       msg: '',
+      isPromotionPopup: false,
+      count: 0
     }
   },
 
   components: {
     Spinner,
-    AlertPopup
+    AlertPopup,
+    PromotionPopup
   },
 
   computed: {
@@ -119,6 +137,21 @@ export default {
       }
 
       this.$router.push({path: '/staff/send-notifications', query});
+    },
+
+    handleShowSelectPromotion() {
+      this.isPromotionPopup = true;
+    },
+
+    handleHideSelectPromotion() {
+      this.count += this.isPromotionPopup ? 1 : 0;
+      this.count % 2 == 0 ? this.isPromotionPopup = false : null;
+    },
+
+    handleSelect(promotion) {
+      this.count += this.isPromotionPopup ? 1 : 0;
+      this.isPromotionPopup = false;
+      this.notification.message = promotion.code + ': ' + promotion.description;
     },
 
     async sendNotifications() {
@@ -206,7 +239,27 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.position-promotion {
+  position: relative;
+}
 
+.position-promotion i {
+  border: 1px solid #000;
+  border-radius: 50%;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.position-promotion .promotion-popup {
+  position: absolute;
+  bottom: -20px;
+  right: -112px;
+}
 
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="col-custom">
-    <div class="card card-promotion-1" :class="$route.path.includes('payment') ? 'payment' : ''" @click="handleSelect(promotion.code)">
+    <div class="card card-promotion-1" :class="$route.path.includes('payment') ? 'payment' : ''" @click="handleSelect(promotion)">
       <div class="card-icon">
         <span class="discount">{{promotion.discount}}%</span>
       </div>
@@ -10,7 +10,7 @@
             <span class="code">{{promotion.code}}</span>
             <span class="description">{{promotion.description}}</span>
           </div>
-          <button class="btn btn-apply" @click="handleSelect(promotion.code)"><b-icon-arrow-right-circle class="b-icon"/></button>
+          <button class="btn btn-apply" @click="handleSelect(promotion)"><b-icon-arrow-right-circle class="b-icon"/></button>
         </div>
       </div>
     </div>
@@ -40,8 +40,8 @@ export default {
   
   methods: {
 
-    handleSelect(promotionCode) {
-      this.$emit('select', promotionCode);
+    handleSelect(promotion) {
+      this.$emit('select', promotion);
     },
 
     formatPrice(price) {
@@ -72,7 +72,7 @@ export default {
 }
 
 .card.card-promotion-1 .card-icon{
-  width: 40px;
+  width: 60px;
   height: 88px;
   margin: 4px;
   border-radius: 3px;

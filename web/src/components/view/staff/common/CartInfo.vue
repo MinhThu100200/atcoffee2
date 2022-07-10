@@ -166,8 +166,8 @@ export default {
       this.$store.commit(MutationsName.MUTATION_NAME_SET_PROMOTION_KEY_SEARCH, this.promotionCode);
     },
 
-    handleSelect(promotionCode) {
-      this.promotionCode = promotionCode.toUpperCase();
+    handleSelect(promotion) {
+      this.promotionCode = promotion.code.toUpperCase();
       this.promotion = this.$store.getters.promotions.find(item => item.code == this.promotionCode);
       this.verifyPromotion = this.verifyPromotionCode(this.promotion);
 

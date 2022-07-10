@@ -60,8 +60,8 @@ export default {
       this.isAlertPopup = false;
     },
 
-    handleSelect(promotionCode) {
-      this.$emit('select', promotionCode);
+    handleSelect(promotion) {
+      this.$emit('select', promotion);
     },
   }
 }
