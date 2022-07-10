@@ -107,6 +107,9 @@ public class BillServiceImpl implements BillService{
 				int newPoint = (int)(billDTO.getAmount() * ConstantsUtil.POINTS_REFUND);
 				user.setAccumulatedPoints(user.getAccumulatedPoints() + newPoint);
 				user.setCurrentPoints(user.getCurrentPoints() + newPoint);
+				if (entity.getReward() != null) {
+					user.setCurrentPoints(user.getCurrentPoints() - entity.getReward().getProviso());
+				}
 				List<TypeEntity> types = typeRepository.findAll();
 				int points = user.getAccumulatedPoints();
 				if (points <= types.get(0).getPoint()) {
