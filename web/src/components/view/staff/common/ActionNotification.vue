@@ -8,7 +8,7 @@
         <div class="card-body">
           <form @submit.prevent="handleSave">
             <div class="row">
-              <div class="col-9 col">
+              <div class="col-12 col">
                 <div class="official-info">
                   <span class="title">Thông tin thông báo</span> 
                   <div class="line">
@@ -31,8 +31,8 @@
                           <promotion-popup :isPromotionPopup="isPromotionPopup" @select="handleSelect"></promotion-popup>
                         </div>
                       </div>
-                      </div>
-                </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -258,8 +258,6 @@ export default {
 
 .position-promotion .promotion-popup {
   position: absolute;
-  bottom: -20px;
-  right: -112px;
 }
 
 </style>
