@@ -220,6 +220,8 @@ class _PopUpAddress extends State<PopUpAddress> {
                                                             14)),
                                                 child: GestureDetector(
                                                     onTap: () {
+                                                      storeController
+                                                          .setSeleted(index);
                                                       if (index == 0) {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
@@ -318,7 +320,8 @@ class _PopUpAddress extends State<PopUpAddress> {
                       child: const Text(""));
                 } else {
                   return GestureDetector(
-                    onTap: () => Get.to(() => CartPage(isPaid: false, idOrder: "")),
+                    onTap: () =>
+                        Get.to(() => CartPage(isPaid: false, idOrder: "")),
                     child: Container(
                         margin: const EdgeInsets.only(left: 8.0),
                         padding: const EdgeInsets.all(6),

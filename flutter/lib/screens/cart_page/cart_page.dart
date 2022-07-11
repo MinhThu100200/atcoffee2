@@ -1,3 +1,4 @@
+import 'package:at_coffee/controllers/product_controller.dart';
 import 'package:at_coffee/models/promotion.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/cart_page/cart_item.dart';
@@ -49,6 +50,7 @@ class _CartPage extends State<CartPage> {
       Get.put(NotificationController());
   final PromotionController promotionController =
       Get.put(PromotionController());
+  final ProductController productController = Get.put(ProductController());
 
   var wayTitle = ["Giao tận nơi", "Tự đến lấy"];
   var wayImage = [
@@ -223,9 +225,13 @@ class _CartPage extends State<CartPage> {
                                         shrinkWrap: true,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          return CartItem(
-                                              cart: cartController
-                                                  .cartsList[index]);
+                                          bool offPro = checkPro(cartController
+                                              .cartsList[index].productId);
+                                          return offPro
+                                              ? CartItem(
+                                                  cart: cartController
+                                                      .cartsList[index])
+                                              : SizedBox();
                                         }),
                                   ] else ...[
                                     Container(
@@ -857,6 +863,18 @@ class _CartPage extends State<CartPage> {
             ));
       },
     );
+  }
+
+  bool checkPro(id) {
+    bool flag = productController.allProducts
+        .where((i) => i.id == id)
+        .toList()
+        .isNotEmpty;
+    print("Checking");
+    print(productController.allProducts[0].id);
+    print(id);
+    print(flag);
+    return flag;
   }
 
   bool _validPromotion(Promotion promotion) {

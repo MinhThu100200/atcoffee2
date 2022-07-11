@@ -79,18 +79,16 @@ class _SignupPageState extends State<SignUpPage> {
               children: [
                 Column(
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: Image.asset(
-                              "assets/images/logo.png",
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ]),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: Image.asset(
+                          "assets/images/logo.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ]),
                     Container(
                       height: 70,
                       width: double.infinity,
@@ -164,9 +162,8 @@ class _SignupPageState extends State<SignUpPage> {
                                       const TextStyle(color: Colors.black),
                                   //hintText: "Email",
                                   border: InputBorder.none,
-                                  errorText: _validateEmail
-                                      ? _msgValidateEmail
-                                      : null,
+                                  errorText:
+                                      _validateEmail ? _msgValidateEmail : null,
                                 ),
                               ),
                             )
@@ -202,7 +199,8 @@ class _SignupPageState extends State<SignUpPage> {
                                 cursorHeight: 20,
                                 decoration: InputDecoration(
                                   labelText: 'Nhập số điện thoại',
-                                  labelStyle: const TextStyle(color: Colors.black),
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
 
                                   //hintText: "Email",
                                   border: InputBorder.none,
@@ -404,121 +402,123 @@ class _SignupPageState extends State<SignUpPage> {
                 // login button and social login
                 Column(
                   children: [
-                InkWell(
-                  onTap: signUp,
-                  child: Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.arrow_forward_sharp,
-                          color: white,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Đăng ký",
-                          style: TextStyle(
-                              fontSize: 16,
+                    InkWell(
+                      onTap: signUp,
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.arrow_forward_sharp,
                               color: white,
-                              fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Đăng ký",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
+                    // Row(
+                    //   children: const [
+                    //     Flexible(
+                    //       child: Divider(
+                    //         thickness: 0.8,
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text("Hoặc"),
+                    //     SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Flexible(
+                    //       child: Divider(
+                    //         thickness: 0.8,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Container(
+                    //       width: 50,
+                    //       height: 50,
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(12),
+                    //           border:
+                    //               Border.all(color: black.withOpacity(0.1))),
+                    //       child: Center(
+                    //         child: SvgPicture.asset(
+                    //           "assets/images/google_icon.svg",
+                    //           width: 20,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 20,
+                    //     ),
+                    //     Container(
+                    //       width: 50,
+                    //       height: 50,
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(12),
+                    //           border:
+                    //               Border.all(color: black.withOpacity(0.1))),
+                    //       child: Center(
+                    //         child: SvgPicture.asset(
+                    //           "assets/images/facebook_icon.svg",
+                    //           width: 20,
+                    //         ),
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+
+                    // const SizedBox(
+                    //   height: 30,
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Bạn đã có tài khoản?",
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: openLoginPage,
+                          child: const Text(
+                            "Đăng nhập",
+                            style: TextStyle(
+                                fontSize: 13,
+                                decoration: TextDecoration.underline),
+                          ),
                         )
                       ],
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: const [
-                    Flexible(
-                      child: Divider(
-                        thickness: 0.8,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text("Hoặc"),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Flexible(
-                      child: Divider(
-                        thickness: 0.8,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border:
-                              Border.all(color: black.withOpacity(0.1))),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          "assets/images/google_icon.svg",
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border:
-                              Border.all(color: black.withOpacity(0.1))),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          "assets/images/facebook_icon.svg",
-                          width: 20,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Bạn đã có tài khoản?",
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: openLoginPage,
-                      child: const Text(
-                        "Đăng nhập",
-                        style: TextStyle(
-                            fontSize: 13,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )
-                  ],
-                ),
                   ],
                 )
               ],

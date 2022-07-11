@@ -255,6 +255,7 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                         .toString()),
                                               ))
                                           : const Text(""))
+                                    
                                     ],
                                   ),
                                 );
@@ -490,10 +491,6 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                 });
                           }
                         })
-
-                        // status == 'REQUESTED'
-                        //     ? _getMessageList('REQUESTED')
-                        //     : _getMessageList('COMPLETED'),
                       ]),
                 ),
               ],

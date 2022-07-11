@@ -997,10 +997,10 @@ class _OrderPage extends State<OrderPage> {
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         itemCount:
-                                            rateController.ratesList.length < 3
+                                            rateController.ratesList.length < 7
                                                 ? rateController
                                                     .ratesList.length
-                                                : 3,
+                                                : 7,
                                         shrinkWrap: true,
                                         itemBuilder:
                                             (BuildContext context, int index) {

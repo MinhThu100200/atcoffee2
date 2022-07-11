@@ -55,6 +55,7 @@ class _loginPageState extends State<LoginPage> {
       );
       await userController.authUser(email, password);
       EasyLoading.dismiss();
+      print(userController.user.value.name);
       if (userController.user.value.name != "" &&
           userController.user.value.name != null) {
         Get.snackbar(
@@ -297,69 +298,69 @@ class _loginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: const [
-                            Flexible(
-                              child: Divider(
-                                thickness: 0.8,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("Hoặc"),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Flexible(
-                              child: Divider(
-                                thickness: 0.8,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      color: black.withOpacity(0.1))),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  "assets/images/google_icon.svg",
-                                  width: 20,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      color: black.withOpacity(0.1))),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  "assets/images/facebook_icon.svg",
-                                  width: 20,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
+                        // Row(
+                        //   children: const [
+                        //     Flexible(
+                        //       child: Divider(
+                        //         thickness: 0.8,
+                        //       ),
+                        //     ),
+                        //     SizedBox(
+                        //       width: 5,
+                        //     ),
+                        //     Text("Hoặc"),
+                        //     SizedBox(
+                        //       width: 5,
+                        //     ),
+                        //     Flexible(
+                        //       child: Divider(
+                        //         thickness: 0.8,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // const SizedBox(
+                        //   height: 20,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Container(
+                        //       width: 50,
+                        //       height: 50,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(12),
+                        //           border: Border.all(
+                        //               color: black.withOpacity(0.1))),
+                        //       child: Center(
+                        //         child: SvgPicture.asset(
+                        //           "assets/images/google_icon.svg",
+                        //           width: 20,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(
+                        //       width: 20,
+                        //     ),
+                        //     Container(
+                        //       width: 50,
+                        //       height: 50,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(12),
+                        //           border: Border.all(
+                        //               color: black.withOpacity(0.1))),
+                        //       child: Center(
+                        //         child: SvgPicture.asset(
+                        //           "assets/images/facebook_icon.svg",
+                        //           width: 20,
+                        //         ),
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        // const SizedBox(
+                        //   height: 30,
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
