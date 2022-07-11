@@ -292,4 +292,16 @@ public class UserServiceImpl implements UserService{
 		return validateMsg;
 	}
 
+	@Override
+	public List<String> findAllTokens() {
+		List<UserEntity> entities = userRepository.findAll();
+		List<String> tokens = new ArrayList<String>();
+		entities.forEach(entity -> {
+			if (!"".equals(entity.getToken())) {
+				tokens.add(entity.getToken());
+			}
+		});
+		return tokens;
+	}
+
 }

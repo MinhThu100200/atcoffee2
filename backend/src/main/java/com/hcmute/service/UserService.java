@@ -19,6 +19,7 @@ public interface UserService extends UserDetailsService{
 	UserDTO findOneByUsername(String username);
 	UserDTO findOneByCode(String code);
 	UserDTO findOne(Long id);
+	List<String> findAllTokens();
 	String validateSignUpUser(UserDTO userDto);
 	List<UserDTO> validate(String username, String code, String email, String phone, String identityCard);
 	List<UserDTO> findAll();

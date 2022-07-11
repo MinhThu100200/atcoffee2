@@ -251,7 +251,8 @@ export default {
         createdDate: new Date().getTime(),
         state: true,
         read: true,
-        token: ''
+        token: '',
+        rate: true,
       }
      
       let result = await BillCommand.save(bill);
