@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hcmute.api.request.PasswordRequest;
+import com.hcmute.api.request.TokenRequest;
 import com.hcmute.api.response.UserResponse;
 import com.hcmute.dto.UserDTO;
 import com.hcmute.entity.RoleEntity;
@@ -137,6 +138,20 @@ public class UserServiceImpl implements UserService{
 		return dtos;
 	}
 
+
+	@Override
+	public Boolean updateToken(TokenRequest tokenRequest) {
+		try {
+			UserEntity entity = userRepository.findOne(ConstantsUtil.userDTO.getId());
+			if (!"".equals(tokenRequest.getToken())) {
+				entity.setToken(tokenRequest.getToken());
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	@Override
 	public UserDTO updatePassword(PasswordRequest passwordRequest) {
 		UserDTO dto = passwordRequest.getUser();

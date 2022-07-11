@@ -73,4 +73,9 @@ public class NotificationServiceImpl implements NotificationService {
 		NotificationEntity entity = notificationRepository.findOne(id);
 		return mapper.map(entity, NotificationDTO.class);
 	}
+
+	@Override
+	public void delete(Long id) {
+		notificationRepository.delete(id);
+	}
 }

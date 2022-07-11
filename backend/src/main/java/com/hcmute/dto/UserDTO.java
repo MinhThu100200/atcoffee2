@@ -17,6 +17,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	private String gender;
 	private String email;
 	private String address;
+	private String token;
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
@@ -133,6 +134,13 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	}
 	public void setIdentityCard(String identityCard) {
 		this.identityCard = identityCard;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	public Long getStoreId() {
 		return storeId;
