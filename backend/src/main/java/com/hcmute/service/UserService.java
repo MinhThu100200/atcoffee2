@@ -7,16 +7,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.hcmute.api.request.PasswordRequest;
+import com.hcmute.api.request.TokenRequest;
 import com.hcmute.api.response.UserResponse;
 import com.hcmute.dto.UserDTO;
 
 public interface UserService extends UserDetailsService{
 	UserDTO save(UserDTO userDTO);
 	UserDTO updatePassword(PasswordRequest passwordRequest);
+	Boolean updateToken(TokenRequest tokenRequest);
 	Boolean resetPassword(String email);
 	UserDTO findOneByUsername(String username);
 	UserDTO findOneByCode(String code);
 	UserDTO findOne(Long id);
+	List<String> findAllTokens();
 	String validateSignUpUser(UserDTO userDto);
 	List<UserDTO> validate(String username, String code, String email, String phone, String identityCard);
 	List<UserDTO> findAll();

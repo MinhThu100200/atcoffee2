@@ -21,6 +21,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmute.api.request.PasswordRequest;
+import com.hcmute.api.request.TokenRequest;
 import com.hcmute.api.response.UserResponse;
 import com.hcmute.dto.UserDTO;
 import com.hcmute.service.UserService;
@@ -73,6 +74,16 @@ public class UserAPI {
 	@PutMapping("/api/user/change-password")
 	public ResponseEntity<UserDTO> changePassword(@RequestBody PasswordRequest passwordRequest){
 		return ResponseEntity.ok(userService.updatePassword(passwordRequest));
+	}
+	
+	@GetMapping("/api/user/token")
+	public ResponseEntity<List<String>> findAllTokens(){
+		return ResponseEntity.ok(userService.findAllTokens());
+	}
+	
+	@PutMapping("/api/user/token")
+	public ResponseEntity<Boolean> changePassword(@RequestBody TokenRequest tokenRequest){
+		return ResponseEntity.ok(userService.updateToken(tokenRequest));
 	}
 	
 	@GetMapping("/api/info/reset-password")

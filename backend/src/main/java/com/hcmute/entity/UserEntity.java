@@ -37,6 +37,8 @@ public class UserEntity extends BaseEntity implements Serializable{
 	@Column(unique = true)
 	private String email;
 	private String address;
+	
+	private String token;
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
@@ -198,6 +200,14 @@ public class UserEntity extends BaseEntity implements Serializable{
 
 	public void setType(TypeEntity type) {
 		this.type = type;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public List<RateEntity> getRates() {
