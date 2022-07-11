@@ -255,8 +255,10 @@ class _ProfilePage extends State<ProfilePage> {
                                     child: const Icon(Icons.email_outlined,
                                         color: Colors.black, size: 28.0),
                                   ),
-                                  Text(userController.user.value.email,
-                                      style: const TextStyle(fontSize: 18.0))
+                                  Flexible(
+                                    child: Text(userController.user.value.email,
+                                        style: const TextStyle(fontSize: 18.0)),
+                                  )
                                 ],
                               ),
                             ),

@@ -68,16 +68,16 @@ class _MomoPageState extends State<MomoPage> {
                   onTap: () async {
                     MomoPaymentInfo options = MomoPaymentInfo(
                         merchantName: "AT Coffee",
-                        appScheme: "MOxx",
-                        merchantCode: 'MOMO28TI20220531',
+                        appScheme: "momoshfw20201230",
+                        merchantCode: 'MOMO28TI20220531', //MOMO28TI20220531
                         partnerCode: 'MOMO28TI20220531',
                         amount: widget.amount,
-                        orderId: '23',
+                        orderId: widget.idOrder,
                         orderLabel: 'Thanh toán đơn hàng ${widget.idOrder}',
                         merchantNameLabel: "AT Coffee",
                         fee: 0,
                         description: 'Thanh toán đơn hàng ${widget.idOrder}',
-                        username: '0397830379', // cửa hàng
+                        username: '0346279377', // cửa hàng
                         partner: 'merchant',
                         extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
                         isTestMode: true);

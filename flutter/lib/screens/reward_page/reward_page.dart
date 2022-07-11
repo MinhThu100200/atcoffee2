@@ -464,7 +464,6 @@ class _RewardPage extends State<RewardPage> {
               .firstWhere((type) => type.code == promotion.object)
               .id;
     } catch (e) {
-      print(e.toString());
       return false;
     }
 
