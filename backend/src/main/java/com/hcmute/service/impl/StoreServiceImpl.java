@@ -47,6 +47,7 @@ public class StoreServiceImpl implements StoreService {
 		if (ConstantsUtil.userDTO != null) {
 			dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 		}
+		dto.setNumberFavourites(entity.getCustomers().size());
 		return dto;
 	}
 	
@@ -64,6 +65,7 @@ public class StoreServiceImpl implements StoreService {
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
@@ -78,6 +80,7 @@ public class StoreServiceImpl implements StoreService {
 			if (ConstantsUtil.userDTO != null) {
 				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
 			}
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
@@ -110,7 +113,14 @@ public class StoreServiceImpl implements StoreService {
 	public StoreResponse resultResponse(Page<StoreEntity> page, Pageable pageable) {
 		List<StoreEntity> entities = page.getContent();
 		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
+		entities.forEach(entity -> {
+			StoreDTO dto = mapper.map(entity, StoreDTO.class);
+			if (ConstantsUtil.userDTO != null) {
+				dto.setFavourited(entity.getCustomers().contains(userRepository.findOne(ConstantsUtil.userDTO.getId())));
+			}
+			dto.setNumberFavourites(entity.getCustomers().size());
+			dtos.add(mapper.map(entity, StoreDTO.class));
+		});
 		StoreResponse result = new StoreResponse();
 		result.setStores(dtos);
 		result.setTotalPage(page.getTotalPages());
@@ -127,6 +137,7 @@ public class StoreServiceImpl implements StoreService {
 		entities.forEach(entity -> {
 			StoreDTO dto = mapper.map(entity, StoreDTO.class);
 			dto.setFavourited(true);
+			dto.setNumberFavourites(entity.getCustomers().size());
 			dtos.add(dto);
 		});
 		return dtos;
