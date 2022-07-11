@@ -180,7 +180,6 @@ public class UserServiceImpl implements UserService{
 			String password = PasswordUtil.generateRandomPassword(8);
 			String passwordEncoded = passwordEncoder.encode(password);
 			entity.setPassword(passwordEncoded);
-			entity = userRepository.save(entity);
 			if (entity != null) {
 				Mail mail = new Mail();
 		        mail.setMailFrom("atcoffee2021@gmail.com");
@@ -188,6 +187,7 @@ public class UserServiceImpl implements UserService{
 		        mail.setMailSubject("Reset password - A&T Coffee");
 		        mail.setMailContent(password + " là mật khẩu mới của bạn!");
 		        mailService.sendEmail(mail);
+		        userRepository.save(entity);
 		        return true;
 			}
 		}
