@@ -33,6 +33,18 @@ const UserCommand = {
     return null;
   },
 
+  async findAllTokens(store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/token`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null
+        ? store.commit(MutationsName.MUTATION_NAME_SET_TOKENS, res)
+        : "";
+      return res;
+    }
+    return null;
+  },
+
   async findAllByOrder(
     page,
     size,

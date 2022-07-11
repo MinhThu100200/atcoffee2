@@ -22,7 +22,7 @@ import * as MutationsName from '../../../common/MutationsName'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import TableSendNotifications from '../common/TableSendNotifications.vue'
-import BillDataService from '../../../services/BillDataService'
+import UserCommand from '../../../command/UserCommand'
 
 export default {
   name: Constants.COMPONENT_NAME_SEND_NOTIFICATION_STAFF,
@@ -42,7 +42,7 @@ export default {
 
   methods: {
     loadTokens() {
-      BillDataService.findAllTokens(this.$store);
+      UserCommand.findAllTokens(this.$store);
     },
   },
 

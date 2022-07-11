@@ -76,7 +76,7 @@ import CommonUtils from '../../../common/CommonUtils'
 import Pagination from '../../common/common/Pagination.vue'
 import Spinner from '../../common/popup/Spinner.vue'
 import NotificationCommand from '../../../command/NotificationCommand'
-import BillDataService from '../../../services/BillDataService'
+import UserCommand from '../../../command/UserCommand'
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css';
 
@@ -129,8 +129,8 @@ export default {
       
     },
 
-    loadTokens() {
-      BillDataService.findAllTokens(this.$store);
+    async loadTokens() {
+      await UserCommand.findAllTokens(this.$store);
     },
 
     handleAdd() {
@@ -193,6 +193,7 @@ export default {
       let saved = await NotificationCommand.save(formData);
       var result = null;
       if (saved) {
+        await this.loadTokens();
         result = await NotificationCommand.sendAllNotifications(notification.title, notification.message, notification.image, this.$store.getters.tokens);
       }
       this.isSpinner = false;
@@ -217,7 +218,7 @@ export default {
   created() {
     this.init();
     this.loadData();
-    this.loadTokens();
+    // this.loadTokens();
   }
 
 }

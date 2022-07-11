@@ -53,6 +53,12 @@ var NotificationCommand = {
     return res != null ? res : null;
   },
 
+  async delete(id) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification/${id}`;
+    let res = await ConnectServer.deleteData(url);
+    return res != null ? res : null;
+  },
+
   async findOne(id, store) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification/${id}`;
     let result = await ConnectServer.getData(url);

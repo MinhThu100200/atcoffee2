@@ -145,6 +145,7 @@ public class UserServiceImpl implements UserService{
 			UserEntity entity = userRepository.findOne(ConstantsUtil.userDTO.getId());
 			if (!"".equals(tokenRequest.getToken())) {
 				entity.setToken(tokenRequest.getToken());
+				userRepository.save(entity);
 			}
 			return true;
 		} catch (Exception e) {
@@ -192,13 +193,13 @@ public class UserServiceImpl implements UserService{
 		}
 		return false;
 	}
-
+	
 	@Override
 	public UserResponse findByKeyword(String keyword, Pageable pageable) {
 		RoleEntity admin = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_ADMIN);
 		RoleEntity staff = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_STAFF);
 		Page<UserEntity> page = userRepository.findByKeyword(keyword, admin, staff, pageable);
-		return resultResponse(page, pageable);
+		return resultResponse(page, pageable);	
 	}
 
 	@Override
@@ -297,7 +298,7 @@ public class UserServiceImpl implements UserService{
 		List<UserEntity> entities = userRepository.findAll();
 		List<String> tokens = new ArrayList<String>();
 		entities.forEach(entity -> {
-			if (!"".equals(entity.getToken())) {
+			if (!"".equals(entity.getToken()) && entity.getToken() != null) {
 				tokens.add(entity.getToken());
 			}
 		});

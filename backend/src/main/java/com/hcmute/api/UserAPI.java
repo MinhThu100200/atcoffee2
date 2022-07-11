@@ -76,7 +76,7 @@ public class UserAPI {
 		return ResponseEntity.ok(userService.updatePassword(passwordRequest));
 	}
 	
-	@GetMapping("/api/user/token")
+	@GetMapping("/api/staff/token")
 	public ResponseEntity<List<String>> findAllTokens(){
 		return ResponseEntity.ok(userService.findAllTokens());
 	}

@@ -56,27 +56,28 @@ var BillDataService = {
   },
 
   findAllTokens(store) {
-    const dbRef = ref(database, collectionName);
+    console.log("🚀 ~ file: BillDataService.js ~ line 59 ~ findAllTokens ~ store", store)
+    // const dbRef = ref(database, collectionName);
 
-    onValue(dbRef, (snapshot) => {
-      let bills = [];
-      snapshot.forEach((childSnapshot) => {
-        // const childKey = childSnapshot.key;
-        const childData = childSnapshot.val();
+    // onValue(dbRef, (snapshot) => {
+    //   let bills = [];
+    //   snapshot.forEach((childSnapshot) => {
+    //     // const childKey = childSnapshot.key;
+    //     const childData = childSnapshot.val();
         
-        bills.push(childData);
-      });
-      let tokens = bills.map(item => {
-        if (item.token && item.token != undefined)
-        {
-          return item.token;
-        } 
-      }).filter((v, i, a) => v !== undefined &&  a.indexOf(v) === i);
+    //     bills.push(childData);
+    //   });
+    //   let tokens = bills.map(item => {
+    //     if (item.token && item.token != undefined)
+    //     {
+    //       return item.token;
+    //     } 
+    //   }).filter((v, i, a) => v !== undefined &&  a.indexOf(v) === i);
       
-      store.commit(MutationsName.MUTATION_NAME_SET_TOKENS, tokens);
-    }, {
-      onlyOnce: true
-    });
+    //   store.commit(MutationsName.MUTATION_NAME_SET_TOKENS, tokens);
+    // }, {
+    //   onlyOnce: true
+    // });
   },
 
   findByStoreId(store) {

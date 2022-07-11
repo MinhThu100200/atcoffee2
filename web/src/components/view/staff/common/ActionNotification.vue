@@ -56,7 +56,7 @@
 <script>
 import * as Constants from '../../../common/Constants' 
 import NotificationCommand from '../../../command/NotificationCommand'
-import BillDataService from '../../../services/BillDataService'
+import UserCommand from '../../../command/UserCommand'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
 import PromotionPopup from '../popup/PromotionPopup.vue'
@@ -115,8 +115,8 @@ export default {
         })
     },
 
-    loadTokens() {
-      BillDataService.findAllTokens(this.$store);
+    async loadTokens() {
+      await UserCommand.findAllTokens(this.$store);
     },
 
     handleHideAlert() {
@@ -166,6 +166,7 @@ export default {
       let saved = await NotificationCommand.save(this.formData);
       var result = null;
       if (saved) {
+        await this.loadTokens();
         result = await NotificationCommand.sendAllNotifications(this.notification.title, this.notification.message, this.notification.image, this.$store.getters.tokens);
       }
       this.isSpinner = false;
@@ -233,7 +234,7 @@ export default {
   },
 
   created() {
-    this.loadTokens();
+    // this.loadTokens();
     this.loadData();
   }
 }
