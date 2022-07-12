@@ -45,7 +45,9 @@
                     <label>Vĩ độ - Kinh độ</label>
                     <span>{{store.latitude}} - {{store.longitude}}</span>
                   </div>
-                  <div class="info-group flex-4">
+                  <div class="info-group favourited flex-4">
+                    <label>Lượt thích</label>
+                    <span>{{store.numberFavourites}} <b-icon-heart-fill class="b-icon b-heart-fill active"/></span>
                   </div>
                 </div>
               </div>
@@ -66,6 +68,7 @@ import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
 import Spinner from '../../common/popup/Spinner.vue'
 import vClickOutside from 'click-outside-vue3'
+import {BIconHeartFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_BASIC_STORE_INFO,
@@ -77,7 +80,8 @@ export default {
   },
 
   components: {
-    Spinner
+    Spinner,
+    BIconHeartFill
   },
 
   data() {

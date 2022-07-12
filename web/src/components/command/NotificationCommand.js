@@ -54,7 +54,7 @@ var NotificationCommand = {
   },
 
   async delete(id) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification/${id}`;
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/notification?notificationId=${id}`;
     let res = await ConnectServer.deleteData(url);
     return res != null ? res : null;
   },

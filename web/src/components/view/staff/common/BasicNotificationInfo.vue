@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12" v-if="notification != null">
       <div class="card">
         <div class="card-body">
           <div class="row">
@@ -11,6 +11,10 @@
                     <i class="fas fa-edit"></i>
                     Chỉnh sửa
                   </a>
+                  <router-link to="" class="dropdown-item has-icon" @click="removeNotification(notification.id)">
+                    <i class="far fa-trash-alt"></i>
+                    Xóa
+                  </router-link>
                   <router-link to="" class="dropdown-item has-icon" @click="sendNotifications(notification)">
                    <i class="far fa-paper-plane"></i>
                     Gửi 
@@ -146,6 +150,32 @@ export default {
 
     formatPrice(price) {
       return CommonUtils.formatPrice(price);
+    },
+
+    async removeNotification(id) {
+      var result = await NotificationCommand.delete(id);
+      var text = '', type = 'success';
+      if (result != null) {
+
+        text = 'Xóa thông báo thành công';
+        var query = {
+        page: this.$store.getters.sortNotification.page,
+        };
+
+        var sortNotification = this.$store.getters.sortNotification;
+        if (sortNotification.keyword != '') {
+          query = {...query, keyword: this.$store.getters.sortNotification.keyword};
+        }
+        if (sortNotification.state != '') {
+          query = {...query, state: this.$store.getters.sortNotification.state};
+        }
+
+        this.$router.push({path: '/staff/send-notifications', query});
+      } else {
+        text = 'Xóa thông báo thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
     },
 
     async sendNotifications(notification) {

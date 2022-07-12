@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12" v-if="this.$store.getters.products && this.$store.getters.categories">
       <div class="card">
         <div class="card-header">
           <h4>Danh sách sản phẩm</h4>

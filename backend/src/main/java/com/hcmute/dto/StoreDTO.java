@@ -8,7 +8,7 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 	private String image;
 	private double latitude;
 	private double longitude;
-
+	private int numberFavourites;
 	private boolean favourited;
 	
 	public StoreDTO() {
@@ -81,4 +81,12 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 		this.favourited = favourited;
 	}
 
+	public int getNumberFavourites() {
+		return numberFavourites;
+	}
+
+	public void setNumberFavourites(int numberFavourites) {
+		this.numberFavourites = numberFavourites;
+	}
+	
 }

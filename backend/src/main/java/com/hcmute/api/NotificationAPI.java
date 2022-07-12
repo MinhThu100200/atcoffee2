@@ -48,8 +48,8 @@ public class NotificationAPI {
 		}
 	}
 	
-	@DeleteMapping("/api/staff/notification/{id}")
-	public ResponseEntity<Boolean> deleteById(@RequestParam(name = "id") Long id) {
+	@DeleteMapping(value="/api/staff/notification", params = {"notificationId"})
+	public ResponseEntity<Boolean> deleteById(@RequestParam(name = "notificationId") Long id) {
 		notificationService.delete(id);
 		return ResponseEntity.ok(true);
 	}
