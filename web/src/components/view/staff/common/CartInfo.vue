@@ -253,6 +253,7 @@ export default {
         read: true,
         token: '',
         rate: true,
+        shipFee: 0
       }
      
       let result = await BillCommand.save(bill);
