@@ -116,7 +116,11 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public UserDTO findOneByCode(String code) {
-		return mapper.map(userRepository.findOneByCode(code), UserDTO.class);
+		UserEntity entity = userRepository.findOneByCode(code);
+		if (entity != null) {
+			return mapper.map(entity, UserDTO.class);			
+		}
+		return null;
 	}
 
 	@Override
