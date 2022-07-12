@@ -132,7 +132,7 @@ class StoreController extends GetxController {
       //     await geoCode.forwardGeocoding(address: "10 Lê Văn Việt, Hồ Chí Minh");
       // print(coordinates);
       //getDistance(lat, lang, 10.9021, 106.7754);
-      isLoading.value = false;
+      //isLoading.value = false;
     } finally {
       isLoading.value = false;
     }
@@ -218,7 +218,7 @@ class StoreController extends GetxController {
         }
       }
       storeListNearYou.value = newList;
-
+      isLoading.value = false;
       //print(storeListNearYou.value.length.toString() + " stores");
     } catch (error) {
       print(error);

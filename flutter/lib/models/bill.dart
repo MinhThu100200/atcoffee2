@@ -33,6 +33,7 @@ class Bill {
       this.customerId,
       this.storeId,
       this.rate,
+      this.shipFee,
       this.billDetails});
   int id;
   int createdDate;
@@ -63,6 +64,7 @@ class Bill {
   String customerName;
   bool read;
   String token;
+  int shipFee;
 
   Bill.fromDocumentSnapshot(Map<dynamic, dynamic> json)
       : id = json["id"],
@@ -91,6 +93,7 @@ class Bill {
         customerName = json["customerName"],
         read = json["read"],
         rate = json["rate"],
+        shipFee = json["shipFee"],
         billDetails = List<BillDetail>.from(
             json["billDetails"].map((x) => BillDetail.fromMap(x)));
 
@@ -140,6 +143,7 @@ class Bill {
         "customerId": customerId,
         "storeId": storeId,
         "rate": rate,
+        "shipFee": shipFee,
         "billDetails": billDetailToJson(billDetails)
       };
 
@@ -171,6 +175,7 @@ class Bill {
         "read": read,
         "token": token,
         "rate": rate,
+        "shipFee": shipFee,
         "billDetails":
             List<dynamic>.from(billDetails.map((x) => x.toFirebaseJson()))
       };

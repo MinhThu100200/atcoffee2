@@ -255,7 +255,6 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                         .toString()),
                                               ))
                                           : const Text(""))
-                                    
                                     ],
                                   ),
                                 );
@@ -263,7 +262,6 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                             ),
                           ),
                         ),
-
                         Obx(() {
                           if (billController.isLoading.value) {
                             return const Center(
@@ -397,8 +395,9 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                                   '${data[index].billDetails.length} sản phẩm' +
                                                                       " - " +
                                                                       oCcy
-                                                                          .format(data[index]
-                                                                              .amount)
+                                                                          .format(data[index].amount +
+                                                                              data[index]
+                                                                                  .shipFee)
                                                                           .toString(),
                                                                   style: const TextStyle(
                                                                       fontSize:

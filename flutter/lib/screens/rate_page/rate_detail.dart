@@ -355,6 +355,7 @@ class _RateDetailPage extends State<RateDetailPage> {
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
       );
+      Navigator.pop(context);
     } catch (error) {
       EasyLoading.dismiss();
       Get.snackbar(

@@ -114,21 +114,17 @@ class _ProductItem extends State<ProductItem> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(_product.rate.round().toString() + " ",
+                              Text(
+                                  _product.rate.toStringAsFixed(1).toString() +
+                                      " ",
                                   style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.yellow)),
                               Container(
                                 padding: const EdgeInsets.only(bottom: 5.0),
-                                child: Text(
-                                    "★★★★★".substring(
-                                          0,
-                                          _product.rate.round(),
-                                        ) +
-                                        "☆☆☆☆☆".substring(
-                                            _product.rate.round(), 5),
-                                    style: const TextStyle(
+                                child: const Text("★",
+                                    style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.yellow)),

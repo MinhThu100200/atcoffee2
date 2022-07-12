@@ -515,13 +515,7 @@ class _RatePage extends State<RatePage> {
                                                                       CrossAxisAlignment
                                                                           .end,
                                                                   children: [
-                                                                    Text(
-                                                                        '${data[index].billDetails.length} sản phẩm' +
-                                                                            " - " +
-                                                                            oCcy
-                                                                                .format(data[index]
-                                                                                    .amount)
-                                                                                .toString(),
+                                                                    Text('${data[index].billDetails.length} sản phẩm' + " - " + oCcy.format(data[index].amount + data[index].shipFee).toString(),
                                                                         style: const TextStyle(
                                                                             fontSize:
                                                                                 14,

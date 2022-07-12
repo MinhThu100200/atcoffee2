@@ -101,8 +101,10 @@ class _PopUpAddress extends State<PopUpAddress> {
                               shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
-                                  onTap: () =>
-                                      storeController.setSeleted(index),
+                                  onTap: () {
+                                    storeController.setSeleted(index);
+                                    Navigator.pop(context);
+                                  },
                                   child: Obx(
                                     () => Container(
                                         color: storeController.selected.value ==
@@ -351,8 +353,13 @@ class _PopUpAddress extends State<PopUpAddress> {
                                 child: Text(
                                   // MethodConstants.oCcy.format(
                                   //     calTotalAmount(cartController.cartsList)),
-                                  MethodConstants.oCcy.format(cartController
-                                      .totalCart.value.totalAmount),
+                                  MethodConstants.oCcy.format(
+                                      storeController.selected.value == 1
+                                          ? cartController
+                                              .totalCart.value.totalAmount
+                                          : cartController
+                                                  .totalCart.value.totalAmount +
+                                              15000),
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 14.0,

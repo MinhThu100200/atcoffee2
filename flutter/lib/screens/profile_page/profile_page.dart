@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:at_coffee/screens/profile_page/profile_update_page.dart';
 import 'package:at_coffee/screens/login_page/login_page.dart';
 import 'package:at_coffee/common/utils_common/api_service.dart';
+import 'package:restart_app/restart_app.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -320,7 +321,23 @@ class _ProfilePage extends State<ProfilePage> {
                 ),
               ),
               GestureDetector(
-                onTap: logout,
+                onTap: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Thông báo'),
+                    content: const Text('Bạn chắc chắn đăng xuất?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Huỷ'),
+                      ),
+                      TextButton(
+                        onPressed: logout,
+                        child: const Text('Đồng ý'),
+                      ),
+                    ],
+                  ),
+                ),
                 child: Card(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -349,8 +366,8 @@ class _ProfilePage extends State<ProfilePage> {
     );
   }
 
-  logout() {
-    removeToken();
-    Get.off(() => const LoginPage());
+  logout() async {
+    await removeToken();
+    Restart.restartApp();
   }
 }

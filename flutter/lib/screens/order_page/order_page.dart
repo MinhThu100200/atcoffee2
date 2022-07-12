@@ -919,12 +919,23 @@ class _OrderPage extends State<OrderPage> {
                                                       _product.rate
                                                               .toStringAsFixed(
                                                                   1) +
-                                                          "/5 ",
+                                                          "/5",
                                                       style: const TextStyle(
                                                           fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: yellowDark)),
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 4.0),
+                                                    child: const Text("★",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: yellowDark)),
+                                                  ),
                                                   // Container(
                                                   //   padding:
                                                   //       const EdgeInsets.only(

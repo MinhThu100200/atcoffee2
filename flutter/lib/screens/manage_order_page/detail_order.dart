@@ -255,7 +255,10 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                     Container(
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                            oCcy.format(_bill.price).toString(),
+                                            oCcy
+                                                .format(
+                                                    totalPrice() - _bill.price)
+                                                .toString(),
                                             style: const TextStyle(
                                               color: gray1,
                                               fontSize: 14,
@@ -297,6 +300,31 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                   children: [
                                     Container(
                                         alignment: Alignment.topLeft,
+                                        child: const Text("Phí giao hàng:",
+                                            style: TextStyle(
+                                              color: gray1,
+                                              fontSize: 14,
+                                            ))),
+                                    Container(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                            oCcy
+                                                .format(_bill.shipFee)
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: gray1,
+                                              fontSize: 14,
+                                            ))),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        alignment: Alignment.topLeft,
                                         child: const Text("Thành tiền:",
                                             style: TextStyle(
                                               color: gray1,
@@ -306,7 +334,8 @@ class _DetailOrderPage extends State<DetailOrderPage> {
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                             oCcy
-                                                .format(_bill.amount)
+                                                .format(_bill.amount +
+                                                    _bill.shipFee)
                                                 .toString(),
                                             style: const TextStyle(
                                               color: gray1,

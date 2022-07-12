@@ -59,6 +59,7 @@ class _CartPage extends State<CartPage> {
   ];
 
   String _selectedPayment = '';
+  int shipFee = 15000;
   //bool _isPaid;
 
   @override
@@ -374,6 +375,41 @@ class _CartPage extends State<CartPage> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
+                                                  const Text('Phí giao hàng',
+                                                      style: TextStyle(
+                                                          fontSize: 16.0)),
+                                                  Text(
+                                                      // oCcy.format(_calPromotion(
+                                                      //         cartController
+                                                      //             .cartsList)
+                                                      //     .toInt()),
+                                                      oCcy.format(
+                                                          storeController
+                                                                      .selected
+                                                                      .value ==
+                                                                  1
+                                                              ? 0
+                                                              : shipFee),
+                                                      style: const TextStyle(
+                                                          fontSize: 16.0))
+                                                ],
+                                              )),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 0.0),
+                                              child: const Divider()),
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 0.0,
+                                                      vertical: 8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
                                                   const Text('Tổng tiền',
                                                       style: TextStyle(
                                                           fontSize: 16.0)),
@@ -383,10 +419,20 @@ class _CartPage extends State<CartPage> {
                                                       //             cartController
                                                       //                 .cartsList)
                                                       //         .toInt()),
-                                                      oCcy.format(cartController
-                                                          .totalCart
-                                                          .value
-                                                          .totalAmount),
+                                                      oCcy.format(
+                                                          storeController
+                                                                      .selected
+                                                                      .value ==
+                                                                  1
+                                                              ? cartController
+                                                                  .totalCart
+                                                                  .value
+                                                                  .totalAmount
+                                                              : cartController
+                                                                      .totalCart
+                                                                      .value
+                                                                      .totalAmount +
+                                                                  shipFee),
                                                       style: const TextStyle(
                                                           fontSize: 16.0))
                                                 ],
@@ -512,8 +558,11 @@ class _CartPage extends State<CartPage> {
                                 // oCcy.format(
                                 //     _calTotalAmount(cartController.cartsList)
                                 //         .toInt()),
-                                oCcy.format(
-                                    cartController.totalCart.value.totalAmount),
+                                oCcy.format(storeController.selected.value == 1
+                                    ? cartController.totalCart.value.totalAmount
+                                    : cartController
+                                            .totalCart.value.totalAmount +
+                                        shipFee),
                                 style: const TextStyle(
                                     color: white,
                                     fontSize: 16.0,
@@ -600,12 +649,14 @@ class _CartPage extends State<CartPage> {
     Bill bill = Bill();
     bill.code = code;
     bill.amount = cartController.totalCart.value.totalAmount.toDouble();
+
     bill.price = cartController.totalCart.value.amount.toDouble();
     bill.discount = cartController.totalCart.value.promotion;
     bill.point = (bill.amount * StatusBillConstants.POINTS_REFUND).toInt();
     bill.address = storeController.selected.value == 1
         ? storeController.storeNearYou.value.address
         : storeController.myAddress.value;
+    bill.shipFee = storeController.selected.value == 1 ? 0 : shipFee;
     bill.status = StatusBillConstants.REQUESTED;
     bill.rewardId =
         cartController.type.value == 2 ? cartController.reward.value.id : 0;
@@ -637,8 +688,8 @@ class _CartPage extends State<CartPage> {
       billDetail.code = code + 'D' + (count++).toString();
       billDetail.quantity = c.quantity;
       billDetail.description = c.description;
-      billDetail.amount = priceItem * (1 - c.product.discount / 100);
       billDetail.price = priceItem;
+      billDetail.amount = priceItem * (1 - c.product.discount / 100);
       billDetail.size = c.size;
       billDetail.state = true;
       billDetail.discount = c.product.discount;
@@ -746,7 +797,10 @@ class _CartPage extends State<CartPage> {
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
-                        onTap: () => storeController.setSeleted(index),
+                        onTap: () {
+                          storeController.setSeleted(index);
+                          Navigator.pop(context);
+                        },
                         child: Obx(
                           () => Container(
                               color: storeController.selected.value == index
@@ -870,10 +924,6 @@ class _CartPage extends State<CartPage> {
         .where((i) => i.id == id)
         .toList()
         .isNotEmpty;
-    print("Checking");
-    print(productController.allProducts[0].id);
-    print(id);
-    print(flag);
     return flag;
   }
 
