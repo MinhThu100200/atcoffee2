@@ -1,4 +1,5 @@
 import 'package:at_coffee/screens/root_app/root_app.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:at_coffee/screens/login_page/login_page.dart';
@@ -613,7 +614,8 @@ class _SignupPageState extends State<SignUpPage> {
           : _gender == 1
               ? 'Nữ'
               : 'Khác';
-
+      String token = await FirebaseMessaging.instance.getToken();
+      user.token = token;
       String validateMsg = await userController.validateSignUp(user);
       if (validateMsg == '') {
         User userNew = await userController.signUp(user);

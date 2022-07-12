@@ -1,4 +1,5 @@
 import 'package:at_coffee/models/product.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/state_manager.dart';
 import 'package:at_coffee/models/user.dart';
 import 'package:at_coffee/services/service_user.dart';
@@ -22,6 +23,14 @@ class UserController extends GetxController {
       var userFetched = await RemoteServices.authUser(username, password);
       if (userFetched != null) {
         user.value = userFetched;
+        String token = await FirebaseMessaging.instance.getToken();
+        if (userFetched.token != token) {
+          var updatedToken = await RemoteServices.updateTokenDevice(token);
+          if (updatedToken != null) {
+            user.value.token = token;
+          }
+        }
+        isLoading.value = false;
       }
     } finally {
       isLoading.value = false;

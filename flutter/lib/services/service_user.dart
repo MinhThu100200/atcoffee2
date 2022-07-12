@@ -144,6 +144,26 @@ class RemoteServices {
     }
   }
 
+  static Future<bool> updateTokenDevice(String token) async{
+try {
+      String url = ApiConstants.HOST + ApiConstants.UPDATE_TOKEN;
+      String body = jsonEncode(<String, dynamic>{
+        'token': token,
+      });
+      var response = await ApiService.instance().put(url, body);
+      if (response.statusCode == 200) {
+        //print(response.body);
+        if (json.decode(response.body) != null) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
   static Future<List<Product>> fetchFavourites() async {
     String url = ApiConstants.HOST + ApiConstants.FAVOURITE;
 

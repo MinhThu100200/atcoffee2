@@ -35,7 +35,8 @@ class User {
       this.accumulatedPoints,
       this.currentPoints,
       this.typeId,
-      this.roleName});
+      this.roleName,
+      this.token});
 
   int id;
   int createdDate;
@@ -61,6 +62,7 @@ class User {
   int currentPoints;
   int typeId;
   String roleName;
+  String token;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -87,6 +89,7 @@ class User {
         currentPoints: json["currentPoints"],
         typeId: json["typeId"],
         roleName: json["roleName"],
+        token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -114,5 +117,6 @@ class User {
         "currentPoints": currentPoints,
         "typeId": typeId,
         "roleName": roleName,
+        "token": token,
       };
 }

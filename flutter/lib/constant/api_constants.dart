@@ -1,5 +1,6 @@
 class ApiConstants {
-  static String HOST = 'https://924d-116-108-12-132.ap.ngrok.io';
+  static String HOST =
+      'https://15aa-2402-800-790c-6341-5dd0-de20-54e2-2b68.ap.ngrok.io';
 
   static String FCM_TOKEN =
       'AAAA-YQwquE:APA91bGUSX9_WqJauv3VE2AECILzW-NNUWEt_h8D8IcsednX6eMUSAR465RtKwDAa_WqGQ34SYwMHz8Xbg8sjdsf9149t_iJn1ZZEogZOmnYzsHocg21fyiDLLYxMpeLQUff2AF_qw9Z';
@@ -9,7 +10,7 @@ class ApiConstants {
   static String GET_ADRRESS(depth) =>
       'https://provinces.open-api.vn/api/?depth=' + depth.toString();
   static String GET_PRODUCT =
-      '/api/info/product?page=1&size=100&store=AT_THUDUC&category&keyword';
+      '/api/info/product?page=1&size=100&store=&category&keyword';
   static String GET_PRODUCT_BY_CATEGORY(cate) =>
       '/api/info/product?page=1&size=100&store=AT_THUDUC&category=' +
       cate +
@@ -55,4 +56,5 @@ class ApiConstants {
   static String RESET_PASSWORD = '/api/info/reset-password';
   static String CHANGE_PASSWORD = '/api/user/change-password';
   static String FAVOURITE = '/api/user/favourite';
+  static String UPDATE_TOKEN = '/api/user/token';
 }
