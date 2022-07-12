@@ -28,7 +28,7 @@
                   <th class="text-center">Địa chỉ</th>
                   <th class="text-center">Thời gian mở cửa</th>
                   <th class="text-center">Thời gian đóng cửa</th>
-                  <th class="text-center">Lượt thích</th>
+                  <!-- <th class="text-center">Lượt thích</th> -->
                   <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
@@ -39,7 +39,7 @@
                   <td class="text-center">{{store.address}}</td>
                   <td class="text-center">{{store.timeOpen}}</td>
                   <td class="text-center">{{store.timeClose}}</td>
-                  <td class="text-center flex-center">{{store.numberFavourites}} <b-icon-heart-fill class="b-icon b-heart-fill active"/></td>
+                  <!-- <td class="text-center flex-center">{{store.numberFavourites}} <b-icon-heart-fill class="b-icon b-heart-fill active"/></td> -->
                   <td class="text-center">
                     <i class="fas fa-circle" :class="store.state ? 'active' : 'inactive'"></i>
                   </td>
@@ -63,14 +63,12 @@
 import * as Constants from '../../../common/Constants'
 import StoreCommand from '../../../command/StoreCommand'
 import Pagination from '../../common/common/Pagination.vue'
-import {BIconHeartFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_STORES,
 
   components: {
     Pagination,
-    BIconHeartFill
   },
 
   data() {
