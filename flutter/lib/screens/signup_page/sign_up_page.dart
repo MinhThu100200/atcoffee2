@@ -600,10 +600,10 @@ class _SignupPageState extends State<SignUpPage> {
     });
     if (_isValid) {
       User user = new User();
-      user.code = _email.text;
+      user.code = _phone.text;
       user.name = _name.text;
       user.email = _email.text;
-      user.username = _email.text;
+      user.username = _phone.text;
       user.phone = _phone.text;
       user.identityCard = _phone.text;
       user.password = _password.text;

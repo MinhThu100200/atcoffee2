@@ -23,16 +23,26 @@ class _LocationPageState extends State<LocationPage> {
   int selectedTab = 0;
 
   final StoreController storeController = Get.put(StoreController());
-
+  var data;
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
+  }
+
+  void setStateValueData(value) {
+    setState(() {
+      data = value;
+    });
   }
 
   void setStateValue(value) {
     setState(() {
       selectedTab = value;
+      data = value == 0
+          ? storeController.storeListNearYou.value
+          : storeController.storesList.value;
     });
   }
 
@@ -40,6 +50,9 @@ class _LocationPageState extends State<LocationPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // if (selectedTab == 0) {
+      //   setStateValueData(storeController.storeListNearYou);
+      // }
       storeController.getAddress();
       storeController.getStoreListNearYou();
     });
@@ -133,9 +146,6 @@ class _LocationPageState extends State<LocationPage> {
                               }),
                         ),
                         Obx(() {
-                          var data = selectedTab != 0
-                              ? storeController.storesList.value
-                              : storeController.storeListNearYou.value;
                           if (storeController.isLoading.value) {
                             return const Center(
                                 child: CircularProgressIndicator());
@@ -145,9 +155,7 @@ class _LocationPageState extends State<LocationPage> {
                               margin:
                                   const EdgeInsets.only(left: 16, right: 10),
                               child: ListView.builder(
-                                  itemCount: selectedTab == 0
-                                      ? storeController.storeListNearYou.length
-                                      : storeController.storesList.length,
+                                  itemCount: data.length,
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -189,10 +197,7 @@ class _LocationPageState extends State<LocationPage> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                        storeController
-                                                            .storesList[index]
-                                                            .name,
+                                                    Text(data[index].name,
                                                         style: const TextStyle(
                                                             fontSize: 11,
                                                             fontWeight:
