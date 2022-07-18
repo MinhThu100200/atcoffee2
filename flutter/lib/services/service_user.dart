@@ -28,7 +28,7 @@ class RemoteServices {
         <String, String>{'username': username, 'password': password});
 
     var response = await ApiService.instance().post(url, body);
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       var jsonString = response.body;
       await setToken(json.decode(jsonString)["jwt"]);
@@ -144,8 +144,8 @@ class RemoteServices {
     }
   }
 
-  static Future<bool> updateTokenDevice(String token) async{
-try {
+  static Future<bool> updateTokenDevice(String token) async {
+    try {
       String url = ApiConstants.HOST + ApiConstants.UPDATE_TOKEN;
       String body = jsonEncode(<String, dynamic>{
         'token': token,

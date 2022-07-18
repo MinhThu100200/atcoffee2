@@ -41,8 +41,8 @@ class _LocationPageState extends State<LocationPage> {
     setState(() {
       selectedTab = value;
       data = value == 0
-          ? storeController.storeListNearYou.value
-          : storeController.storesList.value;
+          ? storeController.storeListNearYou
+          : storeController.storesList;
     });
   }
 
@@ -50,9 +50,9 @@ class _LocationPageState extends State<LocationPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // if (selectedTab == 0) {
-      //   setStateValueData(storeController.storeListNearYou);
-      // }
+      if (selectedTab == 0) {
+        setStateValueData(storeController.storeListNearYou);
+      }
       storeController.getAddress();
       storeController.getStoreListNearYou();
     });

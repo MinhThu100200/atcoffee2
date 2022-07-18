@@ -98,7 +98,8 @@ import CartPopupItem from './CartPopupItem.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
 import PromotionPopup from '../popup/PromotionPopup.vue'
 import SpinnerSuccess from '../../common/popup/SpinnerSuccess.vue'
-
+import NotificationCommand from '../../../command/NotificationCommand'
+import NotificationService from '../../../services/NotificationService'
 export default {
   name: Constants.COMPONENT_NAME_CART_INFO_STAFF,
 
@@ -224,6 +225,7 @@ export default {
         return;
       }
       var userId = this.user == null ? 1 : this.user.id;
+      var token = this.user == null ? '' : this.user.token;
       var now = new Date();
       let code = `BI${now.getTime().toString().slice(1, 9)}`;
       var bill = {
@@ -251,9 +253,23 @@ export default {
         createdDate: new Date().getTime(),
         state: true,
         read: true,
-        token: '',
+        token: token,
         rate: true,
         shipFee: 0
+      }
+
+      if (this.user !== null && token != '') {
+        await NotificationCommand.sendNotification('A&T Coffee' , `Đơn hàng ${bill.code} đang được chuẩn bị`, token);
+        var notification = {
+          id: bill.customerId,
+          code: bill.code + '_' + bill.status,
+          codeOrder: bill.code,
+          isSeen: false,
+          title: 'Thông báo',
+          body: `Đơn hàng ${bill.code} đang được chuẩn bị`,
+          time: (new Date()).getTime()
+        }
+         NotificationService.save(notification);
       }
      
       let result = await BillCommand.save(bill);

@@ -245,9 +245,7 @@ class _RateFilterPage extends State<RateFilterPage> {
                                                   children: [
                                                     Text(
                                                         "User " +
-                                                            rateController
-                                                                .ratesList[
-                                                                    index]
+                                                            data[index]
                                                                 .userId
                                                                 .toString(),
                                                         style: const TextStyle(
@@ -258,9 +256,7 @@ class _RateFilterPage extends State<RateFilterPage> {
                                                     const SizedBox(height: 5),
                                                     Text(
                                                         DateTime.fromMillisecondsSinceEpoch(
-                                                                rateController
-                                                                    .ratesList[
-                                                                        index]
+                                                                data[index]
                                                                     .createdDate)
                                                             .toString(),
                                                         style: const TextStyle(
@@ -268,16 +264,12 @@ class _RateFilterPage extends State<RateFilterPage> {
                                                     Text(
                                                         "★★★★★".substring(
                                                               0,
-                                                              rateController
-                                                                  .ratesList[
-                                                                      index]
+                                                              data[index]
                                                                   .star
                                                                   .toInt(),
                                                             ) +
                                                             "☆☆☆☆☆".substring(
-                                                                rateController
-                                                                    .ratesList[
-                                                                        index]
+                                                                data[index]
                                                                     .star
                                                                     .toInt(),
                                                                 5),
@@ -318,7 +310,6 @@ class _RateFilterPage extends State<RateFilterPage> {
                                 });
                           }
                         }),
-                      
                       ]),
                 ),
               ],

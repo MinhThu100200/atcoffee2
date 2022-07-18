@@ -203,7 +203,13 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                       Obx(() => billController.billsList
                                                   .where((element) =>
                                                       element.status ==
-                                                      cateData[index]['status'])
+                                                          cateData[index]
+                                                              ['status'] ||
+                                                      element.status ==
+                                                              'PAID' &&
+                                                          cateData[index]
+                                                                  ['status'] ==
+                                                              "APPROVED")
                                                   .toList()
                                                   .isNotEmpty ||
                                               cateData[index]['status'] ==
@@ -232,24 +238,23 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                                                 child: Text(billController
                                                         .billsList
                                                         .where((element) =>
-                                                            element.status ==
-                                                            cateData[index]
-                                                                ['status'])
+                                                            element.status == cateData[index]['status'] ||
+                                                            element.status == 'PAID' &&
+                                                                cateData[index]['status'] ==
+                                                                    "APPROVED")
                                                         .toList()
                                                         .isNotEmpty
                                                     ? billController.billsList
                                                         .where((element) =>
-                                                            element.status ==
-                                                            cateData[index]
-                                                                ['status'])
+                                                            element.status == cateData[index]['status'] ||
+                                                            element.status == 'PAID' &&
+                                                                cateData[index]['status'] ==
+                                                                    "APPROVED")
                                                         .toList()
                                                         .length
                                                         .toString()
                                                     : billController.billsList
-                                                        .where((element) =>
-                                                            element.status ==
-                                                                "COMPLETED" &&
-                                                            element.rate)
+                                                        .where((element) => element.status == "COMPLETED" && element.rate)
                                                         .toList()
                                                         .length
                                                         .toString()),
@@ -269,7 +274,9 @@ class _ManageOrderPage extends State<ManageOrderPage> {
                           } else {
                             var data = billController.billsList
                                 .where((element) =>
-                                    element.status == indexCategory)
+                                    element.status == indexCategory ||
+                                    element.status == 'PAID' &&
+                                        indexCategory == "APPROVED")
                                 .toList();
 
                             return ListView.builder(

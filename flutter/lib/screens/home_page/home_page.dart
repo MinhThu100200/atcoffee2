@@ -1,6 +1,7 @@
 import 'package:at_coffee/controllers/address_controller.dart';
 import 'package:at_coffee/controllers/bill_controller.dart';
 import 'package:at_coffee/controllers/cart_controller.dart';
+import 'package:at_coffee/controllers/promotion_controller.dart';
 import 'package:at_coffee/models/reward.dart';
 import 'package:at_coffee/screens/home_page/popup_address.dart';
 import 'package:at_coffee/screens/momo_page/momo_page.dart';
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   final BillController billController = Get.put(BillController());
   final NotificationController notificationController =
       Get.put(NotificationController());
-
+  final PromotionController promotionController = Get.put(PromotionController());
   //var selected = 0.obs;
 
   @override
@@ -51,7 +52,8 @@ class _HomePageState extends State<HomePage> {
       billController.getBill();
       notificationController.getNotifications(userController.user.value.id);
       cartController.fetchCartsByCustomerId(
-          userController.user.value.id); //addressController.fetchAddress();
+          userController.user.value.id); 
+           promotionController.fetchPromotions();//addressController.fetchAddress();
       //print("Build Completed:" + userController.user.value.id.toString());
     });
   }
